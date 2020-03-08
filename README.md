@@ -2,6 +2,8 @@
 
 [Faiss](https://github.com/facebookresearch/faiss) - efficient similarity search and clustering - for Ruby
 
+[![Build Status](https://travis-ci.org/ankane/faiss.svg?branch=master)](https://travis-ci.org/ankane/faiss)
+
 ## Installation
 
 First, install the [Faiss C++ library](https://github.com/facebookresearch/faiss/blob/master/INSTALL.md). For Homebrew, use:
