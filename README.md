@@ -1,0 +1,130 @@
+# Faiss
+
+[Faiss](https://github.com/facebookresearch/faiss) - efficient similarity search and clustering - for Ruby
+
+## Installation
+
+First, install the [Faiss C++ library](https://github.com/facebookresearch/faiss/blob/master/INSTALL.md). For Homebrew, use:
+
+```sh
+brew install faiss
+```
+
+Add this line to your application’s Gemfile:
+
+```ruby
+gem 'faiss'
+```
+
+## Getting Started
+
+Prep your data
+
+```ruby
+objects = [
+  [1, 1, 2, 1],
+  [5, 4, 6, 5],
+  [1, 2, 1, 2]
+]
+```
+
+Build an index
+
+```ruby
+index = Faiss::IndexFlatL2.new(4)
+index.add(objects)
+```
+
+Search
+
+```ruby
+distances, ids = index.search(objects, 3)
+```
+
+## K-means Clustering
+
+Train
+
+```ruby
+kmeans = Faiss::Kmeans.new(4, 2)
+kmeans.train(objects)
+```
+
+Get the centroids
+
+```ruby
+kmeans.centroids
+```
+
+## PCA
+
+Train
+
+```ruby
+mat = Faiss::PCAMatrix.new(40, 10)
+mat.train(objects)
+```
+
+Apply
+
+```ruby
+mat.apply(mt)
+```
+
+## Product Quantizer
+
+Train
+
+```ruby
+pq = Faiss::ProductQuantizer.new(32, 4, 8)
+pq.train(objects)
+```
+
+Encode
+
+```ruby
+pq.compute_codes(objects)
+```
+
+Decode
+
+```ruby
+pq.decode(codes)
+```
+
+## Data
+
+Data can be an array of arrays
+
+```ruby
+[[1, 2, 3], [4, 5, 6]]
+```
+
+Or a Numo NArray
+
+```ruby
+Numo::SFloat.new(3, 2).seq
+```
+
+## History
+
+View the [changelog](https://github.com/ankane/faiss/blob/master/CHANGELOG.md)
+
+## Contributing
+
+Everyone is encouraged to help improve this project. Here are a few ways you can help:
+
+- [Report bugs](https://github.com/ankane/faiss/issues)
+- Fix bugs and [submit pull requests](https://github.com/ankane/faiss/pulls)
+- Write, clarify, or fix documentation
+- Suggest or add new features
+
+To get started with development:
+
+```sh
+git clone https://github.com/ankane/faiss.git
+cd faiss
+bundle install
+bundle exec rake compile
+bundle exec rake test
+```
