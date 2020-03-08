@@ -41,6 +41,70 @@ Search
 distances, ids = index.search(objects, 3)
 ```
 
+## Basic Indexes
+
+Exact search for L2
+
+```rb
+Faiss::IndexFlatL2.new(d)
+```
+
+Exact search for inner product
+
+```rb
+Faiss::IndexFlatIP.new(d)
+```
+
+Hierarchical navigable small world graph exploration
+
+```rb
+Faiss::IndexHNSWFlat.new(d, m)
+```
+
+Inverted file with exact post-verification
+
+```rb
+Faiss::IndexIVFFlat.new(quantizer, d, nlists)
+```
+
+Locality-sensitive hashing
+
+```rb
+Faiss::IndexLSH.new(d, nbits)
+```
+
+Product quantizer (PQ) in flat mode
+
+```rb
+Faiss::IndexPQ.new(d, m, nbits)
+```
+
+IVFADC (coarse quantizer+PQ on residuals)
+
+```rb
+Faiss::IndexIVFPQ.new(quantizer, d, nlists, m, nbits)
+```
+
+IVFADC+R (same as IVFADC with re-ranking based on codes)
+
+```rb
+Faiss::IndexIVFPQR.new(quantizer, d, nlists, m, nbits, m_refine, nbits_refine)
+```
+
+## Binary Indexes
+
+Index binary vectors
+
+```rb
+Faiss::IndexBinaryFlat.new(d)
+```
+
+Speed up search with an inverse vector file
+
+```rb
+Faiss::IndexBinaryIVF.new(quantizer, d, nlists)
+```
+
 ## K-means Clustering
 
 Train
