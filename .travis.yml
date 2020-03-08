@@ -4,6 +4,7 @@ rvm: 2.7
 before_install:
   - export FAISS_VERSION=1.6.1
   - ./test/ci/install_faiss.sh
+  - export LD_LIBRARY_PATH=$HOME/faiss/$FAISS_VERSION:$LD_LIBRARY_PATH
 cache:
   bundler: true
   directories:
