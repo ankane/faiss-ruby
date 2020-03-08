@@ -5,6 +5,7 @@ addons:
   apt:
     packages:
       - libblas-dev
+      - liblapack-dev
 before_install:
   - export FAISS_VERSION=1.6.1
   - ./test/ci/install_faiss.sh
