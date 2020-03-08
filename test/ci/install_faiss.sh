@@ -15,3 +15,6 @@ if [ ! -d "$CACHE_DIR" ]; then
 else
   echo "Faiss cached"
 fi
+
+cd $CACHE_DIR
+make install
