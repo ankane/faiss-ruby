@@ -1,6 +1,10 @@
 dist: bionic
 language: ruby
 rvm: 2.7
+addons:
+  apt:
+    packages:
+      - libblas-dev
 before_install:
   - export FAISS_VERSION=1.6.1
   - ./test/ci/install_faiss.sh
