@@ -17,4 +17,4 @@ else
 fi
 
 cd $CACHE_DIR
-make install
+sudo make install
