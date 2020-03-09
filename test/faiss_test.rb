@@ -25,6 +25,11 @@ class FaissTest < Minitest::Test
     # d, i = index.search(xq, k)
     # i[0...5, true]
     # i[-5..-1, true]
+
+    path = "#{Dir.tmpdir}/index.bin"
+    index.save(path)
+    index2 = Faiss::Index.load(path)
+    assert_equal index.ntotal, index2.ntotal
   end
 
   def test_index_flat_l2
@@ -136,6 +141,11 @@ class FaissTest < Minitest::Test
 
     assert_equal [[0, 5, 6], [0, 5, 9], [0, 6, 9]], distances.to_a
     assert_equal [[0, 1, 2], [1, 0, 2], [2, 0, 1]], ids.to_a
+
+    path = "#{Dir.tmpdir}/index.bin"
+    index.save(path)
+    index2 = Faiss::IndexBinary.load(path)
+    assert_equal index.ntotal, index2.ntotal
   end
 
   def test_index_binary_ivf

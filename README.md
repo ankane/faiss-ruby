@@ -45,6 +45,20 @@ Search
 distances, ids = index.search(objects, 3)
 ```
 
+Save an index [master]
+
+```ruby
+index.save("index.bin")
+```
+
+Load an index [master]
+
+```ruby
+Faiss::Index.load("index.bin")
+```
+
+> Use `Faiss::IndexBinary` to load binary indexes
+
 ## Basic Indexes
 
 Exact search for L2

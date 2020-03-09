@@ -23,3 +23,7 @@ print(D)
 D, I = index.search(xq, k)
 print(I[:5])
 print(I[-5:])
+
+faiss.write_index(index, "/tmp/index.bin")
+index2 = faiss.read_index("/tmp/index.bin")
+print(index2.ntotal)

@@ -10,6 +10,7 @@
 #include <faiss/IndexBinaryFlat.h>
 #include <faiss/IndexBinaryIVF.h>
 #include <faiss/index_factory.h>
+#include <faiss/index_io.h>
 
 #include <faiss/Clustering.h>
 #include <faiss/VectorTransform.h>
@@ -109,6 +110,16 @@ void Init_ext()
         ret.push(dstr);
         ret.push(lstr);
         return ret;
+      })
+    .define_method(
+      "save",
+      *[](faiss::Index &self, const char *fname) {
+        faiss::write_index(&self, fname);
+      })
+    .define_singleton_method(
+      "load",
+      *[](const char *fname) {
+        return faiss::read_index(fname);
       });
 
   Rice::define_class_under<faiss::IndexBinary>(rb_mFaiss, "IndexBinary")
@@ -155,6 +166,16 @@ void Init_ext()
         ret.push(dstr);
         ret.push(lstr);
         return ret;
+      })
+    .define_method(
+      "save",
+      *[](faiss::IndexBinary &self, const char *fname) {
+        faiss::write_index_binary(&self, fname);
+      })
+    .define_singleton_method(
+      "load",
+      *[](const char *fname) {
+        return faiss::read_index_binary(fname);
       });
 
   Rice::define_class_under<faiss::IndexFlatL2, faiss::Index>(rb_mFaiss, "IndexFlatL2")
