@@ -44,9 +44,9 @@ module Faiss
   # friendlier error message
   autoload :FFI, "faiss/ffi"
 
-  def self.index_binary_factory(d, description)
-    index = Faiss::Index.new
-    Utils.ffi(:faiss_index_factory, index.to_ptr.ref, d, description, 0)
-    index
-  end
+  # def self.index_binary_factory(d, description)
+  #   index = Faiss::BinaryIndex.new
+  #   Utils.ffi(:faiss_index_factory, index.to_ptr.ref, d, description, 0)
+  #   index
+  # end
 end
