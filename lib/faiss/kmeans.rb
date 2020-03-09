@@ -5,7 +5,7 @@ module Faiss
     def train(objects)
       objects = Numo::SFloat.cast(objects) unless objects.is_a?(Numo::SFloat)
       @index = IndexFlatL2.new(d)
-      _train(objects.shape[0], objects.to_binary, @index)
+      _train(objects.shape[0], objects, @index)
     end
 
     def centroids

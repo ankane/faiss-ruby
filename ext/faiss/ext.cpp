@@ -24,6 +24,11 @@ float* float_array(Rice::Object o) {
   return (float*) s.c_str();
 }
 
+uint8_t* uint8_array(Rice::Object o) {
+  Rice::String s = o.call("to_binary");
+  return (uint8_t*) s.c_str();
+}
+
 extern "C"
 void Init_ext()
 {
@@ -98,20 +103,20 @@ void Init_ext()
       })
     .define_method(
       "_train",
-      *[](faiss::IndexBinary &self, int64_t n, Rice::String s) {
-        const uint8_t *x = (uint8_t*) s.c_str();
+      *[](faiss::IndexBinary &self, int64_t n, Rice::Object o) {
+        const uint8_t *x = uint8_array(o);
         self.train(n, x);
       })
     .define_method(
       "_add",
-      *[](faiss::IndexBinary &self, int64_t n, Rice::String s) {
-        const uint8_t *x = (uint8_t*) s.c_str();
+      *[](faiss::IndexBinary &self, int64_t n, Rice::Object o) {
+        const uint8_t *x = uint8_array(o);
         self.add(n, x);
       })
     .define_method(
       "_search",
-      *[](faiss::IndexBinary &self, int64_t n, Rice::String s, int64_t k) {
-        const uint8_t *x = (uint8_t*) s.c_str();
+      *[](faiss::IndexBinary &self, int64_t n, Rice::Object o, int64_t k) {
+        const uint8_t *x = uint8_array(o);
         int32_t *distances = new int32_t[k * n];
         int64_t *labels = new int64_t[k * n];
 
@@ -185,8 +190,8 @@ void Init_ext()
       })
     .define_method(
       "_train",
-      *[](faiss::Clustering &self, int64_t n, Rice::String s, faiss::Index & index) {
-        const float *x = (float*) s.c_str();
+      *[](faiss::Clustering &self, int64_t n, Rice::Object o, faiss::Index & index) {
+        const float *x = float_array(o);
         self.train(n, x, index);
       });
 
@@ -204,14 +209,14 @@ void Init_ext()
       })
     .define_method(
       "_train",
-      *[](faiss::PCAMatrix &self, int64_t n, Rice::String s) {
-        const float *x = (float*) s.c_str();
+      *[](faiss::PCAMatrix &self, int64_t n, Rice::Object o) {
+        const float *x = float_array(o);
         self.train(n, x);
       })
     .define_method(
       "_apply",
-      *[](faiss::PCAMatrix &self, int64_t n, Rice::String s) {
-        const float *x = (float*) s.c_str();
+      *[](faiss::PCAMatrix &self, int64_t n, Rice::Object o) {
+        const float *x = float_array(o);
         float* res = self.apply(n, x);
         return std::string((char*) res, n * self.d_out * sizeof(float));
       });
@@ -230,22 +235,22 @@ void Init_ext()
       })
     .define_method(
       "_train",
-      *[](faiss::ProductQuantizer &self, int n, Rice::String s) {
-        const float *x = (float*) s.c_str();
+      *[](faiss::ProductQuantizer &self, int n, Rice::Object o) {
+        const float *x = float_array(o);
         self.train(n, x);
       })
     .define_method(
       "_compute_codes",
-      *[](faiss::ProductQuantizer &self, int n, Rice::String s) {
-        const float *x = (float*) s.c_str();
+      *[](faiss::ProductQuantizer &self, int n, Rice::Object o) {
+        const float *x = float_array(o);
         uint8_t *codes = new uint8_t[n * self.M];
         self.compute_codes(x, codes, n);
         return std::string((char*) codes, n * self.M * sizeof(uint8_t));
       })
     .define_method(
       "_decode",
-      *[](faiss::ProductQuantizer &self, int n, Rice::String s) {
-        const uint8_t *codes = (uint8_t*) s.c_str();
+      *[](faiss::ProductQuantizer &self, int n, Rice::Object o) {
+        const uint8_t *codes = uint8_array(o);
         float *x = new float[n * self.d];
         self.decode(codes, x, n);
         return std::string((char*) x, n * self.d * sizeof(float));
