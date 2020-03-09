@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.author        = "Andrew Kane"
   spec.email         = "andrew@chartkick.com"
 
-  spec.files         = Dir["*.{md,txt}", "{lib,ext}/**/*"]
+  spec.files         = Dir["*.{md,txt}", "{lib,ext}/**/*", "vendor/faiss/LICENSE", "vendor/faiss/**/*.{cpp,h}"]
   spec.require_path  = "lib"
   spec.extensions    = ["ext/faiss/extconf.rb"]
 

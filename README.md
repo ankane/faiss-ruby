@@ -8,10 +8,14 @@ Learn more about [Faiss](https://engineering.fb.com/data-infrastructure/faiss-a-
 
 ## Installation
 
-First, install the [Faiss C++ library](https://github.com/facebookresearch/faiss/blob/master/INSTALL.md). For Homebrew, use:
+First, install BLAS, LAPACK, and OpenMP:
 
 ```sh
-brew install faiss
+# Mac
+brew install openblas lapack libomp
+
+# Ubuntu
+sudo apt install libblas-dev liblapack-dev
 ```
 
 Add this line to your application’s Gemfile:

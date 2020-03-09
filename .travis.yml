@@ -6,14 +6,8 @@ addons:
     packages:
       - libblas-dev
       - liblapack-dev
-before_install:
-  - export FAISS_VERSION=1.6.1
-  - ./test/ci/install_faiss.sh
-  - export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 cache:
   bundler: true
-  directories:
-    - $HOME/faiss
 before_script: bundle exec rake compile
 script: bundle exec rake test
 notifications:
