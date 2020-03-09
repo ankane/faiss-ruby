@@ -14,7 +14,7 @@ cache:
   directories:
     - $HOME/faiss
 before_script: bundle exec rake compile
-script: echo 'hi'
+script: bundle exec rake test
 notifications:
   email:
     on_success: never
