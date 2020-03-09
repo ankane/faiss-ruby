@@ -19,6 +19,11 @@
 #include <rice/Constructor.hpp>
 #include <rice/Module.hpp>
 
+float* float_array(Rice::Object o) {
+  Rice::String s = o.call("to_binary");
+  return (float*) s.c_str();
+}
+
 extern "C"
 void Init_ext()
 {
@@ -47,20 +52,20 @@ void Init_ext()
       })
     .define_method(
       "_train",
-      *[](faiss::Index &self, int64_t n, Rice::String s) {
-        const float *x = (float*) s.c_str();
+      *[](faiss::Index &self, int64_t n, Rice::Object o) {
+        const float *x = float_array(o);
         self.train(n, x);
       })
     .define_method(
       "_add",
-      *[](faiss::Index &self, int64_t n, Rice::String s) {
-        const float *x = (float*) s.c_str();
+      *[](faiss::Index &self, int64_t n, Rice::Object o) {
+        const float *x = float_array(o);
         self.add(n, x);
       })
     .define_method(
       "_search",
-      *[](faiss::Index &self, int64_t n, Rice::String s, int64_t k) {
-        const float *x = (float*) s.c_str();
+      *[](faiss::Index &self, int64_t n, Rice::Object o, int64_t k) {
+        const float *x = float_array(o);
         float *distances = new float[k * n];
         int64_t *labels = new int64_t[k * n];
 
