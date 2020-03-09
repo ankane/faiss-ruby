@@ -2,6 +2,8 @@
 
 [Faiss](https://github.com/facebookresearch/faiss) - efficient similarity search and clustering - for Ruby
 
+Learn more about [Faiss](https://engineering.fb.com/data-infrastructure/faiss-a-library-for-efficient-similarity-search/)
+
 [![Build Status](https://travis-ci.org/ankane/faiss.svg?branch=master)](https://travis-ci.org/ankane/faiss)
 
 ## Installation
