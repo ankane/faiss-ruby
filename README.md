@@ -51,13 +51,13 @@ Search
 distances, ids = index.search(objects, 3)
 ```
 
-Save an index [master]
+Save an index
 
 ```ruby
 index.save("index.bin")
 ```
 
-Load an index [master]
+Load an index
 
 ```ruby
 index = Faiss::Index.load("index.bin")
@@ -180,13 +180,13 @@ Decode
 pq.decode(codes)
 ```
 
-Save the quantizer [master]
+Save a quantizer
 
 ```ruby
 pq.save("pq.bin")
 ```
 
-Load a quantizer [master]
+Load a quantizer
 
 ```ruby
 pq = Faiss::ProductQuantizer.load("pq.bin")
@@ -222,7 +222,7 @@ Everyone is encouraged to help improve this project. Here are a few ways you can
 To get started with development:
 
 ```sh
-git clone https://github.com/ankane/faiss.git
+git clone --recursive https://github.com/ankane/faiss.git
 cd faiss
 bundle install
 bundle exec rake compile

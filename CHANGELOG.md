@@ -1,4 +1,4 @@
-## 0.1.1 (unreleased)
+## 0.1.1 (2020-03-09)
 
 - Vendored library
 - Added `save` and `load` methods
