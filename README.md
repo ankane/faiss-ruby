@@ -193,6 +193,6 @@ To get started with development:
 git clone https://github.com/ankane/faiss.git
 cd faiss
 bundle install
-bundle exec rake compile
+bundle exec rake vendor:all
 bundle exec rake test
 ```
