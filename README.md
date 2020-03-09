@@ -20,6 +20,8 @@ Add this line to your application’s Gemfile:
 gem 'faiss'
 ```
 
+Faiss is not available for Windows yet
+
 ## Getting Started
 
 Prep your data
