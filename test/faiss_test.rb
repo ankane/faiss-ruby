@@ -202,6 +202,12 @@ class FaissTest < Minitest::Test
     assert_equal [10000, 32], x2.shape
     assert_kind_of Numo::SFloat, x2
     assert_operator ((x - x2)**2).sum / (x**2).sum, :<, 0.06
+
+    path = "#{Dir.tmpdir}/pq.bin"
+    pq.save(path)
+    pq = Faiss::ProductQuantizer.load(path)
+    x3 = pq.decode(codes)
+    assert_equal x2, x3
   end
 
   private

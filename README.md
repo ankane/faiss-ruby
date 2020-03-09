@@ -56,7 +56,7 @@ index.save("index.bin")
 Load an index [master]
 
 ```ruby
-Faiss::Index.load("index.bin")
+index = Faiss::Index.load("index.bin")
 ```
 
 > Use `Faiss::IndexBinary` to load binary indexes
@@ -174,6 +174,18 @@ Decode
 
 ```ruby
 pq.decode(codes)
+```
+
+Save the quantizer [master]
+
+```ruby
+pq.save("pq.bin")
+```
+
+Load a quantizer [master]
+
+```ruby
+pq = Faiss::ProductQuantizer.load("pq.bin")
 ```
 
 ## Data

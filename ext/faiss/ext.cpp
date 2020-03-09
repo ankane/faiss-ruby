@@ -301,5 +301,15 @@ void Init_ext()
         float *x = new float[n * self.d];
         self.decode(codes, x, n);
         return result(x, n * self.d);
+      })
+    .define_method(
+      "save",
+      *[](faiss::ProductQuantizer &self, const char *fname) {
+        faiss::write_ProductQuantizer(&self, fname);
+      })
+    .define_singleton_method(
+      "load",
+      *[](const char *fname) {
+        return faiss::read_ProductQuantizer(fname);
       });
 }
