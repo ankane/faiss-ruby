@@ -9,9 +9,7 @@ addons:
 before_install:
   - export FAISS_VERSION=1.6.1
   - ./test/ci/install_faiss.sh
-  - echo $LD_LIBRARY_PATH
   - export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
-  - ls /usr/local/lib | grep faiss
 cache:
   bundler: true
   directories:
