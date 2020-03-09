@@ -19,14 +19,36 @@
 #include <rice/Constructor.hpp>
 #include <rice/Module.hpp>
 
-float* float_array(Rice::Object o) {
+float* float_array(Rice::Object o)
+{
   Rice::String s = o.call("to_binary");
   return (float*) s.c_str();
 }
 
-uint8_t* uint8_array(Rice::Object o) {
+uint8_t* uint8_array(Rice::Object o)
+{
   Rice::String s = o.call("to_binary");
   return (uint8_t*) s.c_str();
+}
+
+Rice::String result(float* ptr, int64_t length)
+{
+  return Rice::String(std::string((char*) ptr, length * sizeof(float)));
+}
+
+Rice::String result(uint8_t* ptr, int64_t length)
+{
+  return Rice::String(std::string((char*) ptr, length * sizeof(uint8_t)));
+}
+
+Rice::String result(int32_t* ptr, int64_t length)
+{
+  return Rice::String(std::string((char*) ptr, length * sizeof(int32_t)));
+}
+
+Rice::String result(int64_t* ptr, int64_t length)
+{
+  return Rice::String(std::string((char*) ptr, length * sizeof(int64_t)));
 }
 
 extern "C"
@@ -76,8 +98,8 @@ void Init_ext()
 
         self.search(n, x, k, distances, labels);
 
-        auto dstr = std::string((char*) distances, k * n * sizeof(float));
-        auto lstr = std::string((char*) labels, k * n * sizeof(int64_t));
+        auto dstr = result(distances, k * n);
+        auto lstr = result(labels, k * n);
 
         Rice::Array ret;
         ret.push(dstr);
@@ -122,8 +144,8 @@ void Init_ext()
 
         self.search(n, x, k, distances, labels);
 
-        auto dstr = std::string((char*) distances, k * n * sizeof(int32_t));
-        auto lstr = std::string((char*) labels, k * n * sizeof(int64_t));
+        auto dstr = result(distances, k * n);
+        auto lstr = result(labels, k * n);
 
         Rice::Array ret;
         ret.push(dstr);
@@ -186,7 +208,7 @@ void Init_ext()
         for (size_t i = 0; i < self.centroids.size(); i++) {
           centroids[i] = self.centroids[i];
         }
-        return std::string((char*) centroids, self.k * self.d * sizeof(float));
+        return result(centroids, self.k * self.d);
       })
     .define_method(
       "_train",
@@ -218,7 +240,7 @@ void Init_ext()
       *[](faiss::PCAMatrix &self, int64_t n, Rice::Object o) {
         const float *x = float_array(o);
         float* res = self.apply(n, x);
-        return std::string((char*) res, n * self.d_out * sizeof(float));
+        return result(res, n * self.d_out);
       });
 
   Rice::define_class_under<faiss::ProductQuantizer>(rb_mFaiss, "ProductQuantizer")
@@ -245,7 +267,7 @@ void Init_ext()
         const float *x = float_array(o);
         uint8_t *codes = new uint8_t[n * self.M];
         self.compute_codes(x, codes, n);
-        return std::string((char*) codes, n * self.M * sizeof(uint8_t));
+        return result(codes, n * self.M);
       })
     .define_method(
       "_decode",
@@ -253,6 +275,6 @@ void Init_ext()
         const uint8_t *codes = uint8_array(o);
         float *x = new float[n * self.d];
         self.decode(codes, x, n);
-        return std::string((char*) x, n * self.d * sizeof(float));
+        return result(x, n * self.d);
       });
 }
