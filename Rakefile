@@ -25,5 +25,5 @@ task :remove_obj do
   File.unlink(path) if File.exist?(path)
 end
 
-Rake::Task["release:guard_clean"].enhance [:remove_ext, :remove_obj]
+Rake::Task["build"].enhance [:remove_ext, :remove_obj]
 Rake::Task["compile"].enhance [:remove_obj]
