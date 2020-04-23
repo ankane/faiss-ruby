@@ -14,7 +14,6 @@ Rake::ExtensionTask.new("faiss") do |ext|
   ext.lib_dir = "lib/faiss"
 end
 
-# include ext in local installs but not releases
 task :remove_ext do
   path = "lib/faiss/ext.bundle"
   File.unlink(path) if File.exist?(path)
