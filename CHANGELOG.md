@@ -1,3 +1,7 @@
+## 0.1.3 (unreleased)
+
+- Updated Faiss to 1.6.4
+
 ## 0.1.2 (2020-08-17)
 
 - Updated Faiss to 1.6.3
