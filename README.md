@@ -4,7 +4,7 @@
 
 Learn more about [Faiss](https://engineering.fb.com/data-infrastructure/faiss-a-library-for-efficient-similarity-search/)
 
-[![Build Status](https://travis-ci.org/ankane/faiss.svg?branch=master)](https://travis-ci.org/ankane/faiss)
+[![Build Status](https://github.com/ankane/faiss/workflows/build/badge.svg?branch=master)](https://github.com/ankane/faiss/actions)
 
 ## Installation
 
