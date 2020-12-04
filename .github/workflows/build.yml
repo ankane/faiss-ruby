@@ -3,7 +3,11 @@ on: [push, pull_request]
 jobs:
   build:
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v2
       with:
@@ -12,6 +16,9 @@ jobs:
       with:
         ruby-version: 2.7
         bundler-cache: true
-    - run: sudo apt-get install libblas-dev liblapack-dev
+    - if: ${{ startsWith(matrix.os, 'ubuntu') }}
+      run: sudo apt-get install libblas-dev liblapack-dev
+    - if: ${{ startsWith(matrix.os, 'macos') }}
+      run: brew install openblas lapack libomp
     - run: bundle exec rake compile
     - run: bundle exec rake test
