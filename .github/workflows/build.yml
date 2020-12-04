@@ -15,7 +15,7 @@ jobs:
     - if: ${{ startsWith(matrix.os, 'ubuntu') }}
       run: sudo apt-get install libblas-dev liblapack-dev
     - if: ${{ startsWith(matrix.os, 'macos') }}
-      run: brew install openblas lapack libomp
+      run: brew install openblas lapack libomp automake
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: 2.7
