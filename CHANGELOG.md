@@ -1,4 +1,4 @@
-## 0.1.4 (unreleased)
+## 0.1.4 (2020-02-04)
 
 - Updated Faiss to 1.7.0
 
