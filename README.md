@@ -200,10 +200,10 @@ Data can be an array of arrays
 [[1, 2, 3], [4, 5, 6]]
 ```
 
-Or a Numo NArray
+Or a Numo array
 
 ```ruby
-Numo::SFloat.new(3, 2).seq
+Numo::NArray.cast([[1, 2, 3], [4, 5, 6]])
 ```
 
 ## History
