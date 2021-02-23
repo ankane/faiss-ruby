@@ -20,8 +20,9 @@ task :remove_ext do
 end
 
 task :remove_obj do
-  path = "ext/faiss/ext.o"
-  File.unlink(path) if File.exist?(path)
+  Dir["ext/faiss/*.o"].each do |path|
+    File.unlink(path)
+  end
 end
 
 Rake::Task["build"].enhance [:remove_ext, :remove_obj]
