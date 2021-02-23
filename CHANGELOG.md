@@ -1,3 +1,7 @@
+## 0.1.5 (unreleased)
+
+- Added `--with-optflags` option
+
 ## 0.1.4 (2021-02-04)
 
 - Updated Faiss to 1.7.0
