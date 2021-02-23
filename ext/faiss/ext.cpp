@@ -9,11 +9,11 @@ void init_product_quantizer(Rice::Module& m);
 extern "C"
 void Init_ext()
 {
-  Rice::Module rb_mFaiss = Rice::define_module("Faiss");
+  auto m = Rice::define_module("Faiss");
 
-  init_index(rb_mFaiss);
-  init_index_binary(rb_mFaiss);
-  init_kmeans(rb_mFaiss);
-  init_pca_matrix(rb_mFaiss);
-  init_product_quantizer(rb_mFaiss);
+  init_index(m);
+  init_index_binary(m);
+  init_kmeans(m);
+  init_pca_matrix(m);
+  init_product_quantizer(m);
 }
