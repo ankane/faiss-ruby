@@ -1,6 +1,7 @@
 #include <faiss/IndexBinary.h>
 #include <faiss/IndexBinaryFlat.h>
 #include <faiss/IndexBinaryIVF.h>
+#include <faiss/index_factory.h>
 #include <faiss/index_io.h>
 
 #include <rice/Array.hpp>
@@ -71,4 +72,10 @@ void init_index_binary(Rice::Module& m) {
 
   Rice::define_class_under<faiss::IndexBinaryIVF, faiss::IndexBinary>(m, "IndexBinaryIVF")
     .define_constructor(Rice::Constructor<faiss::IndexBinaryIVF, faiss::IndexBinary*, size_t, size_t>());
+
+  m.define_singleton_method(
+    "index_binary_factory",
+    *[](int d, const char *description) {
+      return faiss::index_binary_factory(d, description);
+    });
 }

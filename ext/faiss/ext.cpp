@@ -1,5 +1,3 @@
-#include <faiss/index_factory.h>
-
 #include <rice/Module.hpp>
 
 void init_index(Rice::Module& m);
@@ -11,12 +9,7 @@ void init_product_quantizer(Rice::Module& m);
 extern "C"
 void Init_ext()
 {
-  Rice::Module rb_mFaiss = Rice::define_module("Faiss")
-    .define_singleton_method(
-      "index_binary_factory",
-      *[](int d, const char *description) {
-        return faiss::index_binary_factory(d, description);
-      });
+  Rice::Module rb_mFaiss = Rice::define_module("Faiss");
 
   init_index(rb_mFaiss);
   init_index_binary(rb_mFaiss);
