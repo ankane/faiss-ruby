@@ -1,7 +1,16 @@
 #include <faiss/Index.h>
+#include <faiss/IndexFlat.h>
+#include <faiss/IndexHNSW.h>
+#include <faiss/IndexIVFFlat.h>
+#include <faiss/IndexLSH.h>
+#include <faiss/IndexScalarQuantizer.h>
+#include <faiss/IndexPQ.h>
+#include <faiss/IndexIVFPQ.h>
+#include <faiss/IndexIVFPQR.h>
 #include <faiss/index_io.h>
 
 #include <rice/Array.hpp>
+#include <rice/Constructor.hpp>
 #include <rice/Module.hpp>
 
 #include "utils.h"
@@ -62,4 +71,34 @@ void init_index(Rice::Module& m) {
       *[](const char *fname) {
         return faiss::read_index(fname);
       });
+
+  Rice::define_class_under<faiss::IndexFlatL2, faiss::Index>(m, "IndexFlatL2")
+    .define_constructor(Rice::Constructor<faiss::IndexFlatL2, int64_t>());
+
+  Rice::define_class_under<faiss::IndexFlatIP, faiss::Index>(m, "IndexFlatIP")
+    .define_constructor(Rice::Constructor<faiss::IndexFlatIP, int64_t>());
+
+  Rice::define_class_under<faiss::IndexHNSWFlat, faiss::Index>(m, "IndexHNSWFlat")
+    .define_constructor(Rice::Constructor<faiss::IndexHNSWFlat, int, int>());
+
+  Rice::define_class_under<faiss::IndexIVFFlat, faiss::Index>(m, "IndexIVFFlat")
+    .define_constructor(Rice::Constructor<faiss::IndexIVFFlat, faiss::Index*, size_t, size_t>());
+
+  Rice::define_class_under<faiss::IndexLSH, faiss::Index>(m, "IndexLSH")
+    .define_constructor(Rice::Constructor<faiss::IndexLSH, int64_t, int>());
+
+  Rice::define_class_under<faiss::IndexScalarQuantizer, faiss::Index>(m, "IndexScalarQuantizer")
+    .define_constructor(Rice::Constructor<faiss::IndexScalarQuantizer, int, faiss::ScalarQuantizer::QuantizerType>());
+
+  Rice::define_class_under<faiss::IndexPQ, faiss::Index>(m, "IndexPQ")
+    .define_constructor(Rice::Constructor<faiss::IndexPQ, int, size_t, size_t>());
+
+  Rice::define_class_under<faiss::IndexIVFScalarQuantizer, faiss::Index>(m, "IndexIVFScalarQuantizer")
+    .define_constructor(Rice::Constructor<faiss::IndexIVFScalarQuantizer, faiss::Index*, size_t, size_t, faiss::ScalarQuantizer::QuantizerType>());
+
+  Rice::define_class_under<faiss::IndexIVFPQ, faiss::Index>(m, "IndexIVFPQ")
+    .define_constructor(Rice::Constructor<faiss::IndexIVFPQ, faiss::Index*, size_t, size_t, size_t, size_t>());
+
+  Rice::define_class_under<faiss::IndexIVFPQR, faiss::Index>(m, "IndexIVFPQR")
+    .define_constructor(Rice::Constructor<faiss::IndexIVFPQR, faiss::Index*, size_t, size_t, size_t, size_t, size_t, size_t>());
 }

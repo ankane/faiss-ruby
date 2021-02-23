@@ -1,7 +1,10 @@
 #include <faiss/IndexBinary.h>
+#include <faiss/IndexBinaryFlat.h>
+#include <faiss/IndexBinaryIVF.h>
 #include <faiss/index_io.h>
 
 #include <rice/Array.hpp>
+#include <rice/Constructor.hpp>
 #include <rice/Module.hpp>
 
 #include "utils.h"
@@ -62,4 +65,10 @@ void init_index_binary(Rice::Module& m) {
       *[](const char *fname) {
         return faiss::read_index_binary(fname);
       });
+
+  Rice::define_class_under<faiss::IndexBinaryFlat, faiss::IndexBinary>(m, "IndexBinaryFlat")
+    .define_constructor(Rice::Constructor<faiss::IndexBinaryFlat, int64_t>());
+
+  Rice::define_class_under<faiss::IndexBinaryIVF, faiss::IndexBinary>(m, "IndexBinaryIVF")
+    .define_constructor(Rice::Constructor<faiss::IndexBinaryIVF, faiss::IndexBinary*, size_t, size_t>());
 }
