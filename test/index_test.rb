@@ -155,8 +155,4 @@ class IndexTest < Minitest::Test
   def max_float # single-precision
     @max_float ||= (2 - 2**-23) * 2**127
   end
-
-  def max_int
-    @max_int ||= 2**31 - 1
-  end
 end

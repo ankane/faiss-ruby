@@ -21,8 +21,6 @@ class IndexBinaryTest < Minitest::Test
   end
 
   def test_index_binary_ivf
-    skip "Segfaults after 1.6.4 to 1.7.0 upgrade"
-
     objects = [
       [1, 1, 2, 1],
       [5, 4, 6, 5],
@@ -40,5 +38,11 @@ class IndexBinaryTest < Minitest::Test
 
   def test_index_binary_factory
     Faiss.index_binary_factory(8, "BIVF32")
+  end
+
+  private
+
+  def max_int
+    @max_int ||= 2**31 - 1
   end
 end
