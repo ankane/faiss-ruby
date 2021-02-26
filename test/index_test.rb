@@ -1,7 +1,7 @@
 require_relative "test_helper"
 
-class FaissTest < Minitest::Test
-  def test_works
+class IndexTest < Minitest::Test
+  def test_index
     Numo::NArray.srand(1234)
 
     d = 64
@@ -148,89 +148,6 @@ class FaissTest < Minitest::Test
     # TODO improve test
     quantizer = Faiss::IndexPQ.new(128, 16, 8)
     index = Faiss::IndexIVFPQR.new(quantizer, 128, 2, 16, 8, 2, 2)
-  end
-
-  def test_index_binary_flat
-    objects = [
-      [1, 1, 2, 1],
-      [5, 4, 6, 5],
-      [1, 2, 1, 2]
-    ]
-    index = Faiss::IndexBinaryFlat.new(32)
-    index.add(objects)
-    distances, ids = index.search(objects, 3)
-
-    assert_equal [[0, 5, 6], [0, 5, 9], [0, 6, 9]], distances.to_a
-    assert_equal [[0, 1, 2], [1, 0, 2], [2, 0, 1]], ids.to_a
-
-    path = "#{Dir.tmpdir}/index.bin"
-    index.save(path)
-    index2 = Faiss::IndexBinary.load(path)
-    assert_equal index.ntotal, index2.ntotal
-  end
-
-  def test_index_binary_ivf
-    skip "Segfaults after 1.6.4 to 1.7.0 upgrade"
-
-    objects = [
-      [1, 1, 2, 1],
-      [5, 4, 6, 5],
-      [1, 2, 1, 2]
-    ]
-    quantizer = Faiss::IndexBinaryFlat.new(32)
-    index = Faiss::IndexBinaryIVF.new(quantizer, 32, 2)
-    index.train(objects)
-    index.add(objects)
-    distances, ids = index.search(objects, 3)
-
-    assert_equal [[0, 6, max_int], [0, max_int, max_int], [0, 6, max_int]], distances.to_a
-    assert_equal [[0, 2, -1], [1, -1, -1], [2, 0, -1]], ids.to_a
-  end
-
-  def test_index_binary_factory
-    Faiss.index_binary_factory(8, "BIVF32")
-  end
-
-  def test_kmeans
-    objects = [
-      [1, 1, 2, 1],
-      [5, 4, 6, 5],
-      [1, 2, 1, 2]
-    ]
-    kmeans = Faiss::Kmeans.new(4, 2)
-    kmeans.train(objects)
-
-    assert_equal [[5, 4, 6, 5], [1, 1.5, 1.5, 1.5]], kmeans.centroids.to_a
-    assert_equal 4, kmeans.d
-    assert_kind_of Faiss::IndexFlatL2, kmeans.index
-    assert_equal 4, kmeans.index.d
-  end
-
-  def test_pca_matrix
-    mt = Numo::SFloat.new(1000, 40).rand
-    mat = Faiss::PCAMatrix.new(40, 10)
-    mat.train(mt)
-    tr = mat.apply(mt)
-    assert_operator (tr ** 2).sum(0).to_a.last, :<, 100
-  end
-
-  def test_product_quantizer
-    x = Numo::SFloat.new(10000, 32).rand
-    pq = Faiss::ProductQuantizer.new(32, 4, 8)
-    pq.train(x)
-    codes = pq.compute_codes(x)
-    assert_equal [10000, 4], codes.shape
-    assert_kind_of Numo::UInt8, codes
-    x2 = pq.decode(codes)
-    assert_equal [10000, 32], x2.shape
-    assert_kind_of Numo::SFloat, x2
-    assert_operator ((x - x2)**2).sum / (x**2).sum, :<, 0.06
-
-    path = "#{Dir.tmpdir}/pq.bin"
-    pq.save(path)
-    pq = Faiss::ProductQuantizer.load(path)
-    x3 = pq.decode(codes)
-    assert_equal x2, x3
   end
 
   private
