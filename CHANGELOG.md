@@ -1,6 +1,7 @@
 ## 0.1.5 (unreleased)
 
 - Added `--with-optflags` option
+- Added support for inner product to `IndexHNSWFlat`
 
 ## 0.1.4 (2021-02-04)
 

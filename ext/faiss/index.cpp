@@ -15,6 +15,20 @@
 
 #include "utils.h"
 
+template<>
+faiss::MetricType from_ruby<faiss::MetricType>(Rice::Object x)
+{
+  auto s = x.to_s().str();
+  if (s == "inner_product") {
+    return faiss::METRIC_INNER_PRODUCT;
+  } else if (s == "l2") {
+    return faiss::METRIC_L2;
+  } else {
+    // TODO throw argument error
+    throw std::runtime_error("Invalid metric: " + s);
+  }
+}
+
 void init_index(Rice::Module& m) {
   Rice::define_class_under<faiss::Index>(m, "Index")
     .define_method(
@@ -79,7 +93,7 @@ void init_index(Rice::Module& m) {
     .define_constructor(Rice::Constructor<faiss::IndexFlatIP, int64_t>());
 
   Rice::define_class_under<faiss::IndexHNSWFlat, faiss::Index>(m, "IndexHNSWFlat")
-    .define_constructor(Rice::Constructor<faiss::IndexHNSWFlat, int, int>());
+    .define_constructor(Rice::Constructor<faiss::IndexHNSWFlat, int, int, faiss::MetricType>(), (Rice::Arg("d"), Rice::Arg("M"), Rice::Arg("metric") = faiss::METRIC_L2));
 
   Rice::define_class_under<faiss::IndexIVFFlat, faiss::Index>(m, "IndexIVFFlat")
     .define_constructor(Rice::Constructor<faiss::IndexIVFFlat, faiss::Index*, size_t, size_t>());
