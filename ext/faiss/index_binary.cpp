@@ -14,7 +14,7 @@ void init_index_binary(Rice::Module& m) {
   Rice::define_class_under<faiss::IndexBinary>(m, "IndexBinary")
     .define_method(
       "d",
-      *[](faiss::Index &self) {
+      *[](faiss::IndexBinary &self) {
         return self.d;
       })
     .define_method(
