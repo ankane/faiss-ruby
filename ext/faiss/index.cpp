@@ -8,6 +8,7 @@
 #include <faiss/IndexIVFPQ.h>
 #include <faiss/IndexIVFPQR.h>
 #include <faiss/index_io.h>
+#include <faiss/AutoTune.h>
 
 #include <rice/Array.hpp>
 #include <rice/Constructor.hpp>
@@ -76,6 +77,11 @@ void init_index(Rice::Module& m) {
         return ret;
       })
     .define_method(
+      "nprobe=",
+      *[](faiss::Index &self, double val) {
+        faiss::ParameterSpace().set_index_parameter(&self, "nprobe", val);
+      })
+    .define_method(
       "save",
       *[](faiss::Index &self, const char *fname) {
         faiss::write_index(&self, fname);
@@ -96,7 +102,7 @@ void init_index(Rice::Module& m) {
     .define_constructor(Rice::Constructor<faiss::IndexHNSWFlat, int, int, faiss::MetricType>(), (Rice::Arg("d"), Rice::Arg("M"), Rice::Arg("metric") = faiss::METRIC_L2));
 
   Rice::define_class_under<faiss::IndexIVFFlat, faiss::Index>(m, "IndexIVFFlat")
-    .define_constructor(Rice::Constructor<faiss::IndexIVFFlat, faiss::Index*, size_t, size_t>());
+    .define_constructor(Rice::Constructor<faiss::IndexIVFFlat, faiss::Index*, size_t, size_t, faiss::MetricType>(), (Rice::Arg("quantizer"), Rice::Arg("d"), Rice::Arg("nlist"), Rice::Arg("metric") = faiss::METRIC_L2));
 
   Rice::define_class_under<faiss::IndexLSH, faiss::Index>(m, "IndexLSH")
     .define_constructor(Rice::Constructor<faiss::IndexLSH, int64_t, int>());
@@ -111,8 +117,16 @@ void init_index(Rice::Module& m) {
     .define_constructor(Rice::Constructor<faiss::IndexIVFScalarQuantizer, faiss::Index*, size_t, size_t, faiss::ScalarQuantizer::QuantizerType>());
 
   Rice::define_class_under<faiss::IndexIVFPQ, faiss::Index>(m, "IndexIVFPQ")
-    .define_constructor(Rice::Constructor<faiss::IndexIVFPQ, faiss::Index*, size_t, size_t, size_t, size_t>());
+    .define_constructor(Rice::Constructor<faiss::IndexIVFPQ, faiss::Index*, size_t, size_t, size_t, size_t, faiss::MetricType>(), (Rice::Arg("quantizer"), Rice::Arg("d"), Rice::Arg("nlist"), Rice::Arg("M"), Rice::Arg("nbits_per_idx"), Rice::Arg("metric") = faiss::METRIC_L2));
 
   Rice::define_class_under<faiss::IndexIVFPQR, faiss::Index>(m, "IndexIVFPQR")
     .define_constructor(Rice::Constructor<faiss::IndexIVFPQR, faiss::Index*, size_t, size_t, size_t, size_t, size_t, size_t>());
+
+  Rice::define_class_under<faiss::ParameterSpace>(m, "ParameterSpace")
+    .define_constructor(Rice::Constructor<faiss::ParameterSpace>())
+    .define_method(
+      "set_index_parameter",
+      *[](faiss::ParameterSpace& self, faiss::Index* index, const std::string& name, double val) {
+        self.set_index_parameter(index, name, val);
+      });
 }

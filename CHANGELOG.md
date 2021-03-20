@@ -1,3 +1,9 @@
+## 0.1.6 (unreleased)
+
+- Added support for inner product to `IndexIVFFlat` and `IndexIVFPQ`
+- Added `ParameterSpace`
+- Added `nprobe=` method
+
 ## 0.1.5 (2021-03-14)
 
 - Added `--with-optflags` option
