@@ -1,4 +1,4 @@
-## 0.1.6 (unreleased)
+## 0.1.6 (2021-03-21)
 
 - Added support for inner product to `IndexIVFFlat` and `IndexIVFPQ`
 - Added `ParameterSpace`
