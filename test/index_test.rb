@@ -126,7 +126,8 @@ class IndexTest < Minitest::Test
   end
 
   def test_index_scalar_quantizer
-    # TODO
+    # TODO improve test
+    index = Faiss::IndexScalarQuantizer.new(4, :qt_8bit)
   end
 
   def test_index_pq
@@ -135,7 +136,9 @@ class IndexTest < Minitest::Test
   end
 
   def test_index_ivf_scalar_quantizer
-    # TODO
+    # TODO improve test
+    quantizer = Faiss::IndexFlatL2.new(4)
+    index = Faiss::IndexIVFScalarQuantizer.new(quantizer, 4, 8, :qt_8bit)
   end
 
   def test_index_ivfpq

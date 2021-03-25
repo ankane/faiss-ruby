@@ -30,6 +30,30 @@ faiss::MetricType from_ruby<faiss::MetricType>(Rice::Object x)
   }
 }
 
+template<>
+faiss::ScalarQuantizer::QuantizerType from_ruby<faiss::ScalarQuantizer::QuantizerType>(Rice::Object x)
+{
+  auto s = x.to_s().str();
+  if (s == "qt_8bit") {
+    return faiss::ScalarQuantizer::QT_8bit;
+  } else if (s == "qt_4bit") {
+    return faiss::ScalarQuantizer::QT_4bit;
+  } else if (s == "qt_8bit_uniform") {
+    return faiss::ScalarQuantizer::QT_8bit_uniform;
+  } else if (s == "qt_4bit_uniform") {
+    return faiss::ScalarQuantizer::QT_4bit_uniform;
+  } else if (s == "qt_fp16") {
+    return faiss::ScalarQuantizer::QT_fp16;
+  } else if (s == "qt_8bit_direct") {
+    return faiss::ScalarQuantizer::QT_8bit_direct;
+  } else if (s == "qt_6bit") {
+    return faiss::ScalarQuantizer::QT_6bit;
+  } else {
+    // TODO throw argument error
+    throw std::runtime_error("Invalid quantizer type: " + s);
+  }
+}
+
 void init_index(Rice::Module& m) {
   Rice::define_class_under<faiss::Index>(m, "Index")
     .define_method(

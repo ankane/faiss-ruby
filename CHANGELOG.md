@@ -1,3 +1,7 @@
+## 0.1.7 (unreleased)
+
+- Added `IndexScalarQuantizer` and `IndexIVFScalarQuantizer`
+
 ## 0.1.6 (2021-03-21)
 
 - Added support for inner product to `IndexIVFFlat` and `IndexIVFPQ`

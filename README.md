@@ -97,10 +97,22 @@ Locality-sensitive hashing
 Faiss::IndexLSH.new(d, nbits)
 ```
 
+Scalar quantizer (SQ) in flat mode
+
+```rb
+Faiss::IndexScalarQuantizer.new(d, qtype)
+```
+
 Product quantizer (PQ) in flat mode
 
 ```rb
 Faiss::IndexPQ.new(d, m, nbits)
+```
+
+IVF and scalar quantizer
+
+```rb
+Faiss::IndexIVFScalarQuantizer.new(quantizer, d, nlists, qtype)
 ```
 
 IVFADC (coarse quantizer+PQ on residuals)
