@@ -1,8 +1,5 @@
 #include <faiss/Clustering.h>
 
-#include <rice/Constructor.hpp>
-#include <rice/Module.hpp>
-
 #include "utils.h"
 
 void init_kmeans(Rice::Module& m) {
@@ -10,17 +7,17 @@ void init_kmeans(Rice::Module& m) {
     .define_constructor(Rice::Constructor<faiss::Clustering, int, int>())
     .define_method(
       "d",
-      *[](faiss::Clustering &self) {
+      [](faiss::Clustering &self) {
         return self.d;
       })
     .define_method(
       "k",
-      *[](faiss::Clustering &self) {
+      [](faiss::Clustering &self) {
         return self.k;
       })
     .define_method(
       "_centroids",
-      *[](faiss::Clustering &self) {
+      [](faiss::Clustering &self) {
         float *centroids = new float[self.k * self.d];
         for (size_t i = 0; i < self.centroids.size(); i++) {
           centroids[i] = self.centroids[i];
@@ -29,7 +26,7 @@ void init_kmeans(Rice::Module& m) {
       })
     .define_method(
       "_train",
-      *[](faiss::Clustering &self, int64_t n, Rice::Object o, faiss::Index & index) {
+      [](faiss::Clustering &self, int64_t n, Rice::Object o, faiss::Index & index) {
         const float *x = float_array(o);
         self.train(n, x, index);
       });

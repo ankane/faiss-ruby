@@ -1,9 +1,6 @@
 #include <faiss/impl/ProductQuantizer.h>
 #include <faiss/index_io.h>
 
-#include <rice/Constructor.hpp>
-#include <rice/Module.hpp>
-
 #include "utils.h"
 
 void init_product_quantizer(Rice::Module& m) {
@@ -11,23 +8,23 @@ void init_product_quantizer(Rice::Module& m) {
     .define_constructor(Rice::Constructor<faiss::ProductQuantizer, size_t, size_t, size_t>())
     .define_method(
       "d",
-      *[](faiss::ProductQuantizer &self) {
+      [](faiss::ProductQuantizer &self) {
         return self.d;
       })
     .define_method(
       "m",
-      *[](faiss::ProductQuantizer &self) {
+      [](faiss::ProductQuantizer &self) {
         return self.M;
       })
     .define_method(
       "_train",
-      *[](faiss::ProductQuantizer &self, int n, Rice::Object o) {
+      [](faiss::ProductQuantizer &self, int n, Rice::Object o) {
         const float *x = float_array(o);
         self.train(n, x);
       })
     .define_method(
       "_compute_codes",
-      *[](faiss::ProductQuantizer &self, int n, Rice::Object o) {
+      [](faiss::ProductQuantizer &self, int n, Rice::Object o) {
         const float *x = float_array(o);
         uint8_t *codes = new uint8_t[n * self.M];
         self.compute_codes(x, codes, n);
@@ -35,7 +32,7 @@ void init_product_quantizer(Rice::Module& m) {
       })
     .define_method(
       "_decode",
-      *[](faiss::ProductQuantizer &self, int n, Rice::Object o) {
+      [](faiss::ProductQuantizer &self, int n, Rice::Object o) {
         const uint8_t *codes = uint8_array(o);
         float *x = new float[n * self.d];
         self.decode(codes, x, n);
@@ -43,12 +40,12 @@ void init_product_quantizer(Rice::Module& m) {
       })
     .define_method(
       "save",
-      *[](faiss::ProductQuantizer &self, const char *fname) {
+      [](faiss::ProductQuantizer &self, const char *fname) {
         faiss::write_ProductQuantizer(&self, fname);
       })
-    .define_singleton_method(
+    .define_singleton_function(
       "load",
-      *[](const char *fname) {
+      [](const char *fname) {
         return faiss::read_ProductQuantizer(fname);
       });
 }

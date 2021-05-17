@@ -1,8 +1,5 @@
 #include "utils.h"
 
-#include <rice/Object.hpp>
-#include <rice/String.hpp>
-
 float* float_array(Rice::Object o)
 {
   Rice::String s = o.call("to_binary");

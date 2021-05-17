@@ -1,4 +1,4 @@
-#include <rice/Module.hpp>
+#include "utils.h"
 
 void init_index(Rice::Module& m);
 void init_index_binary(Rice::Module& m);

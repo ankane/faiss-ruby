@@ -1,7 +1,6 @@
 #pragma once
 
-#include <rice/Object.hpp>
-#include <rice/String.hpp>
+#include <rice/rice.hpp>
 
 float* float_array(Rice::Object o);
 uint8_t* uint8_array(Rice::Object o);
