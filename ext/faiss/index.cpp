@@ -44,8 +44,7 @@ namespace Rice::detail {
       } else if (s == "l2") {
         return faiss::METRIC_L2;
       } else {
-        // TODO throw argument error
-        throw std::runtime_error("Invalid metric: " + s);
+        throw Rice::Exception(rb_eArgError, "Invalid metric: %s", s.c_str());
       }
     }
 
@@ -84,8 +83,7 @@ namespace Rice::detail {
       } else if (s == "qt_6bit") {
         return faiss::ScalarQuantizer::QT_6bit;
       } else {
-        // TODO throw argument error
-        throw std::runtime_error("Invalid quantizer type: " + s);
+        throw Rice::Exception(rb_eArgError, "Invalid quantizer type: %s", s.c_str());
       }
     }
   };
