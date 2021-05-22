@@ -59,6 +59,15 @@ class IndexTest < Minitest::Test
     assert_equal "expected 2 dimensions, not 1", error.message
   end
 
+  def test_bad_dimensions_view
+    index = Faiss::IndexFlatL2.new(3)
+    objects = Numo::SFloat.new(1, 3).seq
+    error = assert_raises(ArgumentError) do
+      index.add(objects.expand_dims(0))
+    end
+    assert_equal "expected 2 dimensions, not 3", error.message
+  end
+
   def test_bad_shape
     index = Faiss::IndexFlatL2.new(3)
     error = assert_raises(ArgumentError) do
