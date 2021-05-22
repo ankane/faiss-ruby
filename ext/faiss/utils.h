@@ -11,26 +11,20 @@ namespace numo {
     size_t* shape();
 
   protected:
+    void construct_value(VALUE dtype, VALUE v);
+    void construct_list(VALUE dtype, std::initializer_list<size_t> s);
+
     VALUE _value;
   };
 
   class SFloat: public NArray {
   public:
     SFloat(VALUE v) {
-      v = rb_funcall(numo_cSFloat, rb_intern("cast"), 1, v);
-      if (nary_check_contiguous(v) == Qfalse) {
-        v = nary_dup(v);
-      }
-      this->_value = v;
+      construct_value(numo_cSFloat, v);
     }
 
     SFloat(std::initializer_list<size_t> s) {
-      auto shape = ALLOCA_N(size_t, s.size());
-      size_t i = 0;
-      for (auto& v : s) {
-        shape[i++] = v;
-      }
-      this->_value = rb_narray_new(numo_cSFloat, s.size(), shape);
+      construct_list(numo_cSFloat, s);
     }
 
     const float* read_ptr();
@@ -42,20 +36,11 @@ namespace numo {
   class UInt8: public NArray {
   public:
     UInt8(VALUE v) {
-      v = rb_funcall(numo_cUInt8, rb_intern("cast"), 1, v);
-      if (nary_check_contiguous(v) == Qfalse) {
-        v = nary_dup(v);
-      }
-      this->_value = v;
+      construct_value(numo_cUInt8, v);
     }
 
     UInt8(std::initializer_list<size_t> s) {
-      auto shape = ALLOCA_N(size_t, s.size());
-      size_t i = 0;
-      for (auto& v : s) {
-        shape[i++] = v;
-      }
-      this->_value = rb_narray_new(numo_cUInt8, s.size(), shape);
+      construct_list(numo_cUInt8, s);
     }
 
     const uint8_t* read_ptr();
@@ -67,20 +52,11 @@ namespace numo {
   class Int32: public NArray {
   public:
     Int32(VALUE v) {
-      v = rb_funcall(numo_cInt32, rb_intern("cast"), 1, v);
-      if (nary_check_contiguous(v) == Qfalse) {
-        v = nary_dup(v);
-      }
-      this->_value = v;
+      construct_value(numo_cInt32, v);
     }
 
     Int32(std::initializer_list<size_t> s) {
-      auto shape = ALLOCA_N(size_t, s.size());
-      size_t i = 0;
-      for (auto& v : s) {
-        shape[i++] = v;
-      }
-      this->_value = rb_narray_new(numo_cInt32, s.size(), shape);
+      construct_list(numo_cInt32, s);
     }
 
     const int32_t* read_ptr();
@@ -92,20 +68,11 @@ namespace numo {
   class Int64: public NArray {
   public:
     Int64(VALUE v) {
-      v = rb_funcall(numo_cInt64, rb_intern("cast"), 1, v);
-      if (nary_check_contiguous(v) == Qfalse) {
-        v = nary_dup(v);
-      }
-      this->_value = v;
+      construct_value(numo_cInt64, v);
     }
 
     Int64(std::initializer_list<size_t> s) {
-      auto shape = ALLOCA_N(size_t, s.size());
-      size_t i = 0;
-      for (auto& v : s) {
-        shape[i++] = v;
-      }
-      this->_value = rb_narray_new(numo_cInt64, s.size(), shape);
+      construct_list(numo_cInt64, s);
     }
 
     const int64_t* read_ptr();
