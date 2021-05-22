@@ -19,12 +19,7 @@ void init_kmeans(Rice::Module& m) {
       "centroids",
       [](faiss::Clustering &self) {
         auto centroids = numo::SFloat({self.k, self.d});
-
-        auto data = centroids.write_ptr();
-        for (size_t i = 0; i < self.centroids.size(); i++) {
-          data[i] = self.centroids[i];
-        }
-
+        memcpy(centroids.write_ptr(), self.centroids.data(), self.centroids.size() * sizeof(float));
         return centroids;
       })
     .define_method(
