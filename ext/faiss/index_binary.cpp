@@ -24,32 +24,30 @@ void init_index_binary(Rice::Module& m) {
         return self.ntotal;
       })
     .define_method(
-      "_train",
-      [](faiss::IndexBinary &self, int64_t n, Rice::Object o) {
-        const uint8_t *x = uint8_array(o);
-        self.train(n, x);
+      "train",
+      [](faiss::IndexBinary &self, numo::UInt8 objects) {
+        auto n = check_shape(objects, self.d / 8);
+        self.train(n, objects.read_ptr());
       })
     .define_method(
-      "_add",
-      [](faiss::IndexBinary &self, int64_t n, Rice::Object o) {
-        const uint8_t *x = uint8_array(o);
-        self.add(n, x);
+      "add",
+      [](faiss::IndexBinary &self, numo::UInt8 objects) {
+        auto n = check_shape(objects, self.d / 8);
+        self.add(n, objects.read_ptr());
       })
     .define_method(
-      "_search",
-      [](faiss::IndexBinary &self, int64_t n, Rice::Object o, int64_t k) {
-        const uint8_t *x = uint8_array(o);
-        int32_t *distances = new int32_t[k * n];
-        int64_t *labels = new int64_t[k * n];
+      "search",
+      [](faiss::IndexBinary &self, numo::UInt8 objects, size_t k) {
+        auto n = check_shape(objects, self.d / 8);
 
-        self.search(n, x, k, distances, labels);
+        auto distances = numo::Int32({n, k});
+        auto labels = numo::Int64({n, k});
 
-        auto dstr = result(distances, k * n);
-        auto lstr = result(labels, k * n);
+        self.search(n, objects.read_ptr(), k, distances.write_ptr(), labels.write_ptr());
 
         Rice::Array ret;
-        ret.push(dstr);
-        ret.push(lstr);
+        ret.push(distances);
+        ret.push(labels);
         return ret;
       })
     .define_method(

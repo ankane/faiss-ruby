@@ -16,18 +16,21 @@ void init_kmeans(Rice::Module& m) {
         return self.k;
       })
     .define_method(
-      "_centroids",
+      "centroids",
       [](faiss::Clustering &self) {
-        float *centroids = new float[self.k * self.d];
+        auto centroids = numo::SFloat({self.k, self.d});
+
+        auto data = centroids.write_ptr();
         for (size_t i = 0; i < self.centroids.size(); i++) {
-          centroids[i] = self.centroids[i];
+          data[i] = self.centroids[i];
         }
-        return result(centroids, self.k * self.d);
+
+        return centroids;
       })
     .define_method(
       "_train",
-      [](faiss::Clustering &self, int64_t n, Rice::Object o, faiss::Index & index) {
-        const float *x = float_array(o);
-        self.train(n, x, index);
+      [](faiss::Clustering &self, numo::SFloat objects, faiss::Index & index) {
+        auto n = check_shape(objects, self.d);
+        self.train(n, objects.read_ptr(), index);
       });
 }

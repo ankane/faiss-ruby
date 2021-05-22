@@ -1,37 +1,57 @@
 #include "utils.h"
 
-float* float_array(Rice::Object o)
-{
-  Rice::String s = o.call("to_binary");
-  return (float*) s.c_str();
+VALUE numo::NArray::value() const {
+  return this->_value;
 }
 
-uint8_t* uint8_array(Rice::Object o)
-{
-  Rice::String s = o.call("to_binary");
-  return (uint8_t*) s.c_str();
+size_t numo::NArray::ndim() {
+  return RNARRAY_NDIM(this->_value);
 }
 
-// TODO return Numo::SFloat
-Rice::String result(float* ptr, int64_t length)
-{
-  return Rice::String(std::string((char*) ptr, length * sizeof(float)));
+size_t* numo::NArray::shape() {
+  return RNARRAY_SHAPE(this->_value);
 }
 
-// TODO return Numo::UInt8
-Rice::String result(uint8_t* ptr, int64_t length)
-{
-  return Rice::String(std::string((char*) ptr, length * sizeof(uint8_t)));
+const float* numo::SFloat::read_ptr() {
+  return (float*) nary_get_pointer_for_read(this->_value);
 }
 
-// TODO return Numo::Int32
-Rice::String result(int32_t* ptr, int64_t length)
-{
-  return Rice::String(std::string((char*) ptr, length * sizeof(int32_t)));
+float* numo::SFloat::write_ptr() {
+  return (float*) nary_get_pointer_for_write(this->_value);
 }
 
-// TODO return Numo::Int64
-Rice::String result(int64_t* ptr, int64_t length)
-{
-  return Rice::String(std::string((char*) ptr, length * sizeof(int64_t)));
+const uint8_t* numo::UInt8::read_ptr() {
+  return (uint8_t*) nary_get_pointer_for_read(this->_value);
+}
+
+uint8_t* numo::UInt8::write_ptr() {
+  return (uint8_t*) nary_get_pointer_for_write(this->_value);
+}
+
+const int32_t* numo::Int32::read_ptr() {
+  return (int32_t*) nary_get_pointer_for_read(this->_value);
+}
+
+int32_t* numo::Int32::write_ptr() {
+  return (int32_t*) nary_get_pointer_for_write(this->_value);
+}
+
+const int64_t* numo::Int64::read_ptr() {
+  return (int64_t*) nary_get_pointer_for_read(this->_value);
+}
+
+int64_t* numo::Int64::write_ptr() {
+  return (int64_t*) nary_get_pointer_for_write(this->_value);
+}
+
+size_t check_shape(numo::NArray objects, size_t k) {
+  auto ndim = objects.ndim();
+  if (ndim != 2) {
+    throw Rice::Exception(rb_eArgError, "expected 2 dimensions, not %d", ndim);
+  }
+  auto shape = objects.shape();
+  if (shape[1] != k) {
+    throw Rice::Exception(rb_eArgError, "expected 2nd dimension to be %d, not %d", k, shape[1]);
+  }
+  return shape[0];
 }

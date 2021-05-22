@@ -4,6 +4,10 @@ abort "BLAS not found" unless have_library("blas")
 abort "LAPACK not found" unless have_library("lapack")
 abort "OpenMP not found" unless have_library("omp") || have_library("gomp")
 
+numo = $LOAD_PATH.find { |v| File.exist?("#{v}/numo/numo/narray.h") }
+$INCFLAGS << " -I#{numo}/numo" if numo
+abort "Numo not found" unless have_header("numo/narray.h")
+
 $CXXFLAGS << " -std=c++17 $(optflags) -DFINTEGER=int " << with_config("optflags", "-march=native")
 
 ext = File.expand_path(".", __dir__)

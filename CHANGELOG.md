@@ -1,5 +1,6 @@
 ## 0.2.0 (unreleased)
 
+- Improved performance
 - Updated to Rice 4
 - Dropped support for Ruby < 2.6
 

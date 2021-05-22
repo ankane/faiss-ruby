@@ -16,16 +16,20 @@ void init_pca_matrix(Rice::Module& m) {
         return self.d_out;
       })
     .define_method(
-      "_train",
-      [](faiss::PCAMatrix &self, int64_t n, Rice::Object o) {
-        const float *x = float_array(o);
-        self.train(n, x);
+      "train",
+      [](faiss::PCAMatrix &self, numo::SFloat objects) {
+        auto n = check_shape(objects, self.d_in);
+        self.train(n, objects.read_ptr());
       })
     .define_method(
-      "_apply",
-      [](faiss::PCAMatrix &self, int64_t n, Rice::Object o) {
-        const float *x = float_array(o);
-        float* res = self.apply(n, x);
-        return result(res, n * self.d_out);
+      "apply",
+      [](faiss::PCAMatrix &self, numo::SFloat objects) {
+        auto n = check_shape(objects, self.d_in);
+
+        float* res = self.apply(n, objects.read_ptr());
+
+        auto ary = numo::SFloat({n, static_cast<size_t>(self.d_out)});
+        memcpy(ary.write_ptr(), res, n * self.d_out * sizeof(float));
+        return ary;
       });
 }

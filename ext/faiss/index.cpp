@@ -109,32 +109,30 @@ void init_index(Rice::Module& m) {
         return self.ntotal;
       })
     .define_method(
-      "_train",
-      [](faiss::Index &self, int64_t n, Rice::Object o) {
-        const float *x = float_array(o);
-        self.train(n, x);
+      "train",
+      [](faiss::Index &self, numo::SFloat objects) {
+        auto n = check_shape(objects, self.d);
+        self.train(n, objects.read_ptr());
       })
     .define_method(
-      "_add",
-      [](faiss::Index &self, int64_t n, Rice::Object o) {
-        const float *x = float_array(o);
-        self.add(n, x);
+      "add",
+      [](faiss::Index &self, numo::SFloat objects) {
+        auto n = check_shape(objects, self.d);
+        self.add(n, objects.read_ptr());
       })
     .define_method(
-      "_search",
-      [](faiss::Index &self, int64_t n, Rice::Object o, int64_t k) {
-        const float *x = float_array(o);
-        float *distances = new float[k * n];
-        int64_t *labels = new int64_t[k * n];
+      "search",
+      [](faiss::Index &self, numo::SFloat objects, size_t k) {
+        auto n = check_shape(objects, self.d);
 
-        self.search(n, x, k, distances, labels);
+        auto distances = numo::SFloat({n, k});
+        auto labels = numo::Int64({n, k});
 
-        auto dstr = result(distances, k * n);
-        auto lstr = result(labels, k * n);
+        self.search(n, objects.read_ptr(), k, distances.write_ptr(), labels.write_ptr());
 
         Rice::Array ret;
-        ret.push(dstr);
-        ret.push(lstr);
+        ret.push(distances);
+        ret.push(labels);
         return ret;
       })
     .define_method(

@@ -32,6 +32,22 @@ class IndexTest < Minitest::Test
     assert_equal index.ntotal, index2.ntotal
   end
 
+  def test_bad_dimensions
+    index = Faiss::IndexFlatL2.new(3)
+    error = assert_raises(ArgumentError) do
+      index.add([1])
+    end
+    assert_equal "expected 2 dimensions, not 1", error.message
+  end
+
+  def test_bad_shape
+    index = Faiss::IndexFlatL2.new(3)
+    error = assert_raises(ArgumentError) do
+      index.add([[1]])
+    end
+    assert_equal "expected 2nd dimension to be 3, not 1", error.message
+  end
+
   def test_index_flat_l2
     objects = [
       [1, 1, 2, 1],
