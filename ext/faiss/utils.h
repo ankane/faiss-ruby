@@ -6,12 +6,35 @@
 namespace numo {
   class NArray {
   public:
-    VALUE value() const;
-    size_t ndim();
-    size_t* shape();
+    VALUE value() const {
+      return this->_value;
+    }
+
+    size_t ndim() {
+      return RNARRAY_NDIM(this->_value);
+    }
+
+    size_t* shape() {
+      return RNARRAY_SHAPE(this->_value);
+    }
+
+    const void* read_ptr() {
+      return nary_get_pointer_for_read(this->_value) + nary_get_offset(this->_value);
+    }
+
+    void* write_ptr() {
+      return nary_get_pointer_for_write(this->_value);
+    }
 
   protected:
-    void construct_value(VALUE dtype, VALUE v);
+    void construct_value(VALUE dtype, VALUE v) {
+      v = rb_funcall(dtype, rb_intern("cast"), 1, v);
+      if (nary_check_contiguous(v) == Qfalse) {
+        v = nary_dup(v);
+      }
+      this->_value = v;
+    }
+
     template<std::size_t N>
     void construct_shape(VALUE dtype, const size_t(&shape)[N]) {
       // rb_narray_new doesn't modify shape, but not marked as const
@@ -32,8 +55,13 @@ namespace numo {
       construct_shape<N>(numo_cSFloat, shape);
     }
 
-    const float* read_ptr();
-    float* write_ptr();
+    const float* read_ptr() {
+      return reinterpret_cast<const float*>(NArray::read_ptr());
+    }
+
+    float* write_ptr() {
+      return reinterpret_cast<float*>(NArray::write_ptr());
+    }
   };
 }
 
@@ -49,8 +77,13 @@ namespace numo {
       construct_shape<N>(numo_cUInt8, shape);
     }
 
-    const uint8_t* read_ptr();
-    uint8_t* write_ptr();
+    const uint8_t* read_ptr() {
+      return reinterpret_cast<const uint8_t*>(NArray::read_ptr());
+    }
+
+    uint8_t* write_ptr() {
+      return reinterpret_cast<uint8_t*>(NArray::write_ptr());
+    }
   };
 }
 
@@ -66,8 +99,13 @@ namespace numo {
       construct_shape<N>(numo_cInt32, shape);
     }
 
-    const int32_t* read_ptr();
-    int32_t* write_ptr();
+    const int32_t* read_ptr() {
+      return reinterpret_cast<const int32_t*>(NArray::read_ptr());
+    }
+
+    int32_t* write_ptr() {
+      return reinterpret_cast<int32_t*>(NArray::write_ptr());
+    }
   };
 }
 
@@ -83,8 +121,13 @@ namespace numo {
       construct_shape<N>(numo_cInt64, shape);
     }
 
-    const int64_t* read_ptr();
-    int64_t* write_ptr();
+    const int64_t* read_ptr() {
+      return reinterpret_cast<const int64_t*>(NArray::read_ptr());
+    }
+
+    int64_t* write_ptr() {
+      return reinterpret_cast<int64_t*>(NArray::write_ptr());
+    }
   };
 }
 
