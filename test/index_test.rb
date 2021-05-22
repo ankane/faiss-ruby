@@ -67,6 +67,15 @@ class IndexTest < Minitest::Test
     assert_equal "expected 2nd dimension to be 3, not 1", error.message
   end
 
+  def test_bad_shape_view
+    index = Faiss::IndexFlatL2.new(3)
+    objects = Numo::SFloat.cast([[1, 2, 3]])
+    error = assert_raises(ArgumentError) do
+      index.add(objects[true, 0..1])
+    end
+    assert_equal "expected 2nd dimension to be 3, not 2", error.message
+  end
+
   def test_index_flat_l2
     objects = [
       [1, 1, 2, 1],
