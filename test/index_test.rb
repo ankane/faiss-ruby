@@ -183,6 +183,13 @@ class IndexTest < Minitest::Test
     index = Faiss::IndexScalarQuantizer.new(4, :qt_8bit)
   end
 
+  def test_invalid_quantizer_type
+    error = assert_raises do
+      Faiss::IndexScalarQuantizer.new(4, :bad)
+    end
+    assert_equal "Invalid quantizer type: bad", error.message
+  end
+
   def test_index_pq
     # TODO improve test
     index = Faiss::IndexPQ.new(128, 16, 8)
