@@ -5,5 +5,4 @@ require "numo/narray"
 require "faiss/ext"
 
 # modules
-require "faiss/kmeans"
 require "faiss/version"
