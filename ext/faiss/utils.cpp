@@ -12,6 +12,7 @@ size_t* numo::NArray::shape() {
   return RNARRAY_SHAPE(this->_value);
 }
 
+// need a contiguous array for pointers
 void numo::NArray::construct_value(VALUE dtype, VALUE v) {
   v = rb_funcall(dtype, rb_intern("cast"), 1, v);
   if (nary_check_contiguous(v) == Qfalse) {
