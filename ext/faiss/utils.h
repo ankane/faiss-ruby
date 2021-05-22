@@ -12,7 +12,11 @@ namespace numo {
 
   protected:
     void construct_value(VALUE dtype, VALUE v);
-    void construct_list(VALUE dtype, std::initializer_list<size_t> s);
+    template<std::size_t N>
+    void construct_shape(VALUE dtype, const size_t(&shape)[N]) {
+      // rb_narray_new doesn't modify shape, but not marked as const
+      this->_value = rb_narray_new(dtype, N, const_cast<size_t*>(shape));
+    }
 
     VALUE _value;
   };
@@ -23,8 +27,9 @@ namespace numo {
       construct_value(numo_cSFloat, v);
     }
 
-    SFloat(std::initializer_list<size_t> s) {
-      construct_list(numo_cSFloat, s);
+    template<std::size_t N>
+    SFloat(const size_t(&shape)[N]) {
+      construct_shape<N>(numo_cSFloat, shape);
     }
 
     const float* read_ptr();
@@ -39,8 +44,9 @@ namespace numo {
       construct_value(numo_cUInt8, v);
     }
 
-    UInt8(std::initializer_list<size_t> s) {
-      construct_list(numo_cUInt8, s);
+    template<std::size_t N>
+    UInt8(const size_t(&shape)[N]) {
+      construct_shape<N>(numo_cUInt8, shape);
     }
 
     const uint8_t* read_ptr();
@@ -55,8 +61,9 @@ namespace numo {
       construct_value(numo_cInt32, v);
     }
 
-    Int32(std::initializer_list<size_t> s) {
-      construct_list(numo_cInt32, s);
+    template<std::size_t N>
+    Int32(const size_t(&shape)[N]) {
+      construct_shape<N>(numo_cInt32, shape);
     }
 
     const int32_t* read_ptr();
@@ -71,8 +78,9 @@ namespace numo {
       construct_value(numo_cInt64, v);
     }
 
-    Int64(std::initializer_list<size_t> s) {
-      construct_list(numo_cInt64, s);
+    template<std::size_t N>
+    Int64(const size_t(&shape)[N]) {
+      construct_shape<N>(numo_cInt64, shape);
     }
 
     const int64_t* read_ptr();

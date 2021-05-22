@@ -21,15 +21,6 @@ void numo::NArray::construct_value(VALUE dtype, VALUE v) {
   this->_value = v;
 }
 
-void numo::NArray::construct_list(VALUE dtype, std::initializer_list<size_t> s) {
-  auto shape = ALLOCA_N(size_t, s.size());
-  size_t i = 0;
-  for (auto& v : s) {
-    shape[i++] = v;
-  }
-  this->_value = rb_narray_new(dtype, s.size(), shape);
-}
-
 const float* numo::SFloat::read_ptr() {
   return reinterpret_cast<float*>(nary_get_pointer_for_read(this->_value) + nary_get_offset(this->_value));
 }
