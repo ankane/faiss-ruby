@@ -32,6 +32,25 @@ class IndexTest < Minitest::Test
     assert_equal index.ntotal, index2.ntotal
   end
 
+  def test_view
+    xb = Numo::SFloat.new(100, 1).seq[50..-1, true]
+    index = Faiss::IndexFlatL2.new(1)
+    index.add(xb)
+    d, i = index.search([[0]], 1)
+    assert_equal [0], i[true, 0].to_a
+    assert_equal [2500], d[true, 0].to_a
+  end
+
+  def test_non_contiguous
+    xb = Numo::SFloat.new(100, 1).seq.reverse[0...50, true]
+    refute xb.contiguous?
+    index = Faiss::IndexFlatL2.new(1)
+    index.add(xb)
+    d, i = index.search([[0]], 1)
+    assert_equal [49], i[true, 0].to_a
+    assert_equal [2500], d[true, 0].to_a
+  end
+
   def test_bad_dimensions
     index = Faiss::IndexFlatL2.new(3)
     error = assert_raises(ArgumentError) do

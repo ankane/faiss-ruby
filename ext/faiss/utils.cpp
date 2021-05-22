@@ -13,7 +13,7 @@ size_t* numo::NArray::shape() {
 }
 
 const float* numo::SFloat::read_ptr() {
-  return (float*) nary_get_pointer_for_read(this->_value);
+  return (float*) (nary_get_pointer_for_read(this->_value) + nary_get_offset(this->_value));
 }
 
 float* numo::SFloat::write_ptr() {
@@ -21,7 +21,7 @@ float* numo::SFloat::write_ptr() {
 }
 
 const uint8_t* numo::UInt8::read_ptr() {
-  return (uint8_t*) nary_get_pointer_for_read(this->_value);
+  return (uint8_t*) (nary_get_pointer_for_read(this->_value) + nary_get_offset(this->_value));
 }
 
 uint8_t* numo::UInt8::write_ptr() {
@@ -29,7 +29,7 @@ uint8_t* numo::UInt8::write_ptr() {
 }
 
 const int32_t* numo::Int32::read_ptr() {
-  return (int32_t*) nary_get_pointer_for_read(this->_value);
+  return (int32_t*) (nary_get_pointer_for_read(this->_value) + nary_get_offset(this->_value));
 }
 
 int32_t* numo::Int32::write_ptr() {
@@ -37,7 +37,7 @@ int32_t* numo::Int32::write_ptr() {
 }
 
 const int64_t* numo::Int64::read_ptr() {
-  return (int64_t*) nary_get_pointer_for_read(this->_value);
+  return (int64_t*) (nary_get_pointer_for_read(this->_value) + nary_get_offset(this->_value));
 }
 
 int64_t* numo::Int64::write_ptr() {

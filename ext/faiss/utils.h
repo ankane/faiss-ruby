@@ -17,7 +17,11 @@ namespace numo {
   class SFloat: public NArray {
   public:
     SFloat(VALUE v) {
-      this->_value = rb_funcall(numo_cSFloat, rb_intern("cast"), 1, v);
+      v = rb_funcall(numo_cSFloat, rb_intern("cast"), 1, v);
+      if (nary_check_contiguous(v) == Qfalse) {
+        v = nary_dup(v);
+      }
+      this->_value = v;
     }
 
     SFloat(std::initializer_list<size_t> s) {
@@ -38,7 +42,11 @@ namespace numo {
   class UInt8: public NArray {
   public:
     UInt8(VALUE v) {
-      this->_value = rb_funcall(numo_cUInt8, rb_intern("cast"), 1, v);
+      v = rb_funcall(numo_cUInt8, rb_intern("cast"), 1, v);
+      if (nary_check_contiguous(v) == Qfalse) {
+        v = nary_dup(v);
+      }
+      this->_value = v;
     }
 
     UInt8(std::initializer_list<size_t> s) {
@@ -59,7 +67,11 @@ namespace numo {
   class Int32: public NArray {
   public:
     Int32(VALUE v) {
-      this->_value = rb_funcall(numo_cInt32, rb_intern("cast"), 1, v);
+      v = rb_funcall(numo_cInt32, rb_intern("cast"), 1, v);
+      if (nary_check_contiguous(v) == Qfalse) {
+        v = nary_dup(v);
+      }
+      this->_value = v;
     }
 
     Int32(std::initializer_list<size_t> s) {
@@ -80,7 +92,11 @@ namespace numo {
   class Int64: public NArray {
   public:
     Int64(VALUE v) {
-      this->_value = rb_funcall(numo_cInt64, rb_intern("cast"), 1, v);
+      v = rb_funcall(numo_cInt64, rb_intern("cast"), 1, v);
+      if (nary_check_contiguous(v) == Qfalse) {
+        v = nary_dup(v);
+      }
+      this->_value = v;
     }
 
     Int64(std::initializer_list<size_t> s) {
