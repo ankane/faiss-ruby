@@ -19,6 +19,9 @@ namespace numo {
     }
 
     const void* read_ptr() {
+      if (nary_check_contiguous(this->_value) != Qtrue) {
+        this->_value = nary_dup(this->_value);
+      }
       return nary_get_pointer_for_read(this->_value) + nary_get_offset(this->_value);
     }
 
@@ -28,11 +31,7 @@ namespace numo {
 
   protected:
     void construct_value(VALUE dtype, VALUE v) {
-      v = rb_funcall(dtype, rb_intern("cast"), 1, v);
-      if (nary_check_contiguous(v) == Qfalse) {
-        v = nary_dup(v);
-      }
-      this->_value = v;
+      this->_value = rb_funcall(dtype, rb_intern("cast"), 1, v);
     }
 
     template<std::size_t N>
