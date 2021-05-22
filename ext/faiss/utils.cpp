@@ -31,35 +31,35 @@ void numo::NArray::construct_list(VALUE dtype, std::initializer_list<size_t> s) 
 }
 
 const float* numo::SFloat::read_ptr() {
-  return (float*) (nary_get_pointer_for_read(this->_value) + nary_get_offset(this->_value));
+  return reinterpret_cast<float*>(nary_get_pointer_for_read(this->_value) + nary_get_offset(this->_value));
 }
 
 float* numo::SFloat::write_ptr() {
-  return (float*) nary_get_pointer_for_write(this->_value);
+  return reinterpret_cast<float*>(nary_get_pointer_for_write(this->_value));
 }
 
 const uint8_t* numo::UInt8::read_ptr() {
-  return (uint8_t*) (nary_get_pointer_for_read(this->_value) + nary_get_offset(this->_value));
+  return reinterpret_cast<uint8_t*>(nary_get_pointer_for_read(this->_value) + nary_get_offset(this->_value));
 }
 
 uint8_t* numo::UInt8::write_ptr() {
-  return (uint8_t*) nary_get_pointer_for_write(this->_value);
+  return reinterpret_cast<uint8_t*>(nary_get_pointer_for_write(this->_value));
 }
 
 const int32_t* numo::Int32::read_ptr() {
-  return (int32_t*) (nary_get_pointer_for_read(this->_value) + nary_get_offset(this->_value));
+  return reinterpret_cast<int32_t*>(nary_get_pointer_for_read(this->_value) + nary_get_offset(this->_value));
 }
 
 int32_t* numo::Int32::write_ptr() {
-  return (int32_t*) nary_get_pointer_for_write(this->_value);
+  return reinterpret_cast<int32_t*>(nary_get_pointer_for_write(this->_value));
 }
 
 const int64_t* numo::Int64::read_ptr() {
-  return (int64_t*) (nary_get_pointer_for_read(this->_value) + nary_get_offset(this->_value));
+  return reinterpret_cast<int64_t*>(nary_get_pointer_for_read(this->_value) + nary_get_offset(this->_value));
 }
 
 int64_t* numo::Int64::write_ptr() {
-  return (int64_t*) nary_get_pointer_for_write(this->_value);
+  return reinterpret_cast<int64_t*>(nary_get_pointer_for_write(this->_value));
 }
 
 size_t check_shape(numo::NArray objects, size_t k) {
