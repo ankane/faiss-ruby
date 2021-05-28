@@ -1,3 +1,7 @@
+## 0.2.1 (unreleased)
+
+- Updated Faiss to 1.7.1
+
 ## 0.2.0 (2021-05-23)
 
 - Improved performance
