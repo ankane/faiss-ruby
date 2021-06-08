@@ -1,4 +1,5 @@
 require "mkmf-rice"
+require "numo/narray"
 
 abort "BLAS not found" unless have_library("blas")
 abort "LAPACK not found" unless have_library("lapack")
