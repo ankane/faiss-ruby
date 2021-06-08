@@ -1,6 +1,6 @@
 #include "utils.h"
 
-size_t check_shape(numo::NArray objects, size_t k) {
+size_t check_shape(numo::NArray& objects, size_t k) {
   auto ndim = objects.ndim();
   if (ndim != 2) {
     throw Rice::Exception(rb_eArgError, "expected 2 dimensions, not %d", ndim);
