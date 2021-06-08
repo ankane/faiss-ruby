@@ -24,19 +24,19 @@ namespace numo {
       return this->_value;
     }
 
-    size_t ndim() {
+    size_t ndim() const {
       return RNARRAY_NDIM(this->_value);
     }
 
-    size_t* shape() {
+    size_t* shape() const {
       return RNARRAY_SHAPE(this->_value);
     }
 
-    size_t size() {
+    size_t size() const {
       return RNARRAY_SIZE(this->_value);
     }
 
-    bool is_contiguous() {
+    bool is_contiguous() const {
       return nary_check_contiguous(this->_value) == Qtrue;
     }
 
