@@ -4,7 +4,7 @@ Gem::Specification.new do |spec|
   spec.name          = "faiss"
   spec.version       = Faiss::VERSION
   spec.summary       = "Efficient similarity search and clustering for Ruby"
-  spec.homepage      = "https://github.com/ankane/faiss"
+  spec.homepage      = "https://github.com/ankane/faiss-ruby"
   spec.license       = "MIT"
 
   spec.author        = "Andrew Kane"

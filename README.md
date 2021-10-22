@@ -1,10 +1,10 @@
-# Faiss
+# Faiss Ruby
 
 [Faiss](https://github.com/facebookresearch/faiss) - efficient similarity search and clustering - for Ruby
 
 Learn more about [Faiss](https://engineering.fb.com/data-infrastructure/faiss-a-library-for-efficient-similarity-search/)
 
-[![Build Status](https://github.com/ankane/faiss/workflows/build/badge.svg?branch=master)](https://github.com/ankane/faiss/actions)
+[![Build Status](https://github.com/ankane/faiss-ruby/workflows/build/badge.svg?branch=master)](https://github.com/ankane/faiss-ruby/actions)
 
 ## Installation
 
@@ -220,22 +220,22 @@ Numo::NArray.cast([[1, 2, 3], [4, 5, 6]])
 
 ## History
 
-View the [changelog](https://github.com/ankane/faiss/blob/master/CHANGELOG.md)
+View the [changelog](https://github.com/ankane/faiss-ruby/blob/master/CHANGELOG.md)
 
 ## Contributing
 
 Everyone is encouraged to help improve this project. Here are a few ways you can help:
 
-- [Report bugs](https://github.com/ankane/faiss/issues)
-- Fix bugs and [submit pull requests](https://github.com/ankane/faiss/pulls)
+- [Report bugs](https://github.com/ankane/faiss-ruby/issues)
+- Fix bugs and [submit pull requests](https://github.com/ankane/faiss-ruby/pulls)
 - Write, clarify, or fix documentation
 - Suggest or add new features
 
 To get started with development:
 
 ```sh
-git clone --recursive https://github.com/ankane/faiss.git
-cd faiss
+git clone --recursive https://github.com/ankane/faiss-ruby.git
+cd faiss-ruby
 bundle install
 bundle exec rake compile
 bundle exec rake test
