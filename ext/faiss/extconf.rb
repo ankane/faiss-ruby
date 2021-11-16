@@ -8,7 +8,9 @@ abort "OpenMP not found" unless have_library("omp") || have_library("gomp")
 numo = File.join(Gem.loaded_specs["numo-narray"].require_path, "numo")
 abort "Numo not found" unless find_header("numo/narray.h", numo)
 
-$CXXFLAGS << " -std=c++17 $(optflags) -DFINTEGER=int " << with_config("optflags", "-march=native")
+# -march=native not supported with ARM Mac
+default_optflags = RbConfig::CONFIG["host_os"] =~ /darwin/i && RbConfig::CONFIG["host_cpu"] =~ /arm/i ? "" : "-march=native"
+$CXXFLAGS << " -std=c++17 $(optflags) -DFINTEGER=int " << with_config("optflags", default_optflags)
 
 ext = File.expand_path(".", __dir__)
 vendor = File.expand_path("../../vendor/faiss", __dir__)

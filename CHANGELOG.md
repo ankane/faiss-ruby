@@ -1,3 +1,7 @@
+## 0.2.3 (unreleased)
+
+- Fixed installation error with ARM Mac
+
 ## 0.2.2 (2021-06-08)
 
 - Fixed installation error
