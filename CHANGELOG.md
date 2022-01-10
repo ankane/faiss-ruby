@@ -1,3 +1,7 @@
+## 0.2.4 (unreleased)
+
+- Updated Faiss to 1.7.2
+
 ## 0.2.3 (2021-12-17)
 
 - Fixed installation error with ARM Mac
