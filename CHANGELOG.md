@@ -1,4 +1,4 @@
-## 0.2.4 (unreleased)
+## 0.2.4 (2022-01-10)
 
 - Updated Faiss to 1.7.2
 
