@@ -42,12 +42,12 @@ void init_product_quantizer(Rice::Module& m) {
       })
     .define_method(
       "save",
-      [](faiss::ProductQuantizer &self, const char *fname) {
-        faiss::write_ProductQuantizer(&self, fname);
+      [](faiss::ProductQuantizer &self, Rice::String fname) {
+        faiss::write_ProductQuantizer(&self, fname.c_str());
       })
     .define_singleton_function(
       "load",
-      [](const char *fname) {
-        return faiss::read_ProductQuantizer(fname);
+      [](Rice::String fname) {
+        return faiss::read_ProductQuantizer(fname.c_str());
       });
 }

@@ -140,13 +140,13 @@ void init_index(Rice::Module& m) {
       })
     .define_method(
       "save",
-      [](faiss::Index &self, const char *fname) {
-        faiss::write_index(&self, fname);
+      [](faiss::Index &self, Rice::String fname) {
+        faiss::write_index(&self, fname.c_str());
       })
     .define_singleton_function(
       "load",
-      [](const char *fname) {
-        return faiss::read_index(fname);
+      [](Rice::String fname) {
+        return faiss::read_index(fname.c_str());
       });
 
   Rice::define_class_under<faiss::IndexFlatL2, faiss::Index>(m, "IndexFlatL2")

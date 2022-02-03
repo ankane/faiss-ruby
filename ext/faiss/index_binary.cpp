@@ -52,13 +52,13 @@ void init_index_binary(Rice::Module& m) {
       })
     .define_method(
       "save",
-      [](faiss::IndexBinary &self, const char *fname) {
-        faiss::write_index_binary(&self, fname);
+      [](faiss::IndexBinary &self, Rice::String fname) {
+        faiss::write_index_binary(&self, fname.c_str());
       })
     .define_singleton_function(
       "load",
-      [](const char *fname) {
-        return faiss::read_index_binary(fname);
+      [](Rice::String fname) {
+        return faiss::read_index_binary(fname.c_str());
       });
 
   Rice::define_class_under<faiss::IndexBinaryFlat, faiss::IndexBinary>(m, "IndexBinaryFlat")
@@ -69,7 +69,7 @@ void init_index_binary(Rice::Module& m) {
 
   m.define_singleton_function(
     "index_binary_factory",
-    [](int d, const char *description) {
-      return faiss::index_binary_factory(d, description);
+    [](int d, Rice::String description) {
+      return faiss::index_binary_factory(d, description.c_str());
     });
 }
