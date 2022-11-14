@@ -21,7 +21,7 @@ sudo apt install libblas-dev liblapack-dev
 Add this line to your application’s Gemfile:
 
 ```ruby
-gem 'faiss'
+gem "faiss"
 ```
 
 It can take a few minutes to compile the gem. Faiss is not available for Windows.
