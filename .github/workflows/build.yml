@@ -8,7 +8,7 @@ jobs:
         os: [ubuntu-20.04, ubuntu-18.04, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         submodules: true
     - if: ${{ startsWith(matrix.os, 'ubuntu') }}
