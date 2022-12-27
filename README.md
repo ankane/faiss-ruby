@@ -71,61 +71,61 @@ index = Faiss::Index.load("index.bin")
 
 Exact search for L2
 
-```rb
+```ruby
 Faiss::IndexFlatL2.new(d)
 ```
 
 Exact search for inner product
 
-```rb
+```ruby
 Faiss::IndexFlatIP.new(d)
 ```
 
 Hierarchical navigable small world graph exploration
 
-```rb
+```ruby
 Faiss::IndexHNSWFlat.new(d, m)
 ```
 
 Inverted file with exact post-verification
 
-```rb
+```ruby
 Faiss::IndexIVFFlat.new(quantizer, d, nlists)
 ```
 
 Locality-sensitive hashing
 
-```rb
+```ruby
 Faiss::IndexLSH.new(d, nbits)
 ```
 
 Scalar quantizer (SQ) in flat mode
 
-```rb
+```ruby
 Faiss::IndexScalarQuantizer.new(d, qtype)
 ```
 
 Product quantizer (PQ) in flat mode
 
-```rb
+```ruby
 Faiss::IndexPQ.new(d, m, nbits)
 ```
 
 IVF and scalar quantizer
 
-```rb
+```ruby
 Faiss::IndexIVFScalarQuantizer.new(quantizer, d, nlists, qtype)
 ```
 
 IVFADC (coarse quantizer+PQ on residuals)
 
-```rb
+```ruby
 Faiss::IndexIVFPQ.new(quantizer, d, nlists, m, nbits)
 ```
 
 IVFADC+R (same as IVFADC with re-ranking based on codes)
 
-```rb
+```ruby
 Faiss::IndexIVFPQR.new(quantizer, d, nlists, m, nbits, m_refine, nbits_refine)
 ```
 
@@ -133,13 +133,13 @@ Faiss::IndexIVFPQR.new(quantizer, d, nlists, m, nbits, m_refine, nbits_refine)
 
 Index binary vectors
 
-```rb
+```ruby
 Faiss::IndexBinaryFlat.new(d)
 ```
 
 Speed up search with an inverse vector file
 
-```rb
+```ruby
 Faiss::IndexBinaryIVF.new(quantizer, d, nlists)
 ```
 
