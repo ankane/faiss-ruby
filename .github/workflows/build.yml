@@ -8,16 +8,16 @@ jobs:
         os: [ubuntu-20.04, ubuntu-18.04, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v3
-      with:
-        submodules: true
-    - if: ${{ startsWith(matrix.os, 'ubuntu') }}
-      run: sudo apt-get install libblas-dev liblapack-dev
-    - if: ${{ startsWith(matrix.os, 'macos') }}
-      run: brew install openblas lapack libomp
-    - uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 3.1
-        bundler-cache: true
-    - run: bundle exec rake compile
-    - run: bundle exec rake test
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - if: ${{ startsWith(matrix.os, 'ubuntu') }}
+        run: sudo apt-get install libblas-dev liblapack-dev
+      - if: ${{ startsWith(matrix.os, 'macos') }}
+        run: brew install openblas lapack libomp
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1
+          bundler-cache: true
+      - run: bundle exec rake compile
+      - run: bundle exec rake test
