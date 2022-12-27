@@ -26,7 +26,7 @@ Then add this line to your application’s Gemfile:
 gem "faiss"
 ```
 
-It can take a few minutes to compile the gem. Faiss is not available for Windows.
+It can take a few minutes to compile the gem. Windows is not currently supported.
 
 ## Getting Started
 
