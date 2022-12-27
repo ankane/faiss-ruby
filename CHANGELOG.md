@@ -1,6 +1,7 @@
 ## 0.2.5 (unreleased)
 
 - Updated Faiss to 1.7.3
+- Fixed issue finding OpenMP on Mac
 
 ## 0.2.4 (2022-01-10)
 

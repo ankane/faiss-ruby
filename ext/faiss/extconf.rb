@@ -1,6 +1,14 @@
 require "mkmf-rice"
 require "numo/narray"
 
+# libomp changed to keg-only
+# https://github.com/Homebrew/homebrew-core/issues/112107
+if RbConfig::CONFIG["host_os"] =~ /darwin/i
+  brew_prefix = RbConfig::CONFIG["host_cpu"] =~ /arm|aarch64/i ? "/opt/homebrew" : "/usr/local"
+  find_library("omp", nil, "#{brew_prefix}/opt/libomp/lib")
+  find_header("omp.h", "#{brew_prefix}/opt/libomp/include")
+end
+
 abort "BLAS not found" unless have_library("blas")
 abort "LAPACK not found" unless have_library("lapack")
 abort "OpenMP not found" unless have_library("omp") || have_library("gomp")
