@@ -12,7 +12,7 @@ First, install BLAS, LAPACK, and OpenMP:
 
 ```sh
 # Mac
-brew install openblas lapack libomp
+brew install libomp
 
 # Ubuntu
 sudo apt install libblas-dev liblapack-dev
