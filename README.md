@@ -8,17 +8,19 @@ Learn more about [Faiss](https://engineering.fb.com/data-infrastructure/faiss-a-
 
 ## Installation
 
-First, install BLAS, LAPACK, and OpenMP:
+First, ensure BLAS, LAPACK, and OpenMP are installed. For Mac, use:
 
 ```sh
-# Mac
 brew install libomp
+```
 
-# Ubuntu
+For Ubuntu, use:
+
+```sh
 sudo apt install libblas-dev liblapack-dev
 ```
 
-Add this line to your application’s Gemfile:
+Then add this line to your application’s Gemfile:
 
 ```ruby
 gem "faiss"
