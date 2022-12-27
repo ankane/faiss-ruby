@@ -1,4 +1,4 @@
-## 0.2.5 (unreleased)
+## 0.2.5 (2022-12-27)
 
 - Updated Faiss to 1.7.3
 - Fixed installation errors on Mac
