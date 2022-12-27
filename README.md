@@ -222,7 +222,7 @@ Numo::NArray.cast([[1, 2, 3], [4, 5, 6]])
 
 ## History
 
-View the [changelog](https://github.com/ankane/faiss-ruby/blob/master/CHANGELOG.md)
+View the [changelog](CHANGELOG.md)
 
 ## Contributing
 
