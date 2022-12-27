@@ -17,7 +17,7 @@ brew install libomp
 For Ubuntu, use:
 
 ```sh
-sudo apt install libblas-dev liblapack-dev
+sudo apt-get install libblas-dev liblapack-dev
 ```
 
 Then add this line to your application’s Gemfile:
