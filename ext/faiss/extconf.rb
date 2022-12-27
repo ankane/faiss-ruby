@@ -17,7 +17,7 @@ numo = File.join(Gem.loaded_specs["numo-narray"].require_path, "numo")
 abort "Numo not found" unless find_header("numo/narray.h", numo)
 
 # for https://bugs.ruby-lang.org/issues/19005
-$LDFLAGS += " -Wl,-undefined,dynamic_lookup" if RbConfig::CONFIG["host_os"] =~ /darwin/
+$LDFLAGS += " -Wl,-undefined,dynamic_lookup" if RbConfig::CONFIG["host_os"] =~ /darwin/i
 
 # -march=native not supported with ARM Mac
 default_optflags = RbConfig::CONFIG["host_os"] =~ /darwin/i && RbConfig::CONFIG["host_cpu"] =~ /arm|aarch64/i ? "" : "-march=native"
