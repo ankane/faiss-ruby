@@ -1,3 +1,7 @@
+## 0.2.6 (unreleased)
+
+- Added `add_with_ids` method
+
 ## 0.2.5 (2022-12-27)
 
 - Updated Faiss to 1.7.3

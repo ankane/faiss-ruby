@@ -213,6 +213,51 @@ class IndexTest < Minitest::Test
     index = Faiss::IndexIVFPQR.new(quantizer, 128, 2, 16, 8, 2, 2)
   end
 
+  def test_add_with_ids_flat_l2
+    objects = [
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ]
+    ids = [100, 101, 102]
+    index = Faiss::IndexFlatL2.new(4)
+    error = assert_raises do
+      index.add_with_ids(objects, ids)
+    end
+    assert_match "add_with_ids not implemented for this type of index", error.message
+  end
+
+  def test_add_with_ids_ivf_flat
+    objects = [
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ]
+    ids = [100, 101, 102]
+    quantizer = Faiss::IndexFlatL2.new(4)
+    index = Faiss::IndexIVFFlat.new(quantizer, 4, 2)
+    index.train(objects)
+    index.add_with_ids(objects, ids)
+    distances, ids = index.search(objects, 3)
+
+    assert_equal [[0, 3, max_float], [0, max_float, max_float], [0, 3, max_float]], distances.to_a
+    assert_equal [[100, 102, -1], [101, -1, -1], [102, 100, -1]], ids.to_a
+  end
+
+  def test_add_with_ids_size_mismatch
+    objects = [
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ]
+    ids = [100, 101]
+    index = Faiss::IndexFlatL2.new(4)
+    error = assert_raises do
+      index.add_with_ids(objects, ids)
+    end
+    assert_match "expected ids to be 1d array with size 3", error.message
+  end
+
   private
 
   def max_float # single-precision

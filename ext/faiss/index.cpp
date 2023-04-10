@@ -119,6 +119,15 @@ void init_index(Rice::Module& m) {
         self.add(n, objects.read_ptr());
       })
     .define_method(
+      "add_with_ids",
+      [](faiss::Index &self, numo::SFloat objects, numo::Int64 ids) {
+        auto n = check_shape(objects, self.d);
+        if (ids.ndim() != 1 || ids.shape()[0] != n) {
+          throw Rice::Exception(rb_eArgError, "expected ids to be 1d array with size %d", n);
+        }
+        self.add_with_ids(n, objects.read_ptr(), ids.read_ptr());
+      })
+    .define_method(
       "search",
       [](faiss::Index &self, numo::SFloat objects, size_t k) {
         auto n = check_shape(objects, self.d);
