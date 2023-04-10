@@ -1,6 +1,7 @@
 ## 0.2.6 (unreleased)
 
 - Added `add_with_ids` method
+- Added `IndexIDMap`
 
 ## 0.2.5 (2022-12-27)
 

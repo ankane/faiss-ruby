@@ -1,6 +1,7 @@
 #include <faiss/Index.h>
 #include <faiss/IndexFlat.h>
 #include <faiss/IndexHNSW.h>
+#include <faiss/IndexIDMap.h>
 #include <faiss/IndexIVFFlat.h>
 #include <faiss/IndexLSH.h>
 #include <faiss/IndexScalarQuantizer.h>
@@ -195,4 +196,7 @@ void init_index(Rice::Module& m) {
       [](faiss::ParameterSpace& self, faiss::Index* index, const std::string& name, double val) {
         self.set_index_parameter(index, name, val);
       });
+
+  Rice::define_class_under<faiss::IndexIDMap, faiss::Index>(m, "IndexIDMap")
+    .define_constructor(Rice::Constructor<faiss::IndexIDMap, faiss::Index*>());
 }

@@ -227,6 +227,22 @@ class IndexTest < Minitest::Test
     assert_match "add_with_ids not implemented for this type of index", error.message
   end
 
+  def test_add_with_ids_id_map
+    objects = [
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ]
+    ids = [100, 101, 102]
+    index = Faiss::IndexFlatL2.new(4)
+    index2 = Faiss::IndexIDMap.new(index)
+    index2.add_with_ids(objects, ids)
+    distances, ids = index2.search(objects, 3)
+
+    assert_equal [[0, 3, 57], [0, 54, 57], [0, 3, 54]], distances.to_a
+    assert_equal [[100, 102, 101], [101, 102, 100], [102, 100, 101]], ids.to_a
+  end
+
   def test_add_with_ids_ivf_flat
     objects = [
       [1, 1, 2, 1],
