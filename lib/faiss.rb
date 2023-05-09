@@ -2,7 +2,7 @@
 require "numo/narray"
 
 # ext
-require_relative "faiss/ext"
+require "faiss/ext"
 
 # modules
 require_relative "faiss/version"

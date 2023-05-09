@@ -1,5 +1,6 @@
 ## 0.3.0 (unreleased)
 
+- Fixed error on Fedora
 - Dropped support for Ruby < 3
 
 ## 0.2.7 (2023-04-20)
