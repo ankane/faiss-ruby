@@ -1,4 +1,4 @@
-## 0.3.0 (unreleased)
+## 0.3.0 (2023-05-11)
 
 - Fixed error on Fedora
 - Dropped support for Ruby < 3
