@@ -6,6 +6,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - ruby: 3.3
+            os: ubuntu-22.04
           - ruby: 3.2
             os: ubuntu-22.04
           - ruby: 3.1
@@ -14,7 +16,7 @@ jobs:
             os: macos-latest
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: true
       - if: ${{ startsWith(matrix.os, 'ubuntu') }}
