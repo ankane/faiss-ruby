@@ -19,9 +19,16 @@ abort "Numo not found" unless find_header("numo/narray.h", numo)
 # for https://bugs.ruby-lang.org/issues/19005
 $LDFLAGS += " -Wl,-undefined,dynamic_lookup" if RbConfig::CONFIG["host_os"] =~ /darwin/i
 
+$CXXFLAGS += " -std=c++17 $(optflags) -DFINTEGER=int"
+$CXXFLAGS += " -Wall -Wno-unused-parameter -Wno-unused-function -Wno-unused-variable -Wno-deprecated-declarations -Wno-sign-compare"
+
 # -march=native not supported with ARM Mac
-default_optflags = RbConfig::CONFIG["host_os"] =~ /darwin/i && RbConfig::CONFIG["host_cpu"] =~ /arm|aarch64/i ? "" : "-march=native"
-$CXXFLAGS << " -std=c++17 $(optflags) -DFINTEGER=int " << with_config("optflags", default_optflags)
+default_optflags = RbConfig::CONFIG["host_os"] =~ /darwin/i && RbConfig::CONFIG["host_cpu"] =~ /arm|aarch64/i ? "" : " -march=native"
+$CXXFLAGS += with_config("optflags", default_optflags)
+
+apple_clang = RbConfig::CONFIG["CC_VERSION_MESSAGE"] =~ /apple clang/i
+$CXXFLAGS += " -Xclang" if apple_clang
+$CXXFLAGS += " -fopenmp"
 
 ext = File.expand_path(".", __dir__)
 vendor = File.expand_path("../../vendor/faiss", __dir__)
