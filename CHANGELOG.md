@@ -1,3 +1,7 @@
+## 0.3.1 (unreleased)
+
+- Updated Faiss to 1.8.0
+
 ## 0.3.0 (2023-05-11)
 
 - Fixed error on Fedora
