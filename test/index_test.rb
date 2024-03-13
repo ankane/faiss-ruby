@@ -180,7 +180,7 @@ class IndexTest < Minitest::Test
 
   def test_index_scalar_quantizer
     # TODO improve test
-    index = Faiss::IndexScalarQuantizer.new(4, :qt_8bit)
+    Faiss::IndexScalarQuantizer.new(4, :qt_8bit)
   end
 
   def test_invalid_quantizer_type
@@ -192,25 +192,25 @@ class IndexTest < Minitest::Test
 
   def test_index_pq
     # TODO improve test
-    index = Faiss::IndexPQ.new(128, 16, 8)
+    Faiss::IndexPQ.new(128, 16, 8)
   end
 
   def test_index_ivf_scalar_quantizer
     # TODO improve test
     quantizer = Faiss::IndexFlatL2.new(4)
-    index = Faiss::IndexIVFScalarQuantizer.new(quantizer, 4, 8, :qt_8bit)
+    Faiss::IndexIVFScalarQuantizer.new(quantizer, 4, 8, :qt_8bit)
   end
 
   def test_index_ivfpq
     # TODO improve test
     quantizer = Faiss::IndexPQ.new(128, 16, 8)
-    index = Faiss::IndexIVFPQ.new(quantizer, 128, 2, 16, 8)
+    Faiss::IndexIVFPQ.new(quantizer, 128, 2, 16, 8)
   end
 
   def test_index_ivfpqr
     # TODO improve test
     quantizer = Faiss::IndexPQ.new(128, 16, 8)
-    index = Faiss::IndexIVFPQR.new(quantizer, 128, 2, 16, 8, 2, 2)
+    Faiss::IndexIVFPQR.new(quantizer, 128, 2, 16, 8, 2, 2)
   end
 
   def test_add_with_ids_flat_l2
