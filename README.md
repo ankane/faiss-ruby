@@ -4,7 +4,7 @@
 
 Learn more about [Faiss](https://engineering.fb.com/data-infrastructure/faiss-a-library-for-efficient-similarity-search/)
 
-[![Build Status](https://github.com/ankane/faiss-ruby/workflows/build/badge.svg?branch=master)](https://github.com/ankane/faiss-ruby/actions)
+[![Build Status](https://github.com/ankane/faiss-ruby/actions/workflows/build.yml/badge.svg)](https://github.com/ankane/faiss-ruby/actions)
 
 ## Installation
 
