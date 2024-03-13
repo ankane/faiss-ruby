@@ -49,5 +49,5 @@ void init_product_quantizer(Rice::Module& m) {
       "load",
       [](Rice::String fname) {
         return faiss::read_ProductQuantizer(fname.c_str());
-      });
+      }, Rice::Return().takeOwnership());
 }

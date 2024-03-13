@@ -157,7 +157,7 @@ void init_index(Rice::Module& m) {
       "load",
       [](Rice::String fname) {
         return faiss::read_index(fname.c_str());
-      });
+      }, Rice::Return().takeOwnership());
 
   Rice::define_class_under<faiss::IndexFlatL2, faiss::Index>(m, "IndexFlatL2")
     .define_constructor(Rice::Constructor<faiss::IndexFlatL2, int64_t>());

@@ -59,7 +59,7 @@ void init_index_binary(Rice::Module& m) {
       "load",
       [](Rice::String fname) {
         return faiss::read_index_binary(fname.c_str());
-      });
+      }, Rice::Return().takeOwnership());
 
   Rice::define_class_under<faiss::IndexBinaryFlat, faiss::IndexBinary>(m, "IndexBinaryFlat")
     .define_constructor(Rice::Constructor<faiss::IndexBinaryFlat, int64_t>());
@@ -71,5 +71,5 @@ void init_index_binary(Rice::Module& m) {
     "index_binary_factory",
     [](int d, Rice::String description) {
       return faiss::index_binary_factory(d, description.c_str());
-    });
+    }, Rice::Return().takeOwnership());
 }

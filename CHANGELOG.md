@@ -1,6 +1,7 @@
 ## 0.3.1 (unreleased)
 
 - Updated Faiss to 1.8.0
+- Fixed memory leak with `load` and `index_binary_factory` methods
 
 ## 0.3.0 (2023-05-11)
 
