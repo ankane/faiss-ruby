@@ -7,7 +7,7 @@ jobs:
       matrix:
         include:
           - ruby: 3.3
-            os: ubuntu-22.04
+            os: ubuntu-24.04
           # TODO figure out issue with IndexPQ and Ruby 3.2.3
           - ruby: 3.2.2
             os: ubuntu-22.04
