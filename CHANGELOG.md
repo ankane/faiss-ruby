@@ -1,4 +1,4 @@
-## 0.3.2 (unreleased)
+## 0.3.2 (2024-10-05)
 
 - Updated Faiss to 1.9.0
 
