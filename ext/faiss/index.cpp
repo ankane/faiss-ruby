@@ -10,6 +10,8 @@
 #include <faiss/IndexIVFPQR.h>
 #include <faiss/index_io.h>
 #include <faiss/AutoTune.h>
+#include <ruby.h>
+#include <ruby/thread.h>
 
 #include "utils.h"
 
@@ -90,6 +92,15 @@ namespace Rice::detail {
   };
 }
 
+template<typename F>
+void without_gvl(F&& func) {
+  auto wrapper = [](void* ptr) -> void* {
+    (*static_cast<F*>(ptr))();
+    return NULL;
+  };
+  rb_thread_call_without_gvl(wrapper, &func, RUBY_UBF_PROCESS, NULL);
+}
+
 void init_index(Rice::Module& m) {
   Rice::define_class_under<faiss::Index>(m, "Index")
     .define_method(
@@ -136,7 +147,9 @@ void init_index(Rice::Module& m) {
         auto distances = numo::SFloat({n, k});
         auto labels = numo::Int64({n, k});
 
-        self.search(n, objects.read_ptr(), k, distances.write_ptr(), labels.write_ptr());
+        without_gvl([&] {
+          self.search(n, objects.read_ptr(), k, distances.write_ptr(), labels.write_ptr());
+        });
 
         Rice::Array ret;
         ret.push(distances);
