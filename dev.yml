@@ -1,0 +1,6 @@
+name: faiss-ruby
+
+type: ruby
+
+up:
+  - ruby
