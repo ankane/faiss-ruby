@@ -131,7 +131,9 @@ void init_index(Rice::Module& m) {
         auto distances = numo::SFloat({n, k});
         auto labels = numo::Int64({n, k});
 
-        self.search(n, objects.read_ptr(), k, distances.write_ptr(), labels.write_ptr());
+        without_gvl([&] {
+          self.search(n, objects.read_ptr(), k, distances.write_ptr(), labels.write_ptr());
+        });
 
         Rice::Array ret;
         ret.push(distances);
