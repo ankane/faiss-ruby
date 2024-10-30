@@ -10,8 +10,6 @@
 #include <faiss/IndexIVFPQR.h>
 #include <faiss/index_io.h>
 #include <faiss/AutoTune.h>
-#include <ruby.h>
-#include <ruby/thread.h>
 
 #include "utils.h"
 
@@ -90,15 +88,6 @@ namespace Rice::detail {
       }
     }
   };
-}
-
-template<typename F>
-void without_gvl(F&& func) {
-  auto wrapper = [](void* ptr) -> void* {
-    (*static_cast<F*>(ptr))();
-    return NULL;
-  };
-  rb_thread_call_without_gvl(wrapper, &func, RUBY_UBF_PROCESS, NULL);
 }
 
 void init_index(Rice::Module& m) {
