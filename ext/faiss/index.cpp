@@ -17,10 +17,7 @@ namespace Rice::detail {
   template<>
   struct Type<faiss::MetricType>
   {
-    static bool verify()
-    {
-      return true;
-    }
+    static bool verify() { return true; }
   };
 
   template<>
@@ -29,9 +26,7 @@ namespace Rice::detail {
   public:
     From_Ruby() = default;
 
-    From_Ruby(Arg* arg) : arg_(arg)
-    {
-    }
+    From_Ruby(Arg* arg) : arg_(arg) {}
 
     faiss::MetricType convert(VALUE x)
     {
@@ -56,10 +51,7 @@ namespace Rice::detail {
   template<>
   struct Type<faiss::ScalarQuantizer::QuantizerType>
   {
-    static bool verify()
-    {
-      return true;
-    }
+    static bool verify() { return true; }
   };
 
   template<>
