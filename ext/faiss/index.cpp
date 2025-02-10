@@ -28,6 +28,8 @@ namespace Rice::detail {
 
     From_Ruby(Arg* arg) : arg_(arg) {}
 
+    Convertible is_convertible(VALUE value) { return Convertible::Cast; }
+
     faiss::MetricType convert(VALUE x)
     {
       if (x == Qnil && this->arg_ && this->arg_->hasDefaultValue()) {
@@ -58,6 +60,8 @@ namespace Rice::detail {
   class From_Ruby<faiss::ScalarQuantizer::QuantizerType>
   {
   public:
+    Convertible is_convertible(VALUE value) { return Convertible::Cast; }
+
     faiss::ScalarQuantizer::QuantizerType convert(VALUE x)
     {
       auto s = Object(x).to_s().str();
@@ -158,10 +162,10 @@ void init_index(Rice::Module& m) {
     .define_constructor(Rice::Constructor<faiss::IndexFlatIP, int64_t>());
 
   Rice::define_class_under<faiss::IndexHNSWFlat, faiss::Index>(m, "IndexHNSWFlat")
-    .define_constructor(Rice::Constructor<faiss::IndexHNSWFlat, int, int, faiss::MetricType>(), Rice::Arg("d"), Rice::Arg("M"), Rice::Arg("metric") = faiss::METRIC_L2);
+    .define_constructor(Rice::Constructor<faiss::IndexHNSWFlat, int, int, faiss::MetricType>(), Rice::Arg("_d"), Rice::Arg("_M"), Rice::Arg("_metric") = faiss::METRIC_L2);
 
   Rice::define_class_under<faiss::IndexIVFFlat, faiss::Index>(m, "IndexIVFFlat")
-    .define_constructor(Rice::Constructor<faiss::IndexIVFFlat, faiss::Index*, size_t, size_t, faiss::MetricType>(), Rice::Arg("quantizer"), Rice::Arg("d"), Rice::Arg("nlist"), Rice::Arg("metric") = faiss::METRIC_L2);
+    .define_constructor(Rice::Constructor<faiss::IndexIVFFlat, faiss::Index*, size_t, size_t, faiss::MetricType>(), Rice::Arg("_quantizer"), Rice::Arg("_d"), Rice::Arg("_nlist"), Rice::Arg("_metric") = faiss::METRIC_L2);
 
   Rice::define_class_under<faiss::IndexLSH, faiss::Index>(m, "IndexLSH")
     .define_constructor(Rice::Constructor<faiss::IndexLSH, int64_t, int>());
@@ -176,7 +180,7 @@ void init_index(Rice::Module& m) {
     .define_constructor(Rice::Constructor<faiss::IndexIVFScalarQuantizer, faiss::Index*, size_t, size_t, faiss::ScalarQuantizer::QuantizerType>());
 
   Rice::define_class_under<faiss::IndexIVFPQ, faiss::Index>(m, "IndexIVFPQ")
-    .define_constructor(Rice::Constructor<faiss::IndexIVFPQ, faiss::Index*, size_t, size_t, size_t, size_t, faiss::MetricType>(), Rice::Arg("quantizer"), Rice::Arg("d"), Rice::Arg("nlist"), Rice::Arg("M"), Rice::Arg("nbits_per_idx"), Rice::Arg("metric") = faiss::METRIC_L2);
+    .define_constructor(Rice::Constructor<faiss::IndexIVFPQ, faiss::Index*, size_t, size_t, size_t, size_t, faiss::MetricType>(), Rice::Arg("_quantizer"), Rice::Arg("_d"), Rice::Arg("_nlist"), Rice::Arg("_M"), Rice::Arg("_nbits_per_idx"), Rice::Arg("_metric") = faiss::METRIC_L2);
 
   Rice::define_class_under<faiss::IndexIVFPQR, faiss::Index>(m, "IndexIVFPQR")
     .define_constructor(Rice::Constructor<faiss::IndexIVFPQR, faiss::Index*, size_t, size_t, size_t, size_t, size_t, size_t>());
