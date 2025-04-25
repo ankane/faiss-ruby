@@ -1,4 +1,4 @@
-## 0.4.0 (unreleased)
+## 0.4.0 (2025-04-25)
 
 - Updated Faiss to 1.11.0
 - Dropped support for Ruby < 3.2
