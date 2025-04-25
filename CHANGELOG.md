@@ -1,5 +1,6 @@
 ## 0.4.0 (unreleased)
 
+- Updated Faiss to 1.11.0
 - Dropped support for Ruby < 3.2
 
 ## 0.3.4 (2025-02-10)
