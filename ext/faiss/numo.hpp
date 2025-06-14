@@ -7,6 +7,7 @@
 #pragma once
 
 #include <rice/rice.hpp>
+#include <rice/stl.hpp>
 #include <numo/narray.h>
 
 namespace numo {
