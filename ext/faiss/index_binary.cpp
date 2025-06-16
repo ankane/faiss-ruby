@@ -3,7 +3,9 @@
 #include <faiss/IndexBinaryIVF.h>
 #include <faiss/index_factory.h>
 #include <faiss/index_io.h>
+#include <rice/rice.hpp>
 
+#include "numo.hpp"
 #include "utils.h"
 
 void init_index_binary(Rice::Module& m) {

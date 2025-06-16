@@ -1,6 +1,8 @@
 #include <faiss/impl/ProductQuantizer.h>
 #include <faiss/index_io.h>
+#include <rice/rice.hpp>
 
+#include "numo.hpp"
 #include "utils.h"
 
 void init_product_quantizer(Rice::Module& m) {

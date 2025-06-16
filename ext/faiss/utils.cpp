@@ -1,3 +1,6 @@
+#include <rice/rice.hpp>
+
+#include "numo.hpp"
 #include "utils.h"
 
 size_t check_shape(const numo::NArray& objects, size_t k) {

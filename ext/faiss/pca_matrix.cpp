@@ -1,5 +1,7 @@
 #include <faiss/VectorTransform.h>
+#include <rice/rice.hpp>
 
+#include "numo.hpp"
 #include "utils.h"
 
 void init_pca_matrix(Rice::Module& m) {

@@ -1,3 +1,6 @@
+#include <string>
+
+#include <faiss/AutoTune.h>
 #include <faiss/Index.h>
 #include <faiss/IndexFlat.h>
 #include <faiss/IndexHNSW.h>
@@ -9,22 +12,20 @@
 #include <faiss/IndexIVFPQ.h>
 #include <faiss/IndexIVFPQR.h>
 #include <faiss/index_io.h>
-#include <faiss/AutoTune.h>
 #include <rice/rice.hpp>
 #include <rice/stl.hpp>
 
+#include "numo.hpp"
 #include "utils.h"
 
 namespace Rice::detail {
   template<>
-  struct Type<faiss::MetricType>
-  {
+  struct Type<faiss::MetricType> {
     static bool verify() { return true; }
   };
 
   template<>
-  class From_Ruby<faiss::MetricType>
-  {
+  class From_Ruby<faiss::MetricType> {
   public:
     From_Ruby() = default;
 
@@ -32,8 +33,7 @@ namespace Rice::detail {
 
     Convertible is_convertible(VALUE value) { return Convertible::Cast; }
 
-    faiss::MetricType convert(VALUE x)
-    {
+    faiss::MetricType convert(VALUE x) {
       if (x == Qnil && this->arg_ && this->arg_->hasDefaultValue()) {
         return this->arg_->defaultValue<faiss::MetricType>();
       }
@@ -53,19 +53,16 @@ namespace Rice::detail {
   };
 
   template<>
-  struct Type<faiss::ScalarQuantizer::QuantizerType>
-  {
+  struct Type<faiss::ScalarQuantizer::QuantizerType> {
     static bool verify() { return true; }
   };
 
   template<>
-  class From_Ruby<faiss::ScalarQuantizer::QuantizerType>
-  {
+  class From_Ruby<faiss::ScalarQuantizer::QuantizerType> {
   public:
     Convertible is_convertible(VALUE value) { return Convertible::Cast; }
 
-    faiss::ScalarQuantizer::QuantizerType convert(VALUE x)
-    {
+    faiss::ScalarQuantizer::QuantizerType convert(VALUE x) {
       auto s = Object(x).to_s().str();
       if (s == "qt_8bit") {
         return faiss::ScalarQuantizer::QT_8bit;
@@ -86,7 +83,7 @@ namespace Rice::detail {
       }
     }
   };
-}
+} // namespace Rice::detail
 
 void init_index(Rice::Module& m) {
   Rice::define_class_under<faiss::Index>(m, "Index")
