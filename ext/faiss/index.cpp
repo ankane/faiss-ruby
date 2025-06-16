@@ -10,6 +10,8 @@
 #include <faiss/IndexIVFPQR.h>
 #include <faiss/index_io.h>
 #include <faiss/AutoTune.h>
+#include <rice/rice.hpp>
+#include <rice/stl.hpp>
 
 #include "utils.h"
 
