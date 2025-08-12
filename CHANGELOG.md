@@ -1,3 +1,7 @@
+## 0.4.2 (unreleased)
+
+- Updated Faiss to 1.12.0
+
 ## 0.4.1 (2025-06-18)
 
 - Fixed error with Rice 4.6
