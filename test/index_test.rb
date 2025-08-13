@@ -274,7 +274,7 @@ class IndexTest < Minitest::Test
     assert_match "expected ids to be 1d array with size 3", error.message
   end
 
-  def test_search_with_threads
+  def test_add_after_freeze
     objects = [
       [1, 1, 2, 1],
       [5, 4, 6, 5],
@@ -282,24 +282,29 @@ class IndexTest < Minitest::Test
     ]
     index = Faiss::IndexFlatL2.new(4)
     index.add(objects)
+    index.freeze
 
-    concurrency = 0
-    max_concurrency = 0
-
-    threads = 2.times.map {
-      Thread.new {
-        concurrency += 1
-        max_concurrency = [max_concurrency, concurrency].max
-        index.search(objects, 3)
-        concurrency -= 1
-      }
-    }
-
-    threads.each(&:join)
-
-    assert_equal 0, concurrency
-    assert_equal 2, max_concurrency
+    assert_raises(FrozenError) do
+      index.add(objects)
+    end
   end
+
+  def test_search_after_freeze
+    objects = [
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ]
+    index = Faiss::IndexFlatL2.new(4)
+    index.add(objects)
+    index.freeze
+
+    distances, ids = index.search(objects, 3)
+
+    assert_equal [[0, 3, 57], [0, 54, 57], [0, 3, 54]], distances.to_a
+    assert_equal [[0, 2, 1], [1, 2, 0], [2, 0, 1]], ids.to_a
+  end
+
 
   private
 

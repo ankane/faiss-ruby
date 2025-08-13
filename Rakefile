@@ -11,8 +11,6 @@ end
 Rake::ExtensionTask.new("faiss") do |ext|
   ext.name = "ext"
   ext.lib_dir = "lib/faiss"
-  ruby_include = RbConfig::CONFIG['rubyhdrdir']
-  ext.config_options = ["--with-cppflags=-I#{ruby_include}"]
 end
 
 task :remove_ext do

@@ -85,38 +85,50 @@ namespace Rice::detail {
   };
 } // namespace Rice::detail
 
+namespace {
+  faiss::Index& check_thawed(Rice::Object wrapper) {
+    if (wrapper.is_frozen()) {
+      throw Rice::Exception{rb_eFrozenError, "can't modify frozen Faiss::Index"};
+    }
+    return *Rice::Data_Object<faiss::Index>{wrapper};
+  }
+}
+
 void init_index(Rice::Module& m) {
   Rice::define_class_under<faiss::Index>(m, "Index")
     .define_method(
       "d",
-      [](faiss::Index &self) {
+      [](const faiss::Index& self) {
         return self.d;
       })
     .define_method(
       "trained?",
-      [](faiss::Index &self) {
+      [](const faiss::Index& self) {
         return self.is_trained;
       })
     .define_method(
       "ntotal",
-      [](faiss::Index &self) {
+      [](const faiss::Index& self) {
         return self.ntotal;
       })
     .define_method(
       "train",
-      [](faiss::Index &self, numo::SFloat objects) {
+      [](Rice::Object wrapper, numo::SFloat objects) {
+        auto& self = check_thawed(wrapper);
         auto n = check_shape(objects, self.d);
         self.train(n, objects.read_ptr());
       })
     .define_method(
       "add",
-      [](faiss::Index &self, numo::SFloat objects) {
+      [](Rice::Object wrapper, numo::SFloat objects) {
+        auto& self = check_thawed(wrapper);
         auto n = check_shape(objects, self.d);
         self.add(n, objects.read_ptr());
       })
     .define_method(
       "add_with_ids",
-      [](faiss::Index &self, numo::SFloat objects, numo::Int64 ids) {
+      [](Rice::Object wrapper, numo::SFloat objects, numo::Int64 ids) {
+        auto& self = check_thawed(wrapper);
         auto n = check_shape(objects, self.d);
         if (ids.ndim() != 1 || ids.shape()[0] != n) {
           throw Rice::Exception(rb_eArgError, "expected ids to be 1d array with size %d", n);
@@ -125,15 +137,20 @@ void init_index(Rice::Module& m) {
       })
     .define_method(
       "search",
-      [](faiss::Index &self, numo::SFloat objects, size_t k) {
+      [](Rice::Object wrapper, numo::SFloat objects, size_t k) {
+        const auto& self = *Rice::Data_Object<faiss::Index>{wrapper};
         auto n = check_shape(objects, self.d);
 
         auto distances = numo::SFloat({n, k});
         auto labels = numo::Int64({n, k});
 
-        without_gvl([&] {
+        if (wrapper.is_frozen()) {
+          without_gvl([&] {
+            self.search(n, objects.read_ptr(), k, distances.write_ptr(), labels.write_ptr());
+          });
+        } else {
           self.search(n, objects.read_ptr(), k, distances.write_ptr(), labels.write_ptr());
-        });
+        }
 
         Rice::Array ret;
         ret.push(distances);
@@ -142,12 +159,13 @@ void init_index(Rice::Module& m) {
       })
     .define_method(
       "nprobe=",
-      [](faiss::Index &self, double val) {
+      [](Rice::Object wrapper, double val) {
+        auto& self = check_thawed(wrapper);
         faiss::ParameterSpace().set_index_parameter(&self, "nprobe", val);
       })
     .define_method(
       "save",
-      [](faiss::Index &self, Rice::String fname) {
+      [](const faiss::Index& self, Rice::String fname) {
         faiss::write_index(&self, fname.c_str());
       })
     .define_singleton_function(
