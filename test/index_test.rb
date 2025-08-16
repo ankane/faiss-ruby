@@ -274,6 +274,38 @@ class IndexTest < Minitest::Test
     assert_match "expected ids to be 1d array with size 3", error.message
   end
 
+  def test_add_after_freeze
+    objects = [
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ]
+    index = Faiss::IndexFlatL2.new(4)
+    index.add(objects)
+    index.freeze
+
+    assert_raises(FrozenError) do
+      index.add(objects)
+    end
+  end
+
+  def test_search_after_freeze
+    objects = [
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ]
+    index = Faiss::IndexFlatL2.new(4)
+    index.add(objects)
+    index.freeze
+
+    distances, ids = index.search(objects, 3)
+
+    assert_equal [[0, 3, 57], [0, 54, 57], [0, 3, 54]], distances.to_a
+    assert_equal [[0, 2, 1], [1, 2, 0], [2, 0, 1]], ids.to_a
+  end
+
+
   private
 
   def max_float # single-precision
