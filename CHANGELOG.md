@@ -1,4 +1,4 @@
-## 0.4.3 (unreleased)
+## 0.4.3 (2025-10-26)
 
 - Fixed error with Rice 4.7
 
