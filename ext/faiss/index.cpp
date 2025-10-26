@@ -29,7 +29,7 @@ namespace Rice::detail {
   public:
     From_Ruby() = default;
 
-    From_Ruby(Arg* arg) : arg_(arg) {}
+    explicit From_Ruby(Arg* arg) : arg_(arg) { }
 
     Convertible is_convertible(VALUE value) { return Convertible::Cast; }
 
@@ -49,7 +49,7 @@ namespace Rice::detail {
     }
 
   private:
-    Arg* arg_;
+    Arg* arg_ = nullptr;
   };
 
   template<>
@@ -60,6 +60,10 @@ namespace Rice::detail {
   template<>
   class From_Ruby<faiss::ScalarQuantizer::QuantizerType> {
   public:
+    From_Ruby() = default;
+
+    explicit From_Ruby(Arg* arg) : arg_(arg) { }
+
     Convertible is_convertible(VALUE value) { return Convertible::Cast; }
 
     faiss::ScalarQuantizer::QuantizerType convert(VALUE x) {
@@ -82,6 +86,9 @@ namespace Rice::detail {
         throw Rice::Exception(rb_eArgError, "Invalid quantizer type: %s", s.c_str());
       }
     }
+
+  private:
+    Arg* arg_ = nullptr;
   };
 } // namespace Rice::detail
 
@@ -134,8 +141,8 @@ void init_index(Rice::Module& m) {
         self.search(n, objects.read_ptr(), k, distances.write_ptr(), labels.write_ptr());
 
         Rice::Array ret;
-        ret.push(distances);
-        ret.push(labels);
+        ret.push(std::move(distances), false);
+        ret.push(std::move(labels), false);
         return ret;
       })
     .define_method(

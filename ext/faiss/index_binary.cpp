@@ -48,8 +48,8 @@ void init_index_binary(Rice::Module& m) {
         self.search(n, objects.read_ptr(), k, distances.write_ptr(), labels.write_ptr());
 
         Rice::Array ret;
-        ret.push(distances);
-        ret.push(labels);
+        ret.push(std::move(distances), false);
+        ret.push(std::move(labels), false);
         return ret;
       })
     .define_method(
