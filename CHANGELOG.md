@@ -1,3 +1,7 @@
+## 0.5.0 (unreleased)
+
+- Added support for releasing GVL
+
 ## 0.4.3 (2025-10-26)
 
 - Fixed error with Rice 4.7

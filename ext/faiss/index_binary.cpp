@@ -27,25 +27,38 @@ void init_index_binary(Rice::Module& m) {
       })
     .define_method(
       "train",
-      [](faiss::IndexBinary &self, numo::UInt8 objects) {
+      [](Rice::Object rb_self, numo::UInt8 objects) {
+        rb_check_frozen(rb_self.value());
+
+        auto &self = *Rice::Data_Object<faiss::IndexBinary>{rb_self};
         auto n = check_shape(objects, self.d / 8);
         self.train(n, objects.read_ptr());
       })
     .define_method(
       "add",
-      [](faiss::IndexBinary &self, numo::UInt8 objects) {
+      [](Rice::Object rb_self, numo::UInt8 objects) {
+        rb_check_frozen(rb_self.value());
+
+        auto &self = *Rice::Data_Object<faiss::IndexBinary>{rb_self};
         auto n = check_shape(objects, self.d / 8);
         self.add(n, objects.read_ptr());
       })
     .define_method(
       "search",
-      [](faiss::IndexBinary &self, numo::UInt8 objects, size_t k) {
+      [](Rice::Object rb_self, numo::UInt8 objects, size_t k) {
+        auto &self = *Rice::Data_Object<faiss::IndexBinary>{rb_self};
         auto n = check_shape(objects, self.d / 8);
 
         auto distances = numo::Int32({n, k});
         auto labels = numo::Int64({n, k});
 
-        self.search(n, objects.read_ptr(), k, distances.write_ptr(), labels.write_ptr());
+        if (rb_self.is_frozen()) {
+          Rice::detail::no_gvl([&] {
+            self.search(n, objects.read_ptr(), k, distances.write_ptr(), labels.write_ptr());
+          });
+        } else {
+          self.search(n, objects.read_ptr(), k, distances.write_ptr(), labels.write_ptr());
+        }
 
         Rice::Array ret;
         ret.push(std::move(distances), false);

@@ -111,19 +111,28 @@ void init_index(Rice::Module& m) {
       })
     .define_method(
       "train",
-      [](faiss::Index &self, numo::SFloat objects) {
+      [](Rice::Object rb_self, numo::SFloat objects) {
+        rb_check_frozen(rb_self.value());
+
+        auto &self = *Rice::Data_Object<faiss::Index>{rb_self};
         auto n = check_shape(objects, self.d);
         self.train(n, objects.read_ptr());
       })
     .define_method(
       "add",
-      [](faiss::Index &self, numo::SFloat objects) {
+      [](Rice::Object rb_self, numo::SFloat objects) {
+        rb_check_frozen(rb_self.value());
+
+        auto &self = *Rice::Data_Object<faiss::Index>{rb_self};
         auto n = check_shape(objects, self.d);
         self.add(n, objects.read_ptr());
       })
     .define_method(
       "add_with_ids",
-      [](faiss::Index &self, numo::SFloat objects, numo::Int64 ids) {
+      [](Rice::Object rb_self, numo::SFloat objects, numo::Int64 ids) {
+        rb_check_frozen(rb_self.value());
+
+        auto &self = *Rice::Data_Object<faiss::Index>{rb_self};
         auto n = check_shape(objects, self.d);
         if (ids.ndim() != 1 || ids.shape()[0] != n) {
           throw Rice::Exception(rb_eArgError, "expected ids to be 1d array with size %d", n);
@@ -132,13 +141,20 @@ void init_index(Rice::Module& m) {
       })
     .define_method(
       "search",
-      [](faiss::Index &self, numo::SFloat objects, size_t k) {
+      [](Rice::Object rb_self, numo::SFloat objects, size_t k) {
+        auto &self = *Rice::Data_Object<faiss::Index>{rb_self};
         auto n = check_shape(objects, self.d);
 
         auto distances = numo::SFloat({n, k});
         auto labels = numo::Int64({n, k});
 
-        self.search(n, objects.read_ptr(), k, distances.write_ptr(), labels.write_ptr());
+        if (rb_self.is_frozen()) {
+          Rice::detail::no_gvl([&] {
+            self.search(n, objects.read_ptr(), k, distances.write_ptr(), labels.write_ptr());
+          });
+        } else {
+          self.search(n, objects.read_ptr(), k, distances.write_ptr(), labels.write_ptr());
+        }
 
         Rice::Array ret;
         ret.push(std::move(distances), false);
@@ -147,7 +163,10 @@ void init_index(Rice::Module& m) {
       })
     .define_method(
       "nprobe=",
-      [](faiss::Index &self, double val) {
+      [](Rice::Object rb_self, double val) {
+        rb_check_frozen(rb_self.value());
+
+        auto &self = *Rice::Data_Object<faiss::Index>{rb_self};
         faiss::ParameterSpace().set_index_parameter(&self, "nprobe", val);
       })
     .define_method(
