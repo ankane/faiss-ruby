@@ -32,11 +32,11 @@ void init_kmeans(Rice::Module& m) {
       })
     .define_method(
       "train",
-      [](Rice::Object self, numo::SFloat objects) {
-        auto self_ptr = Rice::detail::From_Ruby<faiss::Clustering*>().convert(self.value());
-        auto n = check_shape(objects, self_ptr->d);
-        auto index = faiss::IndexFlatL2(self_ptr->d);
-        self.iv_set("@index", Rice::Object(Rice::detail::To_Ruby<faiss::IndexFlatL2>().convert(index)));
-        self_ptr->train(n, objects.read_ptr(), index);
+      [](Rice::Object rb_self, numo::SFloat objects) {
+        auto &self = *Rice::Data_Object<faiss::Clustering>{rb_self};
+        auto n = check_shape(objects, self.d);
+        auto index = faiss::IndexFlatL2(self.d);
+        rb_self.iv_set("@index", index);
+        self.train(n, objects.read_ptr(), index);
       });
 }
