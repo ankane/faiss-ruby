@@ -53,6 +53,8 @@ Search
 distances, ids = index.search(objects, 3)
 ```
 
+> Use `index.freeze` to release the GVL for searches
+
 Save an index
 
 ```ruby
