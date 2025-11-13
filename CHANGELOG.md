@@ -1,4 +1,4 @@
-## 0.5.0 (unreleased)
+## 0.5.0 (2025-11-12)
 
 - Updated Faiss to 1.13.0
 - Added support for releasing GVL
