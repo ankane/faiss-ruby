@@ -1,6 +1,7 @@
 ## 0.5.1 (unreleased)
 
 - Updated Faiss to 1.13.1
+- Added `reconstruct` method
 
 ## 0.5.0 (2025-11-12)
 
