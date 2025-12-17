@@ -170,6 +170,14 @@ void init_index(Rice::Module& m) {
         faiss::ParameterSpace().set_index_parameter(&self, "nprobe", val);
       })
     .define_method(
+      "reconstruct",
+      [](faiss::Index &self, int64_t key) {
+        auto d = static_cast<std::size_t>(self.d);
+        auto recons = numo::SFloat({d});
+        self.reconstruct(key, recons.write_ptr());
+        return recons;
+      })
+    .define_method(
       "save",
       [](faiss::Index &self, Rice::String fname) {
         faiss::write_index(&self, fname.c_str());

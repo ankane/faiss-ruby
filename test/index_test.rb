@@ -305,6 +305,20 @@ class IndexTest < Minitest::Test
     assert_equal [[0, 2, 1], [1, 2, 0], [2, 0, 1]], ids.to_a
   end
 
+  def test_reconstruct
+    objects = Numo::SFloat.cast([
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ])
+    index = Faiss::IndexFlatL2.new(4)
+    index.add(objects)
+
+    (0..2).each do |i|
+      assert_equal objects[i, 0..], index.reconstruct(i)
+    end
+  end
+
   private
 
   def max_float # single-precision
