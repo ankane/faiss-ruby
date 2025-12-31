@@ -31,7 +31,7 @@ namespace Rice::detail {
 
     explicit From_Ruby(Arg* arg) : arg_(arg) { }
 
-    Convertible is_convertible(VALUE value) { return Convertible::Cast; }
+    double is_convertible(VALUE value) { return Convertible::Exact; }
 
     faiss::MetricType convert(VALUE x) {
       if (x == Qnil && this->arg_ && this->arg_->hasDefaultValue()) {
@@ -64,7 +64,7 @@ namespace Rice::detail {
 
     explicit From_Ruby(Arg* arg) : arg_(arg) { }
 
-    Convertible is_convertible(VALUE value) { return Convertible::Cast; }
+    double is_convertible(VALUE value) { return Convertible::Exact; }
 
     faiss::ScalarQuantizer::QuantizerType convert(VALUE x) {
       auto s = Object(x).to_s().str();

@@ -460,12 +460,12 @@ public:
 
   explicit From_Ruby(Arg* arg) : arg_(arg) { }
 
-  Convertible is_convertible(VALUE value) {
+  double is_convertible(VALUE value) {
     switch (rb_type(value)) {
       case RUBY_T_DATA:
         return Data_Type<numo::NArray>::is_descendant(value) ? Convertible::Exact : Convertible::None;
       case RUBY_T_ARRAY:
-        return Convertible::Cast;
+        return Convertible::Exact;
       default:
         return Convertible::None;
     }
@@ -506,12 +506,12 @@ public:
 
   explicit From_Ruby(Arg* arg) : arg_(arg) { }
 
-  Convertible is_convertible(VALUE value) {
+  double is_convertible(VALUE value) {
     switch (rb_type(value)) {
       case RUBY_T_DATA:
         return Data_Type<numo::SFloat>::is_descendant(value) ? Convertible::Exact : Convertible::None;
       case RUBY_T_ARRAY:
-        return Convertible::Cast;
+        return Convertible::Exact;
       default:
         return Convertible::None;
     }
@@ -552,12 +552,12 @@ public:
 
   explicit From_Ruby(Arg* arg) : arg_(arg) { }
 
-  Convertible is_convertible(VALUE value) {
+  double is_convertible(VALUE value) {
     switch (rb_type(value)) {
       case RUBY_T_DATA:
         return Data_Type<numo::DFloat>::is_descendant(value) ? Convertible::Exact : Convertible::None;
       case RUBY_T_ARRAY:
-        return Convertible::Cast;
+        return Convertible::Exact;
       default:
         return Convertible::None;
     }
@@ -598,12 +598,12 @@ public:
 
   explicit From_Ruby(Arg* arg) : arg_(arg) { }
 
-  Convertible is_convertible(VALUE value) {
+  double is_convertible(VALUE value) {
     switch (rb_type(value)) {
       case RUBY_T_DATA:
         return Data_Type<numo::Int8>::is_descendant(value) ? Convertible::Exact : Convertible::None;
       case RUBY_T_ARRAY:
-        return Convertible::Cast;
+        return Convertible::Exact;
       default:
         return Convertible::None;
     }
@@ -644,12 +644,12 @@ public:
 
   explicit From_Ruby(Arg* arg) : arg_(arg) { }
 
-  Convertible is_convertible(VALUE value) {
+  double is_convertible(VALUE value) {
     switch (rb_type(value)) {
       case RUBY_T_DATA:
         return Data_Type<numo::Int16>::is_descendant(value) ? Convertible::Exact : Convertible::None;
       case RUBY_T_ARRAY:
-        return Convertible::Cast;
+        return Convertible::Exact;
       default:
         return Convertible::None;
     }
@@ -690,12 +690,12 @@ public:
 
   explicit From_Ruby(Arg* arg) : arg_(arg) { }
 
-  Convertible is_convertible(VALUE value) {
+  double is_convertible(VALUE value) {
     switch (rb_type(value)) {
       case RUBY_T_DATA:
         return Data_Type<numo::Int32>::is_descendant(value) ? Convertible::Exact : Convertible::None;
       case RUBY_T_ARRAY:
-        return Convertible::Cast;
+        return Convertible::Exact;
       default:
         return Convertible::None;
     }
@@ -736,12 +736,12 @@ public:
 
   explicit From_Ruby(Arg* arg) : arg_(arg) { }
 
-  Convertible is_convertible(VALUE value) {
+  double is_convertible(VALUE value) {
     switch (rb_type(value)) {
       case RUBY_T_DATA:
         return Data_Type<numo::Int64>::is_descendant(value) ? Convertible::Exact : Convertible::None;
       case RUBY_T_ARRAY:
-        return Convertible::Cast;
+        return Convertible::Exact;
       default:
         return Convertible::None;
     }
@@ -782,12 +782,12 @@ public:
 
   explicit From_Ruby(Arg* arg) : arg_(arg) { }
 
-  Convertible is_convertible(VALUE value) {
+  double is_convertible(VALUE value) {
     switch (rb_type(value)) {
       case RUBY_T_DATA:
         return Data_Type<numo::UInt8>::is_descendant(value) ? Convertible::Exact : Convertible::None;
       case RUBY_T_ARRAY:
-        return Convertible::Cast;
+        return Convertible::Exact;
       default:
         return Convertible::None;
     }
@@ -828,12 +828,12 @@ public:
 
   explicit From_Ruby(Arg* arg) : arg_(arg) { }
 
-  Convertible is_convertible(VALUE value) {
+  double is_convertible(VALUE value) {
     switch (rb_type(value)) {
       case RUBY_T_DATA:
         return Data_Type<numo::UInt16>::is_descendant(value) ? Convertible::Exact : Convertible::None;
       case RUBY_T_ARRAY:
-        return Convertible::Cast;
+        return Convertible::Exact;
       default:
         return Convertible::None;
     }
@@ -874,12 +874,12 @@ public:
 
   explicit From_Ruby(Arg* arg) : arg_(arg) { }
 
-  Convertible is_convertible(VALUE value) {
+  double is_convertible(VALUE value) {
     switch (rb_type(value)) {
       case RUBY_T_DATA:
         return Data_Type<numo::UInt32>::is_descendant(value) ? Convertible::Exact : Convertible::None;
       case RUBY_T_ARRAY:
-        return Convertible::Cast;
+        return Convertible::Exact;
       default:
         return Convertible::None;
     }
@@ -920,12 +920,12 @@ public:
 
   explicit From_Ruby(Arg* arg) : arg_(arg) { }
 
-  Convertible is_convertible(VALUE value) {
+  double is_convertible(VALUE value) {
     switch (rb_type(value)) {
       case RUBY_T_DATA:
         return Data_Type<numo::UInt64>::is_descendant(value) ? Convertible::Exact : Convertible::None;
       case RUBY_T_ARRAY:
-        return Convertible::Cast;
+        return Convertible::Exact;
       default:
         return Convertible::None;
     }
@@ -966,12 +966,12 @@ public:
 
   explicit From_Ruby(Arg* arg) : arg_(arg) { }
 
-  Convertible is_convertible(VALUE value) {
+  double is_convertible(VALUE value) {
     switch (rb_type(value)) {
       case RUBY_T_DATA:
         return Data_Type<numo::SComplex>::is_descendant(value) ? Convertible::Exact : Convertible::None;
       case RUBY_T_ARRAY:
-        return Convertible::Cast;
+        return Convertible::Exact;
       default:
         return Convertible::None;
     }
@@ -1012,12 +1012,12 @@ public:
 
   explicit From_Ruby(Arg* arg) : arg_(arg) { }
 
-  Convertible is_convertible(VALUE value) {
+  double is_convertible(VALUE value) {
     switch (rb_type(value)) {
       case RUBY_T_DATA:
         return Data_Type<numo::DComplex>::is_descendant(value) ? Convertible::Exact : Convertible::None;
       case RUBY_T_ARRAY:
-        return Convertible::Cast;
+        return Convertible::Exact;
       default:
         return Convertible::None;
     }
@@ -1058,12 +1058,12 @@ public:
 
   explicit From_Ruby(Arg* arg) : arg_(arg) { }
 
-  Convertible is_convertible(VALUE value) {
+  double is_convertible(VALUE value) {
     switch (rb_type(value)) {
       case RUBY_T_DATA:
         return Data_Type<numo::Bit>::is_descendant(value) ? Convertible::Exact : Convertible::None;
       case RUBY_T_ARRAY:
-        return Convertible::Cast;
+        return Convertible::Exact;
       default:
         return Convertible::None;
     }
@@ -1104,12 +1104,12 @@ public:
 
   explicit From_Ruby(Arg* arg) : arg_(arg) { }
 
-  Convertible is_convertible(VALUE value) {
+  double is_convertible(VALUE value) {
     switch (rb_type(value)) {
       case RUBY_T_DATA:
         return Data_Type<numo::RObject>::is_descendant(value) ? Convertible::Exact : Convertible::None;
       case RUBY_T_ARRAY:
-        return Convertible::Cast;
+        return Convertible::Exact;
       default:
         return Convertible::None;
     }
