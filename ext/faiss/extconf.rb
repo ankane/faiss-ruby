@@ -38,4 +38,4 @@ $objs = $srcs.map { |v| v.sub(/cpp\z/, "o") }
 abort "Faiss not found" unless find_header("faiss/Index.h", vendor)
 $VPATH << vendor
 
-create_makefile("faiss/ext")
+create_makefile("faiss/faiss_ruby")
