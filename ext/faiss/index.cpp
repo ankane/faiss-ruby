@@ -34,10 +34,6 @@ namespace Rice::detail {
     double is_convertible(VALUE value) { return Convertible::Exact; }
 
     faiss::MetricType convert(VALUE x) {
-      if (x == Qnil && this->arg_ && this->arg_->hasDefaultValue()) {
-        return this->arg_->defaultValue<faiss::MetricType>();
-      }
-
       auto s = Object(x).to_s().str();
       if (s == "inner_product") {
         return faiss::METRIC_INNER_PRODUCT;
