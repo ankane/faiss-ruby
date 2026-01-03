@@ -1,5 +1,5 @@
 /*!
- * Numo.hpp v0.2.1
+ * Numo.hpp v0.3.0
  * https://github.com/ankane/numo.hpp
  * BSD-2-Clause License
  */
