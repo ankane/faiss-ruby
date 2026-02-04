@@ -376,6 +376,59 @@ class IndexTest < Minitest::Test
     assert_equal [objects[2, true].to_a], recons.to_a
   end
 
+  def test_reconstruct_batch
+    objects = Numo::SFloat.cast([
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2],
+      [3, 3, 3, 3],
+      [7, 8, 9, 10]
+    ])
+    index = Faiss::IndexFlatL2.new(4)
+    index.add(objects)
+
+    # Reconstruct specific vectors by their ids
+    keys = Numo::Int64.cast([0, 2, 4])
+    recons = index.reconstruct_batch(keys)
+    assert_equal [3, 4], recons.shape
+    assert_equal objects[0, true].to_a, recons[0, true].to_a
+    assert_equal objects[2, true].to_a, recons[1, true].to_a
+    assert_equal objects[4, true].to_a, recons[2, true].to_a
+
+    # Reconstruct in different order
+    keys = Numo::Int64.cast([4, 1, 3])
+    recons = index.reconstruct_batch(keys)
+    assert_equal [3, 4], recons.shape
+    assert_equal objects[4, true].to_a, recons[0, true].to_a
+    assert_equal objects[1, true].to_a, recons[1, true].to_a
+    assert_equal objects[3, true].to_a, recons[2, true].to_a
+
+    # Reconstruct single vector
+    keys = Numo::Int64.cast([2])
+    recons = index.reconstruct_batch(keys)
+    assert_equal [1, 4], recons.shape
+    assert_equal objects[2, true].to_a, recons[0, true].to_a
+  end
+
+  def test_reconstruct_batch_with_ids
+    objects = Numo::SFloat.cast([
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ])
+    ids = Numo::Int64.cast([100, 101, 102])
+    index = Faiss::IndexFlatL2.new(4)
+    index2 = Faiss::IndexIDMap2.new(index)
+    index2.add_with_ids(objects, ids)
+
+    # Reconstruct using custom ids
+    keys = Numo::Int64.cast([100, 102])
+    recons = index2.reconstruct_batch(keys)
+    assert_equal [2, 4], recons.shape
+    assert_equal objects[0, true].to_a, recons[0, true].to_a
+    assert_equal objects[2, true].to_a, recons[1, true].to_a
+  end
+
   def test_remove_ids
     objects = [
       [1, 1, 2, 1],

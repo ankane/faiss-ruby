@@ -184,6 +184,18 @@ void init_index(Rice::Module& m) {
         return recons;
       })
     .define_method(
+      "reconstruct_batch",
+      [](faiss::Index &self, numo::Int64 keys) {
+        if (keys.ndim() != 1) {
+          throw Rice::Exception(rb_eArgError, "expected keys to be 1d array");
+        }
+        auto n = static_cast<std::size_t>(keys.shape()[0]);
+        auto d = static_cast<std::size_t>(self.d);
+        auto recons = numo::SFloat({n, d});
+        self.reconstruct_batch(n, keys.read_ptr(), recons.write_ptr());
+        return recons;
+      })
+    .define_method(
       "save",
       [](faiss::Index &self, Rice::String fname) {
         faiss::write_index(&self, fname.c_str());
