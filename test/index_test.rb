@@ -349,6 +349,33 @@ class IndexTest < Minitest::Test
     end
   end
 
+  def test_reconstruct_n
+    objects = Numo::SFloat.cast([
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2],
+      [3, 3, 3, 3],
+      [7, 8, 9, 10]
+    ])
+    index = Faiss::IndexFlatL2.new(4)
+    index.add(objects)
+
+    # Reconstruct all vectors
+    recons = index.reconstruct_n(0, 5)
+    assert_equal [5, 4], recons.shape
+    assert_equal objects.to_a, recons.to_a
+
+    # Reconstruct subset from middle
+    recons = index.reconstruct_n(1, 3)
+    assert_equal [3, 4], recons.shape
+    assert_equal objects[1..3, true].to_a, recons.to_a
+
+    # Reconstruct single vector
+    recons = index.reconstruct_n(2, 1)
+    assert_equal [1, 4], recons.shape
+    assert_equal [objects[2, true].to_a], recons.to_a
+  end
+
   def test_remove_ids
     objects = [
       [1, 1, 2, 1],
