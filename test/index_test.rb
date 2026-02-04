@@ -243,6 +243,36 @@ class IndexTest < Minitest::Test
     assert_equal [[100, 102, 101], [101, 102, 100], [102, 100, 101]], ids.to_a
   end
 
+  def test_add_with_ids_id_map2
+    objects = [
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ]
+    ids = [100, 101, 102]
+    index = Faiss::IndexFlatL2.new(4)
+    index2 = Faiss::IndexIDMap2.new(index)
+    index2.add_with_ids(objects, ids)
+    distances, ids = index2.search(objects, 3)
+    assert_equal [[0, 3, 57], [0, 54, 57], [0, 3, 54]], distances.to_a
+    assert_equal [[100, 102, 101], [101, 102, 100], [102, 100, 101]], ids.to_a
+  end
+
+  def test_reconstruct_id_map2
+    objects = [
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ]
+    ids = [100, 101, 102]
+    index = Faiss::IndexFlatL2.new(4)
+    index2 = Faiss::IndexIDMap2.new(index)
+    index2.add_with_ids(objects, ids)
+    assert_equal [1, 1, 2, 1], index2.reconstruct(100).to_a
+    assert_equal [5, 4, 6, 5], index2.reconstruct(101).to_a
+    assert_equal [1, 2, 1, 2], index2.reconstruct(102).to_a
+  end
+
   def test_add_with_ids_ivf_flat
     objects = [
       [1, 1, 2, 1],
