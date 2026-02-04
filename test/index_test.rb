@@ -319,6 +319,18 @@ class IndexTest < Minitest::Test
     end
   end
 
+  def test_remove_ids
+    objects = [
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ]
+    index = Faiss::IndexFlatL2.new(4)
+    index.add(objects)
+    index.remove_ids([0, 2])
+    assert_equal 1, index.ntotal
+  end
+
   private
 
   def max_float # single-precision

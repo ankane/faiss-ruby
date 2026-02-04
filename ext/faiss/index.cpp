@@ -2,6 +2,7 @@
 
 #include <faiss/AutoTune.h>
 #include <faiss/Index.h>
+#include <faiss/impl/IDSelector.h>
 #include <faiss/IndexFlat.h>
 #include <faiss/IndexHNSW.h>
 #include <faiss/IndexIDMap.h>
@@ -177,6 +178,19 @@ void init_index(Rice::Module& m) {
       "save",
       [](faiss::Index &self, Rice::String fname) {
         faiss::write_index(&self, fname.c_str());
+      })
+    .define_method(
+      "remove_ids",
+      [](Rice::Object rb_self, numo::Int64 ids) {
+        rb_check_frozen(rb_self.value());
+
+        auto &self = *Rice::Data_Object<faiss::Index>{rb_self};
+        if (ids.ndim() != 1) {
+          throw Rice::Exception(rb_eArgError, "expected ids to be 1d array");
+        }
+        auto n = ids.shape()[0];
+        faiss::IDSelectorBatch sel(n, ids.read_ptr());
+        return self.remove_ids(sel);
       })
     .define_singleton_function(
       "load",
