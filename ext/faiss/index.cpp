@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <string>
+#include <vector>
 
 #include <faiss/AutoTune.h>
 #include <faiss/Index.h>
