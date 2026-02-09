@@ -1,3 +1,7 @@
+## 0.5.3 (unreleased)
+
+- Fixed error when searching frozen indexes
+
 ## 0.5.2 (2026-01-02)
 
 - Fixed error with Rice 4.8
