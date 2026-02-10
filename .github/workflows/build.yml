@@ -9,7 +9,7 @@ jobs:
           - ruby: "4.0"
             os: ubuntu-24.04
           - ruby: 3.4
-            os: ubuntu-24.04
+            os: ubuntu-24.04-arm
           - ruby: 3.3
             os: ubuntu-22.04
           - ruby: 3.2
@@ -20,7 +20,7 @@ jobs:
         with:
           submodules: true
       - if: ${{ startsWith(matrix.os, 'ubuntu') }}
-        run: sudo apt-get install libblas-dev liblapack-dev
+        run: sudo apt-get update && sudo apt-get install libblas-dev liblapack-dev
       - if: ${{ startsWith(matrix.os, 'macos') }}
         run: brew install openblas lapack libomp
       - uses: ruby/setup-ruby@v1
