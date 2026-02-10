@@ -1,3 +1,6 @@
+#include <algorithm>
+#include <vector>
+
 #include <faiss/IndexBinary.h>
 #include <faiss/IndexBinaryFlat.h>
 #include <faiss/IndexBinaryIVF.h>
@@ -53,9 +56,18 @@ void init_index_binary(Rice::Module& m) {
         auto labels = numo::Int64({n, k});
 
         if (rb_self.is_frozen()) {
+          // Don't mess with Ruby-owned memory while the GVL is released
+          auto objects_ptr = objects.read_ptr();
+          std::vector<uint8_t> objects_vec(objects_ptr, objects_ptr + n * (self.d / 8));
+          std::vector<int32_t> distances_vec(n * k);
+          std::vector<int64_t> labels_vec(n * k);
+
           Rice::detail::no_gvl([&] {
-            self.search(n, objects.read_ptr(), k, distances.write_ptr(), labels.write_ptr());
+            self.search(n, objects_vec.data(), k, distances_vec.data(), labels_vec.data());
           });
+
+          std::copy(distances_vec.begin(), distances_vec.end(), distances.write_ptr());
+          std::copy(labels_vec.begin(), labels_vec.end(), labels.write_ptr());
         } else {
           self.search(n, objects.read_ptr(), k, distances.write_ptr(), labels.write_ptr());
         }
