@@ -243,6 +243,22 @@ class IndexTest < Minitest::Test
     assert_equal [[100, 102, 101], [101, 102, 100], [102, 100, 101]], ids.to_a
   end
 
+  def test_add_with_ids_id_map2
+    objects = [
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ]
+    ids = [100, 101, 102]
+    index = Faiss::IndexFlatL2.new(4)
+    index2 = Faiss::IndexIDMap2.new(index)
+    index2.add_with_ids(objects, ids)
+    distances, ids = index2.search(objects, 3)
+
+    assert_equal [[0, 3, 57], [0, 54, 57], [0, 3, 54]], distances.to_a
+    assert_equal [[100, 102, 101], [101, 102, 100], [102, 100, 101]], ids.to_a
+  end
+
   def test_add_with_ids_ivf_flat
     objects = [
       [1, 1, 2, 1],
@@ -274,6 +290,44 @@ class IndexTest < Minitest::Test
     assert_match "expected ids to be 1d array with size 3", error.message
   end
 
+  def test_remove_ids
+    objects = [
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ]
+    index = Faiss::IndexFlatL2.new(4)
+    index.add(objects)
+    assert_equal 1, index.remove_ids([0, 99])
+    _, ids = index.search([[1, 2, 1, 2]], 3)
+
+    # changes ids of existing vectors
+    # https://github.com/facebookresearch/faiss/wiki/Special-operations-on-indexes#removing-elements-from-an-index
+    assert_equal [1, 0, -1], ids[0, true].to_a
+  end
+
+  def test_remove_ids_id_map2
+    objects = [
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ]
+    ids = [100, 101, 102]
+    index = Faiss::IndexFlatL2.new(4)
+    index2 = Faiss::IndexIDMap2.new(index)
+    index2.add_with_ids(objects, ids)
+    assert_equal 1, index.remove_ids([0, 99])
+    _, ids = index2.search([[1, 2, 1, 2]], 3)
+
+    # keeps ids
+    assert_equal [101, 100, -1], ids[0, true].to_a
+  end
+
+  def test_remove_ids_empty
+    index = Faiss::IndexFlatL2.new(4)
+    assert_equal 0, index.remove_ids([])
+  end
+
   def test_add_frozen
     index = Faiss::IndexFlatL2.new(4)
     index.freeze
@@ -287,6 +341,14 @@ class IndexTest < Minitest::Test
     index.freeze
     assert_raises(FrozenError) do
       index.add_with_ids([[1, 1, 2, 1]], [100])
+    end
+  end
+
+  def test_remove_ids_frozen
+    index = Faiss::IndexFlatL2.new(4)
+    index.freeze
+    assert_raises(FrozenError) do
+      index.remove_ids([])
     end
   end
 
@@ -317,6 +379,79 @@ class IndexTest < Minitest::Test
     (0..2).each do |i|
       assert_equal objects[i, 0..], index.reconstruct(i)
     end
+  end
+
+  def test_reconstruct_batch
+    objects = Numo::SFloat.cast([
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ])
+    index = Faiss::IndexFlatL2.new(4)
+    index.add(objects)
+
+    assert_equal objects[[2, 0], true], index.reconstruct_batch([2, 0])
+    assert_equal Numo::SFloat.new(0, 4), index.reconstruct_batch([])
+
+    error = assert_raises(RuntimeError) do
+      index.reconstruct_batch([99])
+    end
+    assert_match "Error: 'key < ntotal' failed", error.message
+
+    # returns junk data for IndexFlatL2
+    index.reconstruct_batch([-1])
+  end
+
+  def test_reconstruct_batch_id_map2
+    objects = Numo::SFloat.cast([
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ])
+    ids = [100, 101, 102]
+    index = Faiss::IndexFlatL2.new(4)
+    index2 = Faiss::IndexIDMap2.new(index)
+    index2.add_with_ids(objects, ids)
+
+    assert_equal objects[[2, 0], true], index2.reconstruct_batch([102, 100])
+
+    error = assert_raises(RuntimeError) do
+      index2.reconstruct_batch([-1])
+    end
+    assert_match "key -1 not found", error.message
+  end
+
+  def test_reconstruct_n
+    objects = Numo::SFloat.cast([
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ])
+    index = Faiss::IndexFlatL2.new(4)
+    index.add(objects)
+
+    assert_equal objects[1.., true], index.reconstruct_n(1, 2)
+    assert_equal Numo::SFloat.new(0, 4), index.reconstruct_n(1, 0)
+
+    error = assert_raises(ArgumentError) do
+      index.reconstruct_n(1, -1)
+    end
+    assert_equal "expected n to be non-negative", error.message
+
+    error = assert_raises(RuntimeError) do
+      index.reconstruct_n(1, 3)
+    end
+    assert_match "Error: 'ni == 0 || (i0 >= 0 && i0 + ni <= ntotal)' failed", error.message
+
+    error = assert_raises(RuntimeError) do
+      index.reconstruct_n(-1, 1)
+    end
+    assert_match "Error: 'ni == 0 || (i0 >= 0 && i0 + ni <= ntotal)' failed", error.message
+
+    error = assert_raises(RuntimeError) do
+      index.reconstruct_n(3, 1)
+    end
+    assert_match "Error: 'ni == 0 || (i0 >= 0 && i0 + ni <= ntotal)' failed", error.message
   end
 
   private

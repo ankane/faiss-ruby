@@ -138,6 +138,19 @@ void init_index(Rice::Module& m) {
         self.add_with_ids(n, objects.read_ptr(), ids.read_ptr());
       })
     .define_method(
+      "remove_ids",
+      [](Rice::Object rb_self, numo::Int64 ids) {
+        rb_check_frozen(rb_self.value());
+
+        auto &self = *Rice::Data_Object<faiss::Index>{rb_self};
+        if (ids.ndim() != 1) {
+          throw Rice::Exception(rb_eArgError, "expected ids to be 1d array");
+        }
+        auto n = ids.shape()[0];
+        faiss::IDSelectorBatch sel(n, ids.read_ptr());
+        return self.remove_ids(sel);
+      })
+    .define_method(
       "search",
       [](Rice::Object rb_self, numo::SFloat objects, size_t k) {
         auto &self = *Rice::Data_Object<faiss::Index>{rb_self};
@@ -182,6 +195,30 @@ void init_index(Rice::Module& m) {
         auto d = static_cast<std::size_t>(self.d);
         auto recons = numo::SFloat({d});
         self.reconstruct(key, recons.write_ptr());
+        return recons;
+      })
+    .define_method(
+      "reconstruct_batch",
+      [](faiss::Index &self, numo::Int64 ids) {
+        if (ids.ndim() != 1) {
+          throw Rice::Exception(rb_eArgError, "expected ids to be 1d array");
+        }
+        auto n = static_cast<std::size_t>(ids.shape()[0]);
+        auto d = static_cast<std::size_t>(self.d);
+        auto recons = numo::SFloat({n, d});
+        self.reconstruct_batch(n, ids.read_ptr(), recons.write_ptr());
+        return recons;
+      })
+    .define_method(
+      "reconstruct_n",
+      [](faiss::Index &self, int64_t i0, int64_t ni) {
+        if (ni < 0) {
+          throw Rice::Exception(rb_eArgError, "expected n to be non-negative");
+        }
+        auto d = static_cast<std::size_t>(self.d);
+        auto n = static_cast<std::size_t>(ni);
+        auto recons = numo::SFloat({n, d});
+        self.reconstruct_n(i0, ni, recons.write_ptr());
         return recons;
       })
     .define_method(
@@ -238,4 +275,7 @@ void init_index(Rice::Module& m) {
 
   Rice::define_class_under<faiss::IndexIDMap, faiss::Index>(m, "IndexIDMap")
     .define_constructor(Rice::Constructor<faiss::IndexIDMap, faiss::Index*>());
+
+  Rice::define_class_under<faiss::IndexIDMap2, faiss::Index>(m, "IndexIDMap2")
+    .define_constructor(Rice::Constructor<faiss::IndexIDMap2, faiss::Index*>());
 }

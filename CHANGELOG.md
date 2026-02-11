@@ -1,6 +1,9 @@
 ## 0.5.3 (unreleased)
 
 - Fixed error when searching frozen indexes
+- Added `IndexIDMap2` class
+- Added `remove_ids` method
+- Added `reconstruct_batch` and `reconstruct_n` methods
 
 ## 0.5.2 (2026-01-02)
 
