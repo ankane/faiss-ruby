@@ -40,11 +40,35 @@ class IndexBinaryTest < Minitest::Test
     Faiss.index_binary_factory(8, "BIVF32")
   end
 
+  def test_remove_ids
+    objects = [
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ]
+    index = Faiss::IndexBinaryFlat.new(32)
+    index.add(objects)
+    assert_equal 1, index.remove_ids([0, 99])
+    _, ids = index.search([[1, 2, 1, 2]], 3)
+
+    # changes ids of existing vectors
+    # https://github.com/facebookresearch/faiss/wiki/Special-operations-on-indexes#removing-elements-from-an-index
+    assert_equal [1, 0, -1], ids[0, true].to_a
+  end
+
   def test_add_frozen
     index = Faiss::IndexBinaryFlat.new(32)
     index.freeze
     assert_raises(FrozenError) do
       index.add([[1, 1, 2, 1]])
+    end
+  end
+
+  def test_remove_ids_frozen
+    index = Faiss::IndexBinaryFlat.new(32)
+    index.freeze
+    assert_raises(FrozenError) do
+      index.remove_ids([])
     end
   end
 
