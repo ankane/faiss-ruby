@@ -360,20 +360,22 @@ class IndexTest < Minitest::Test
     index = Faiss::IndexFlatL2.new(4)
     index.add(objects)
 
-    # Reconstruct all vectors
-    recons = index.reconstruct_n(0, 5)
-    assert_equal [5, 4], recons.shape
-    assert_equal objects.to_a, recons.to_a
-
-    # Reconstruct subset from middle
+    # happy path
     recons = index.reconstruct_n(1, 3)
-    assert_equal [3, 4], recons.shape
     assert_equal objects[1..3, true].to_a, recons.to_a
+    
+    # n = 0
+    recons = index.reconstruct_n(2, 0)
+    assert_equal [[]], recons.to_a
 
-    # Reconstruct single vector
-    recons = index.reconstruct_n(2, 1)
-    assert_equal [1, 4], recons.shape
-    assert_equal [objects[2, true].to_a], recons.to_a
+    # negative n
+    assert_raises(ArgumentError) { index.reconstruct_n(0, -1) }
+    # negative i0 
+    assert_raises(RuntimeError) { index.reconstruct_n(-1, 3) }
+    # n > ntotal
+    assert_raises(RuntimeError) { index.reconstruct_n(0, objects.shape.first + 1)  }
+    # n < ntotal but out of bounds because of the starting index
+    assert_raises(RuntimeError) { index.reconstruct_n(3, 3) }
   end
 
   def test_reconstruct_batch
@@ -398,16 +400,17 @@ class IndexTest < Minitest::Test
     # Reconstruct in different order
     keys = Numo::Int64.cast([4, 1, 3])
     recons = index.reconstruct_batch(keys)
-    assert_equal [3, 4], recons.shape
+
     assert_equal objects[4, true].to_a, recons[0, true].to_a
     assert_equal objects[1, true].to_a, recons[1, true].to_a
     assert_equal objects[3, true].to_a, recons[2, true].to_a
 
-    # Reconstruct single vector
-    keys = Numo::Int64.cast([2])
-    recons = index.reconstruct_batch(keys)
-    assert_equal [1, 4], recons.shape
-    assert_equal objects[2, true].to_a, recons[0, true].to_a
+    empty_keys = Numo::Int64.cast([])
+    recons = index.reconstruct_batch(empty_keys)
+    assert_equal Numo::SFloat.new(0, 4), recons
+
+    non_existent_keys = Numo::Int64.cast([12, 33])
+    assert_raises(RuntimeError) { index.reconstruct_batch(non_existent_keys) }
   end
 
   def test_reconstruct_batch_with_ids
@@ -439,6 +442,7 @@ class IndexTest < Minitest::Test
     index.add(objects)
     index.remove_ids([0, 2])
     assert_equal 1, index.ntotal
+    assert_equal objects[1], index.reconstruct(0).to_a
   end
 
   private

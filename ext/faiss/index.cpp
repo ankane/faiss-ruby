@@ -177,6 +177,9 @@ void init_index(Rice::Module& m) {
     .define_method(
       "reconstruct_n",
       [](faiss::Index &self, int64_t i0, int64_t ni) {
+        if ( ni < 0) {
+          throw Rice::Exception(rb_eArgError, "expected n to be positive");
+        }
         auto d = static_cast<std::size_t>(self.d);
         auto n = static_cast<std::size_t>(ni);
         auto recons = numo::SFloat({n, d});
@@ -185,14 +188,14 @@ void init_index(Rice::Module& m) {
       })
     .define_method(
       "reconstruct_batch",
-      [](faiss::Index &self, numo::Int64 keys) {
-        if (keys.ndim() != 1) {
-          throw Rice::Exception(rb_eArgError, "expected keys to be 1d array");
+      [](faiss::Index &self, numo::Int64 ids) {
+        if (ids.ndim() != 1) {
+          throw Rice::Exception(rb_eArgError, "expected ids to be 1d array");
         }
-        auto n = static_cast<std::size_t>(keys.shape()[0]);
+        auto n = static_cast<std::size_t>(ids.shape()[0]);
         auto d = static_cast<std::size_t>(self.d);
         auto recons = numo::SFloat({n, d});
-        self.reconstruct_batch(n, keys.read_ptr(), recons.write_ptr());
+        self.reconstruct_batch(n, ids.read_ptr(), recons.write_ptr());
         return recons;
       })
     .define_method(
