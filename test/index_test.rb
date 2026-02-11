@@ -329,6 +329,9 @@ class IndexTest < Minitest::Test
   end
 
   def test_add_frozen
+    # https://github.com/ruby-rice/rice/issues/386
+    skip if valgrind?
+
     index = Faiss::IndexFlatL2.new(4)
     index.freeze
     assert_raises(FrozenError) do
@@ -337,6 +340,9 @@ class IndexTest < Minitest::Test
   end
 
   def test_add_with_ids_frozen
+    # https://github.com/ruby-rice/rice/issues/386
+    skip if valgrind?
+
     index = Faiss::IndexFlatL2.new(4)
     index.freeze
     assert_raises(FrozenError) do
@@ -345,6 +351,9 @@ class IndexTest < Minitest::Test
   end
 
   def test_remove_ids_frozen
+    # https://github.com/ruby-rice/rice/issues/386
+    skip if valgrind?
+
     index = Faiss::IndexFlatL2.new(4)
     index.freeze
     assert_raises(FrozenError) do
@@ -391,7 +400,11 @@ class IndexTest < Minitest::Test
     index.add(objects)
 
     assert_equal [objects[2], objects[0]], index.reconstruct_batch([2, 0]).to_a
-    assert_equal Numo::SFloat.new(0, 4), index.reconstruct_batch([])
+
+    # https://github.com/ruby-numo/numo-narray/issues/248
+    unless valgrind?
+      assert_equal Numo::SFloat.new(0, 4), index.reconstruct_batch([])
+    end
 
     error = assert_raises(RuntimeError) do
       index.reconstruct_batch([99])
@@ -431,7 +444,11 @@ class IndexTest < Minitest::Test
     index.add(objects)
 
     assert_equal [objects[1], objects[2]], index.reconstruct_n(1, 2).to_a
-    assert_equal Numo::SFloat.new(0, 4), index.reconstruct_n(1, 0)
+
+    # https://github.com/ruby-numo/numo-narray/issues/248
+    unless valgrind?
+      assert_equal Numo::SFloat.new(0, 4), index.reconstruct_n(1, 0)
+    end
 
     error = assert_raises(ArgumentError) do
       index.reconstruct_n(1, -1)
