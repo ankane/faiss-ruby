@@ -368,29 +368,29 @@ class IndexTest < Minitest::Test
   end
 
   def test_reconstruct
-    objects = Numo::SFloat.cast([
+    objects = [
       [1, 1, 2, 1],
       [5, 4, 6, 5],
       [1, 2, 1, 2]
-    ])
+    ]
     index = Faiss::IndexFlatL2.new(4)
     index.add(objects)
 
-    (0..2).each do |i|
-      assert_equal objects[i, 0..], index.reconstruct(i)
+    3.times do |i|
+      assert_equal objects[i], index.reconstruct(i).to_a
     end
   end
 
   def test_reconstruct_batch
-    objects = Numo::SFloat.cast([
+    objects = [
       [1, 1, 2, 1],
       [5, 4, 6, 5],
       [1, 2, 1, 2]
-    ])
+    ]
     index = Faiss::IndexFlatL2.new(4)
     index.add(objects)
 
-    assert_equal objects[[2, 0], true], index.reconstruct_batch([2, 0])
+    assert_equal [objects[2], objects[0]], index.reconstruct_batch([2, 0]).to_a
     assert_equal Numo::SFloat.new(0, 4), index.reconstruct_batch([])
 
     error = assert_raises(RuntimeError) do
@@ -403,17 +403,17 @@ class IndexTest < Minitest::Test
   end
 
   def test_reconstruct_batch_id_map2
-    objects = Numo::SFloat.cast([
+    objects = [
       [1, 1, 2, 1],
       [5, 4, 6, 5],
       [1, 2, 1, 2]
-    ])
+    ]
     ids = [100, 101, 102]
     index = Faiss::IndexFlatL2.new(4)
     index2 = Faiss::IndexIDMap2.new(index)
     index2.add_with_ids(objects, ids)
 
-    assert_equal objects[[2, 0], true], index2.reconstruct_batch([102, 100])
+    assert_equal [objects[2], objects[0]], index2.reconstruct_batch([102, 100]).to_a
 
     error = assert_raises(RuntimeError) do
       index2.reconstruct_batch([-1])
@@ -422,15 +422,15 @@ class IndexTest < Minitest::Test
   end
 
   def test_reconstruct_n
-    objects = Numo::SFloat.cast([
+    objects = [
       [1, 1, 2, 1],
       [5, 4, 6, 5],
       [1, 2, 1, 2]
-    ])
+    ]
     index = Faiss::IndexFlatL2.new(4)
     index.add(objects)
 
-    assert_equal objects[1.., true], index.reconstruct_n(1, 2)
+    assert_equal [objects[1], objects[2]], index.reconstruct_n(1, 2).to_a
     assert_equal Numo::SFloat.new(0, 4), index.reconstruct_n(1, 0)
 
     error = assert_raises(ArgumentError) do
