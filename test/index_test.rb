@@ -398,8 +398,8 @@ class IndexTest < Minitest::Test
     end
     assert_match "Error: 'key < ntotal' failed", error.message
 
-    # returns junk data for IndexFlatL2
-    index.reconstruct_batch([-1])
+    # invalid read for IndexFlatL2 (upstream issue)
+    # index.reconstruct_batch([-1])
   end
 
   def test_reconstruct_batch_id_map2
