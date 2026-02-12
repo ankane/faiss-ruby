@@ -16,9 +16,6 @@ size_t check_shape(const numo::NArray& objects, size_t k) {
 }
 
 void check_frozen(const Rice::Object& obj) {
-  if (obj.is_frozen()) {
-    // same message as rb_check_frozen
-    // but must use C++ exception to avoid skipping destructors and leaking memory
-    throw Rice::Exception(rb_eFrozenError, "can't modify frozen %" PRIsVALUE ": ", CLASS_OF(obj.value()));
-  }
+  // use protect to avoid skipping destructors and leaking memory
+  Rice::detail::protect(rb_check_frozen, obj.value());
 }
