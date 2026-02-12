@@ -99,6 +99,18 @@ void init_index_binary(Rice::Module& m) {
         return recons;
       })
     .define_method(
+      "reconstruct_n",
+      [](faiss::IndexBinary &self, int64_t i0, int64_t ni) {
+        if (ni < 0) {
+          throw Rice::Exception(rb_eArgError, "expected n to be non-negative");
+        }
+        auto d = static_cast<std::size_t>(self.d / 8);
+        auto n = static_cast<std::size_t>(ni);
+        auto recons = numo::UInt8({n, d});
+        self.reconstruct_n(i0, ni, recons.write_ptr());
+        return recons;
+      })
+    .define_method(
       "save",
       [](faiss::IndexBinary &self, Rice::String fname) {
         faiss::write_index_binary(&self, fname.c_str());

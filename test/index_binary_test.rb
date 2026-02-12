@@ -107,6 +107,46 @@ class IndexBinaryTest < Minitest::Test
     end
   end
 
+  def test_reconstruct_n
+    objects = [
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ]
+    index = Faiss::IndexBinaryFlat.new(32)
+    index.add(objects)
+
+    assert_equal [objects[1], objects[2]], index.reconstruct_n(1, 2).to_a
+
+    # https://github.com/ruby-numo/numo-narray/issues/248
+    unless valgrind?
+      assert_equal Numo::UInt8.new(0, 4), index.reconstruct_n(1, 0)
+    end
+
+    error = assert_raises(ArgumentError) do
+      index.reconstruct_n(1, -1)
+    end
+    assert_equal "expected n to be non-negative", error.message
+
+    # invalid read for IndexBinaryFlat
+    # error = assert_raises(RuntimeError) do
+    #   index.reconstruct_n(1, 3)
+    # end
+    # assert_match "Error: 'ni == 0 || (i0 >= 0 && i0 + ni <= ntotal)' failed", error.message
+
+    # invalid read for IndexBinaryFlat
+    # error = assert_raises(RuntimeError) do
+    #   index.reconstruct_n(-1, 1)
+    # end
+    # assert_match "Error: 'ni == 0 || (i0 >= 0 && i0 + ni <= ntotal)' failed", error.message
+
+    # invalid read for IndexBinaryFlat
+    # error = assert_raises(RuntimeError) do
+    #   index.reconstruct_n(3, 1)
+    # end
+    # assert_match "Error: 'ni == 0 || (i0 >= 0 && i0 + ni <= ntotal)' failed", error.message
+  end
+
   private
 
   def max_int
