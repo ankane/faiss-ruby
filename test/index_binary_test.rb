@@ -128,23 +128,20 @@ class IndexBinaryTest < Minitest::Test
     end
     assert_equal "expected n to be non-negative", error.message
 
-    # invalid read for IndexBinaryFlat
-    # error = assert_raises(RuntimeError) do
-    #   index.reconstruct_n(1, 3)
-    # end
-    # assert_match "Error: 'ni == 0 || (i0 >= 0 && i0 + ni <= ntotal)' failed", error.message
+    error = assert_raises(IndexError) do
+      index.reconstruct_n(1, 3)
+    end
+    assert_match "index out of range", error.message
 
-    # invalid read for IndexBinaryFlat
-    # error = assert_raises(RuntimeError) do
-    #   index.reconstruct_n(-1, 1)
-    # end
-    # assert_match "Error: 'ni == 0 || (i0 >= 0 && i0 + ni <= ntotal)' failed", error.message
+    error = assert_raises(IndexError) do
+      index.reconstruct_n(-1, 1)
+    end
+    assert_match "index out of range", error.message
 
-    # invalid read for IndexBinaryFlat
-    # error = assert_raises(RuntimeError) do
-    #   index.reconstruct_n(3, 1)
-    # end
-    # assert_match "Error: 'ni == 0 || (i0 >= 0 && i0 + ni <= ntotal)' failed", error.message
+    error = assert_raises(IndexError) do
+      index.reconstruct_n(3, 1)
+    end
+    assert_match "index out of range", error.message
   end
 
   private

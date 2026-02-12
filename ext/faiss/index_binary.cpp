@@ -104,6 +104,10 @@ void init_index_binary(Rice::Module& m) {
         if (ni < 0) {
           throw Rice::Exception(rb_eArgError, "expected n to be non-negative");
         }
+        // second condition written this way to avoid overflow
+        if (i0 < 0 || i0 > self.ntotal - ni) {
+          throw Rice::Exception(rb_eIndexError, "index out of range");
+        }
         auto d = static_cast<std::size_t>(self.d / 8);
         auto n = static_cast<std::size_t>(ni);
         auto recons = numo::UInt8({n, d});

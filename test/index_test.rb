@@ -455,20 +455,20 @@ class IndexTest < Minitest::Test
     end
     assert_equal "expected n to be non-negative", error.message
 
-    error = assert_raises(RuntimeError) do
+    error = assert_raises(IndexError) do
       index.reconstruct_n(1, 3)
     end
-    assert_match "Error: 'ni == 0 || (i0 >= 0 && i0 + ni <= ntotal)' failed", error.message
+    assert_match "index out of range", error.message
 
-    error = assert_raises(RuntimeError) do
+    error = assert_raises(IndexError) do
       index.reconstruct_n(-1, 1)
     end
-    assert_match "Error: 'ni == 0 || (i0 >= 0 && i0 + ni <= ntotal)' failed", error.message
+    assert_match "index out of range", error.message
 
-    error = assert_raises(RuntimeError) do
+    error = assert_raises(IndexError) do
       index.reconstruct_n(3, 1)
     end
-    assert_match "Error: 'ni == 0 || (i0 >= 0 && i0 + ni <= ntotal)' failed", error.message
+    assert_match "index out of range", error.message
   end
 
   private
