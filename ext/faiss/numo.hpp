@@ -1,5 +1,5 @@
 /*!
- * Numo.hpp v0.3.0
+ * Numo.hpp v0.3.1
  * https://github.com/ankane/numo.hpp
  * BSD-2-Clause License
  */
@@ -38,7 +38,7 @@ public:
   }
 
   bool is_contiguous() const {
-    return nary_check_contiguous(this->_value) == Qtrue;
+    return Rice::detail::protect(nary_check_contiguous, this->_value) == Qtrue;
   }
 
   operator Rice::Object() const {
@@ -46,26 +46,28 @@ public:
   }
 
   const void* read_ptr() {
-    if (!is_contiguous()) {
-      this->_value = nary_dup(this->_value);
-    }
-    return nary_get_pointer_for_read(this->_value) + nary_get_offset(this->_value);
+    return Rice::detail::protect([&]() {
+      if (!nary_check_contiguous(this->_value)) {
+        this->_value = nary_dup(this->_value);
+      }
+      return nary_get_pointer_for_read(this->_value) + nary_get_offset(this->_value);
+    });
   }
 
   void* write_ptr() {
-    return nary_get_pointer_for_write(this->_value);
+    return Rice::detail::protect(nary_get_pointer_for_write, this->_value);
   }
 
 protected:
   NArray() { }
 
   void construct_value(VALUE dtype, VALUE v) {
-    this->_value = rb_funcall(dtype, rb_intern("cast"), 1, v);
+    this->_value = Rice::detail::protect(rb_funcall, dtype, rb_intern("cast"), 1, v);
   }
 
   void construct_shape(VALUE dtype, std::initializer_list<size_t> shape) {
     // rb_narray_new doesn't modify shape, but not marked as const
-    this->_value = rb_narray_new(dtype, shape.size(), const_cast<size_t*>(shape.begin()));
+    this->_value = Rice::detail::protect(rb_narray_new, dtype, shape.size(), const_cast<size_t*>(shape.begin()));
   }
 
   VALUE _value;
