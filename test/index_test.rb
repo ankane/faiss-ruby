@@ -329,9 +329,6 @@ class IndexTest < Minitest::Test
   end
 
   def test_add_frozen
-    # https://github.com/ruby-rice/rice/issues/386
-    skip if valgrind?
-
     index = Faiss::IndexFlatL2.new(4)
     index.freeze
     assert_raises(FrozenError) do
@@ -340,9 +337,6 @@ class IndexTest < Minitest::Test
   end
 
   def test_add_with_ids_frozen
-    # https://github.com/ruby-rice/rice/issues/386
-    skip if valgrind?
-
     index = Faiss::IndexFlatL2.new(4)
     index.freeze
     assert_raises(FrozenError) do
@@ -351,9 +345,6 @@ class IndexTest < Minitest::Test
   end
 
   def test_remove_ids_frozen
-    # https://github.com/ruby-rice/rice/issues/386
-    skip if valgrind?
-
     index = Faiss::IndexFlatL2.new(4)
     index.freeze
     assert_raises(FrozenError) do

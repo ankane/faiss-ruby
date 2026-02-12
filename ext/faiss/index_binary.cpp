@@ -31,7 +31,7 @@ void init_index_binary(Rice::Module& m) {
     .define_method(
       "train",
       [](Rice::Object rb_self, numo::UInt8 objects) {
-        rb_check_frozen(rb_self.value());
+        check_frozen(rb_self);
 
         auto &self = *Rice::Data_Object<faiss::IndexBinary>{rb_self};
         auto n = check_shape(objects, self.d / 8);
@@ -40,7 +40,7 @@ void init_index_binary(Rice::Module& m) {
     .define_method(
       "add",
       [](Rice::Object rb_self, numo::UInt8 objects) {
-        rb_check_frozen(rb_self.value());
+        check_frozen(rb_self);
 
         auto &self = *Rice::Data_Object<faiss::IndexBinary>{rb_self};
         auto n = check_shape(objects, self.d / 8);
@@ -49,7 +49,7 @@ void init_index_binary(Rice::Module& m) {
     .define_method(
       "remove_ids",
       [](Rice::Object rb_self, numo::Int64 ids) {
-        rb_check_frozen(rb_self.value());
+        check_frozen(rb_self);
 
         auto &self = *Rice::Data_Object<faiss::IndexBinary>{rb_self};
         if (ids.ndim() != 1) {

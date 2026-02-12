@@ -4,6 +4,7 @@
 - Added `remove_ids` method
 - Added `reconstruct_batch` and `reconstruct_n` methods
 - Fixed error when searching frozen indexes
+- Fixed memory leak with frozen exceptions
 
 ## 0.5.2 (2026-01-02)
 

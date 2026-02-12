@@ -110,7 +110,7 @@ void init_index(Rice::Module& m) {
     .define_method(
       "train",
       [](Rice::Object rb_self, numo::SFloat objects) {
-        rb_check_frozen(rb_self.value());
+        check_frozen(rb_self);
 
         auto &self = *Rice::Data_Object<faiss::Index>{rb_self};
         auto n = check_shape(objects, self.d);
@@ -119,7 +119,7 @@ void init_index(Rice::Module& m) {
     .define_method(
       "add",
       [](Rice::Object rb_self, numo::SFloat objects) {
-        rb_check_frozen(rb_self.value());
+        check_frozen(rb_self);
 
         auto &self = *Rice::Data_Object<faiss::Index>{rb_self};
         auto n = check_shape(objects, self.d);
@@ -128,7 +128,7 @@ void init_index(Rice::Module& m) {
     .define_method(
       "add_with_ids",
       [](Rice::Object rb_self, numo::SFloat objects, numo::Int64 ids) {
-        rb_check_frozen(rb_self.value());
+        check_frozen(rb_self);
 
         auto &self = *Rice::Data_Object<faiss::Index>{rb_self};
         auto n = check_shape(objects, self.d);
@@ -140,7 +140,7 @@ void init_index(Rice::Module& m) {
     .define_method(
       "remove_ids",
       [](Rice::Object rb_self, numo::Int64 ids) {
-        rb_check_frozen(rb_self.value());
+        check_frozen(rb_self);
 
         auto &self = *Rice::Data_Object<faiss::Index>{rb_self};
         if (ids.ndim() != 1) {
@@ -184,7 +184,7 @@ void init_index(Rice::Module& m) {
     .define_method(
       "nprobe=",
       [](Rice::Object rb_self, double val) {
-        rb_check_frozen(rb_self.value());
+        check_frozen(rb_self);
 
         auto &self = *Rice::Data_Object<faiss::Index>{rb_self};
         faiss::ParameterSpace().set_index_parameter(&self, "nprobe", val);
