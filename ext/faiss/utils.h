@@ -4,4 +4,4 @@
 
 size_t check_shape(const numo::NArray& objects, size_t k);
 
-void check_frozen(const Rice::Object& obj);
+void check_frozen(Rice::Object obj);

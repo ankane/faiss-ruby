@@ -15,7 +15,7 @@ size_t check_shape(const numo::NArray& objects, size_t k) {
   return shape[0];
 }
 
-void check_frozen(const Rice::Object& obj) {
+void check_frozen(Rice::Object obj) {
   // use protect to avoid skipping destructors and leaking memory
   Rice::detail::protect(rb_check_frozen, obj.value());
 }
