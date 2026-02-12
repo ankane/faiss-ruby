@@ -93,6 +93,20 @@ class IndexBinaryTest < Minitest::Test
     assert_equal [[0, 1, 2], [1, 0, 2], [2, 0, 1]], ids.to_a
   end
 
+  def test_reconstruct
+    objects = [
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ]
+    index = Faiss::IndexBinaryFlat.new(32)
+    index.add(objects)
+
+    3.times do |i|
+      assert_equal objects[i], index.reconstruct(i).to_a
+    end
+  end
+
   private
 
   def max_int

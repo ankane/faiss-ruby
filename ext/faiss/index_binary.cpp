@@ -91,6 +91,14 @@ void init_index_binary(Rice::Module& m) {
         return ret;
       })
     .define_method(
+      "reconstruct",
+      [](faiss::IndexBinary &self, int64_t key) {
+        auto d = static_cast<std::size_t>(self.d / 8);
+        auto recons = numo::UInt8({d});
+        self.reconstruct(key, recons.write_ptr());
+        return recons;
+      })
+    .define_method(
       "save",
       [](faiss::IndexBinary &self, Rice::String fname) {
         faiss::write_index_binary(&self, fname.c_str());
