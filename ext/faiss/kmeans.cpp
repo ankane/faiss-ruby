@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include <faiss/Clustering.h>
 #include <faiss/IndexFlat.h>
 #include <rice/rice.hpp>
@@ -27,7 +29,7 @@ void init_kmeans(Rice::Module& m) {
       "centroids",
       [](faiss::Clustering &self) {
         auto centroids = numo::SFloat({self.k, self.d});
-        memcpy(centroids.write_ptr(), self.centroids.data(), self.centroids.size() * sizeof(float));
+        std::copy(self.centroids.begin(), self.centroids.end(), centroids.write_ptr());
         return centroids;
       })
     .define_method(
