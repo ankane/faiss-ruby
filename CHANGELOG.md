@@ -1,4 +1,4 @@
-## 0.5.3 (unreleased)
+## 0.5.3 (2026-02-12)
 
 - Added `IndexIDMap2` class
 - Added `remove_ids` method
