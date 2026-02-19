@@ -281,5 +281,10 @@ void init_index(Rice::Module& m) {
     .define_constructor(Rice::Constructor<faiss::IndexIDMap, faiss::Index*>());
 
   Rice::define_class_under<faiss::IndexIDMap2, faiss::Index>(m, "IndexIDMap2")
-    .define_constructor(Rice::Constructor<faiss::IndexIDMap2, faiss::Index*>());
+    .define_constructor(Rice::Constructor<faiss::IndexIDMap2, faiss::Index*>())
+    .define_method(
+      "id_map",
+      [](faiss::IndexIDMap2 &self) {
+        return self.id_map;
+      });
 }
