@@ -243,6 +243,13 @@ class IndexTest < Minitest::Test
     assert_equal [[100, 102, 101], [101, 102, 100], [102, 100, 101]], ids.to_a
   end
 
+  def test_id_map2_id_map
+    index = Faiss::IndexFlatL2.new(4)
+    index_map = Faiss::IndexIDMap2.new(index)
+    index_map.add_with_ids([[1, 1, 2, 1], [5, 4, 6, 5], [1, 2, 1, 2]], [100, 101, 102])
+    assert_equal [100, 101, 102], index_map.id_map.to_a
+  end
+
   def test_add_with_ids_id_map2
     objects = [
       [1, 1, 2, 1],
