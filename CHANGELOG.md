@@ -1,3 +1,7 @@
+## 0.5.4 (unreleased)
+
+- Added `id_map` method to `IndexIDMap2`
+
 ## 0.5.3 (2026-02-12)
 
 - Added `IndexIDMap2` class
