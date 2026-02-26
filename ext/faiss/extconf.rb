@@ -20,7 +20,7 @@ abort "Numo not found" unless find_header("numo/narray.h", numo)
 $LDFLAGS += " -Wl,-undefined,dynamic_lookup" if RbConfig::CONFIG["host_os"] =~ /darwin/i
 
 $CXXFLAGS += " -std=c++17 $(optflags) -DFINTEGER=int"
-$CXXFLAGS += " -Wall -Wno-unused-parameter -Wno-unused-function -Wno-unused-variable -Wno-unused-private-field -Wno-deprecated-declarations -Wno-sign-compare"
+$CXXFLAGS += " -Wall -Wno-unused-parameter -Wno-unused-function -Wno-unused-variable -Wno-unused-local-typedefs -Wno-deprecated-declarations -Wno-sign-compare"
 
 # -march=native not supported with ARM Mac
 default_optflags = RbConfig::CONFIG["host_os"] =~ /darwin/i && RbConfig::CONFIG["host_cpu"] =~ /arm|aarch64/i ? "" : " -march=native"
@@ -34,8 +34,7 @@ ext = File.expand_path(".", __dir__)
 vendor = File.expand_path("../../vendor/faiss", __dir__)
 
 $srcs = Dir["{#{ext},#{vendor}/faiss,#{vendor}/faiss/{impl,invlists,utils}/**}/*.{cpp}"]
-$objs = $srcs.map { |v| v.sub(/cpp\z/, "o") }
 abort "Faiss not found" unless find_header("faiss/Index.h", vendor)
-$VPATH << vendor
+$VPATH += $srcs.filter_map { |v| File.dirname(v) if v.start_with?(vendor) }.uniq
 
 create_makefile("faiss/ext")

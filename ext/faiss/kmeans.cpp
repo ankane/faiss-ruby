@@ -5,7 +5,7 @@
 #include <rice/rice.hpp>
 
 #include "numo.hpp"
-#include "utils.h"
+#include "utils_rb.h"
 
 void init_kmeans(Rice::Module& m) {
   Rice::define_class_under<faiss::Clustering>(m, "Kmeans")

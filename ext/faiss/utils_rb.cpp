@@ -1,7 +1,7 @@
 #include <rice/rice.hpp>
 
 #include "numo.hpp"
-#include "utils.h"
+#include "utils_rb.h"
 
 size_t check_shape(const numo::NArray& objects, size_t k) {
   auto ndim = objects.ndim();

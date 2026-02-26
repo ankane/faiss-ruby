@@ -18,7 +18,7 @@
 #include <rice/stl.hpp>
 
 #include "numo.hpp"
-#include "utils.h"
+#include "utils_rb.h"
 
 namespace Rice::detail {
   template<>
