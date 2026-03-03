@@ -15,7 +15,7 @@ end
 
 numo = File.join(Gem.loaded_specs["numo-narray-alt"].require_path, "numo")
 abort "Numo not found" unless find_header("numo/narray.h", numo)
-abort "Numo library not found" if Gem.win_platform? && !find_library("narray", nil, numo)
+abort "Numo library not found" if Gem.win_platform? && !find_library("narray", nil, "#{numo}/narray")
 
 # for https://bugs.ruby-lang.org/issues/19005
 $LDFLAGS += " -Wl,-undefined,dynamic_lookup" if RbConfig::CONFIG["host_os"] =~ /darwin/i
