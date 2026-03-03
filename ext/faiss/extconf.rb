@@ -9,12 +9,13 @@ if RbConfig::CONFIG["host_os"] =~ /darwin/i
   find_header("omp.h", "#{brew_prefix}/opt/libomp/include")
 end
 
-abort "BLAS not found" unless have_library("blas")
-abort "LAPACK not found" unless have_library("lapack")
-abort "OpenMP not found" unless have_library("omp") || have_library("gomp")
+# abort "BLAS not found" unless have_library("blas")
+# abort "LAPACK not found" unless have_library("lapack")
+# abort "OpenMP not found" unless have_library("omp") || have_library("gomp")
 
 numo = File.join(Gem.loaded_specs["numo-narray"].require_path, "numo")
 abort "Numo not found" unless find_header("numo/narray.h", numo)
+abort "Numo library not found" if Gem.win_platform? && !find_library("narray", nil, numo)
 
 # for https://bugs.ruby-lang.org/issues/19005
 $LDFLAGS += " -Wl,-undefined,dynamic_lookup" if RbConfig::CONFIG["host_os"] =~ /darwin/i
