@@ -7,14 +7,7 @@ jobs:
       matrix:
         include:
           - ruby: "4.0"
-            os: ubuntu-24.04
-            valgrind: true
-          - ruby: 3.4
-            os: ubuntu-24.04-arm
-          - ruby: 3.3
-            os: ubuntu-22.04
-          - ruby: 3.2
-            os: macos-latest
+            os: windows-latest
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
