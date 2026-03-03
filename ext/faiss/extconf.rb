@@ -32,8 +32,10 @@ $CXXFLAGS += " -fopenmp"
 ext = File.expand_path(".", __dir__)
 vendor = File.expand_path("../../vendor/faiss", __dir__)
 
-$srcs = Dir["{#{ext},#{vendor}/faiss,#{vendor}/faiss/{impl,invlists,utils}/**}/*.{cpp}"]
-abort "Faiss not found" unless find_header("faiss/Index.h", vendor)
-$VPATH += $srcs.filter_map { |v| File.dirname(v) if v.start_with?(vendor) }.uniq
+system "cmake", "-S", vendor, "-B", "build", "-DFAISS_OPT_LEVEL=dd", "-DFAISS_ENABLE_GPU=OFF", "-DFAISS_ENABLE_PYTHON=OFF", "-DFAISS_ENABLE_MKL=OFF", "-DFAISS_ENABLE_EXTRAS=OFF", "-DBUILD_TESTING=OFF", "-DCMAKE_INSTALL_PREFIX=install"
+system "cmake", "--build", "build"
+system "cmake", "--install", "build"
+abort "Faiss not found" unless find_header("faiss/Index.h", "install/include")
+abort "Faiss not found" unless find_library("faiss", nil, "install/lib")
 
 create_makefile("faiss/ext")
