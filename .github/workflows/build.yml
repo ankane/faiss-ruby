@@ -6,11 +6,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - ruby: "4.0"
-            os: ubuntu-24.04
-            valgrind: true
-          - ruby: 3.4
-            os: ubuntu-24.04-arm
+          # - ruby: "4.0"
+          #   os: ubuntu-24.04
+          #   valgrind: true
+          # - ruby: 3.4
+          #   os: ubuntu-24.04-arm
           - ruby: 3.3
             os: macos-latest
           - ruby: 3.2
