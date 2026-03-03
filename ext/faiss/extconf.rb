@@ -13,7 +13,7 @@ end
 # abort "LAPACK not found" unless have_library("lapack")
 # abort "OpenMP not found" unless have_library("omp") || have_library("gomp")
 
-numo = File.join(Gem.loaded_specs["numo-narray"].require_path, "numo")
+numo = File.join(Gem.loaded_specs["numo-narray-alt"].require_path, "numo")
 abort "Numo not found" unless find_header("numo/narray.h", numo)
 abort "Numo library not found" if Gem.win_platform? && !find_library("narray", nil, numo)
 
@@ -28,7 +28,7 @@ $CXXFLAGS += with_config("optflags", default_optflags)
 
 apple_clang = RbConfig::CONFIG["CC_VERSION_MESSAGE"] =~ /apple clang/i
 $CXXFLAGS += " -Xclang" if apple_clang
-$CXXFLAGS += " -fopenmp"
+# $CXXFLAGS += " -fopenmp"
 
 ext = File.expand_path(".", __dir__)
 vendor = File.expand_path("../../vendor/faiss", __dir__)
