@@ -12,12 +12,13 @@ if RbConfig::CONFIG["host_os"] =~ /darwin/i
   cmake_args += ["-DOpenMP_CXX_FLAGS=-Xpreprocessor -fopenmp -I#{brew_prefix}/opt/libomp/include", "-DOpenMP_CXX_LIB_NAMES=omp", "-DOpenMP_omp_LIBRARY=#{brew_prefix}/opt/libomp/lib/libomp.dylib"]
 end
 
-abort "BLAS not found" unless have_library("blas")
-abort "LAPACK not found" unless have_library("lapack")
-abort "OpenMP not found" unless have_library("omp") || have_library("gomp")
+# abort "BLAS not found" unless have_library("blas")
+# abort "LAPACK not found" unless have_library("lapack")
+# abort "OpenMP not found" unless have_library("omp") || have_library("gomp")
 
-numo = File.join(Gem.loaded_specs["numo-narray"].require_path, "numo")
+numo = File.join(Gem.loaded_specs["numo-narray-alt"].require_path, "numo")
 abort "Numo not found" unless find_header("numo/narray.h", numo)
+abort "Numo library not found" if Gem.win_platform? && !find_library("narray", nil, "#{numo}/narray")
 
 # for https://bugs.ruby-lang.org/issues/19005
 $LDFLAGS += " -Wl,-undefined,dynamic_lookup" if RbConfig::CONFIG["host_os"] =~ /darwin/i
@@ -30,7 +31,7 @@ $CXXFLAGS += with_config("optflags", default_optflags)
 
 apple_clang = RbConfig::CONFIG["CC_VERSION_MESSAGE"] =~ /apple clang/i
 $CXXFLAGS += " -Xclang" if apple_clang
-$CXXFLAGS += " -fopenmp"
+# $CXXFLAGS += " -fopenmp"
 
 ext = File.expand_path(".", __dir__)
 vendor = File.expand_path("../../vendor/faiss", __dir__)

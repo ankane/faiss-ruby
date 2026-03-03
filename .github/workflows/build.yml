@@ -11,10 +11,12 @@ jobs:
           #   valgrind: true
           # - ruby: 3.4
           #   os: ubuntu-24.04-arm
-          - ruby: 3.3
-            os: macos-latest
-          - ruby: 3.2
-            os: macos-15-intel
+          # - ruby: 3.3
+          #   os: macos-latest
+          # - ruby: 3.2
+          #   os: macos-15-intel
+          - ruby: "4.0"
+            os: windows-latest
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
