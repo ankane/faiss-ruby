@@ -94,17 +94,17 @@ void init_index(Rice::Module& m) {
   Rice::define_class_under<faiss::Index>(m, "Index")
     .define_method(
       "d",
-      [](faiss::Index &self) {
+      [](faiss::Index& self) {
         return self.d;
       })
     .define_method(
       "trained?",
-      [](faiss::Index &self) {
+      [](faiss::Index& self) {
         return self.is_trained;
       })
     .define_method(
       "ntotal",
-      [](faiss::Index &self) {
+      [](faiss::Index& self) {
         return self.ntotal;
       })
     .define_method(
@@ -112,7 +112,7 @@ void init_index(Rice::Module& m) {
       [](Rice::Object rb_self, numo::SFloat objects) {
         check_frozen(rb_self);
 
-        auto &self = *Rice::Data_Object<faiss::Index>{rb_self};
+        auto& self = *Rice::Data_Object<faiss::Index>{rb_self};
         auto n = check_shape(objects, self.d);
         self.train(n, objects.read_ptr());
       })
@@ -121,7 +121,7 @@ void init_index(Rice::Module& m) {
       [](Rice::Object rb_self, numo::SFloat objects) {
         check_frozen(rb_self);
 
-        auto &self = *Rice::Data_Object<faiss::Index>{rb_self};
+        auto& self = *Rice::Data_Object<faiss::Index>{rb_self};
         auto n = check_shape(objects, self.d);
         self.add(n, objects.read_ptr());
       })
@@ -130,7 +130,7 @@ void init_index(Rice::Module& m) {
       [](Rice::Object rb_self, numo::SFloat objects, numo::Int64 ids) {
         check_frozen(rb_self);
 
-        auto &self = *Rice::Data_Object<faiss::Index>{rb_self};
+        auto& self = *Rice::Data_Object<faiss::Index>{rb_self};
         auto n = check_shape(objects, self.d);
         if (ids.ndim() != 1 || ids.shape()[0] != n) {
           throw Rice::Exception(rb_eArgError, "expected ids to be 1d array with size %d", n);
@@ -142,7 +142,7 @@ void init_index(Rice::Module& m) {
       [](Rice::Object rb_self, numo::Int64 ids) {
         check_frozen(rb_self);
 
-        auto &self = *Rice::Data_Object<faiss::Index>{rb_self};
+        auto& self = *Rice::Data_Object<faiss::Index>{rb_self};
         if (ids.ndim() != 1) {
           throw Rice::Exception(rb_eArgError, "expected ids to be 1d array");
         }
@@ -153,7 +153,7 @@ void init_index(Rice::Module& m) {
     .define_method(
       "search",
       [](Rice::Object rb_self, numo::SFloat objects, size_t k) {
-        auto &self = *Rice::Data_Object<faiss::Index>{rb_self};
+        auto& self = *Rice::Data_Object<faiss::Index>{rb_self};
         auto n = check_shape(objects, self.d);
 
         auto distances = numo::SFloat({n, k});
@@ -186,12 +186,12 @@ void init_index(Rice::Module& m) {
       [](Rice::Object rb_self, double val) {
         check_frozen(rb_self);
 
-        auto &self = *Rice::Data_Object<faiss::Index>{rb_self};
+        auto& self = *Rice::Data_Object<faiss::Index>{rb_self};
         faiss::ParameterSpace().set_index_parameter(&self, "nprobe", val);
       })
     .define_method(
       "reconstruct",
-      [](faiss::Index &self, int64_t key) {
+      [](faiss::Index& self, int64_t key) {
         auto d = static_cast<std::size_t>(self.d);
         auto recons = numo::SFloat({d});
         self.reconstruct(key, recons.write_ptr());
@@ -199,7 +199,7 @@ void init_index(Rice::Module& m) {
       })
     .define_method(
       "reconstruct_batch",
-      [](faiss::Index &self, numo::Int64 ids) {
+      [](faiss::Index& self, numo::Int64 ids) {
         if (ids.ndim() != 1) {
           throw Rice::Exception(rb_eArgError, "expected ids to be 1d array");
         }
@@ -211,7 +211,7 @@ void init_index(Rice::Module& m) {
       })
     .define_method(
       "reconstruct_n",
-      [](faiss::Index &self, int64_t i0, int64_t ni) {
+      [](faiss::Index& self, int64_t i0, int64_t ni) {
         if (ni < 0) {
           throw Rice::Exception(rb_eArgError, "expected n to be non-negative");
         }
@@ -227,7 +227,7 @@ void init_index(Rice::Module& m) {
       })
     .define_method(
       "save",
-      [](faiss::Index &self, Rice::String fname) {
+      [](faiss::Index& self, Rice::String fname) {
         faiss::write_index(&self, fname.c_str());
       })
     .define_singleton_function(
@@ -284,7 +284,7 @@ void init_index(Rice::Module& m) {
     .define_constructor(Rice::Constructor<faiss::IndexIDMap2, faiss::Index*>())
     .define_method(
       "id_map",
-      [](faiss::IndexIDMap2 &self) {
+      [](faiss::IndexIDMap2& self) {
         auto n = self.id_map.size();
         auto ids = numo::Int64({n});
         std::copy(self.id_map.begin(), self.id_map.end(), ids.write_ptr());

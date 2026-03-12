@@ -10,23 +10,23 @@ void init_product_quantizer(Rice::Module& m) {
     .define_constructor(Rice::Constructor<faiss::ProductQuantizer, size_t, size_t, size_t>())
     .define_method(
       "d",
-      [](faiss::ProductQuantizer &self) {
+      [](faiss::ProductQuantizer& self) {
         return self.d;
       })
     .define_method(
       "m",
-      [](faiss::ProductQuantizer &self) {
+      [](faiss::ProductQuantizer& self) {
         return self.M;
       })
     .define_method(
       "train",
-      [](faiss::ProductQuantizer &self, numo::SFloat objects) {
+      [](faiss::ProductQuantizer& self, numo::SFloat objects) {
         auto n = check_shape(objects, self.d);
         self.train(n, objects.read_ptr());
       })
     .define_method(
       "compute_codes",
-      [](faiss::ProductQuantizer &self, numo::SFloat objects) {
+      [](faiss::ProductQuantizer& self, numo::SFloat objects) {
         auto n = check_shape(objects, self.d);
 
         auto codes = numo::UInt8({n, self.M});
@@ -35,7 +35,7 @@ void init_product_quantizer(Rice::Module& m) {
       })
     .define_method(
       "decode",
-      [](faiss::ProductQuantizer &self, numo::UInt8 objects) {
+      [](faiss::ProductQuantizer& self, numo::UInt8 objects) {
         auto n = check_shape(objects, self.M);
 
         auto x = numo::SFloat({n, self.d});
@@ -44,7 +44,7 @@ void init_product_quantizer(Rice::Module& m) {
       })
     .define_method(
       "save",
-      [](faiss::ProductQuantizer &self, Rice::String fname) {
+      [](faiss::ProductQuantizer& self, Rice::String fname) {
         faiss::write_ProductQuantizer(&self, fname.c_str());
       })
     .define_singleton_function(

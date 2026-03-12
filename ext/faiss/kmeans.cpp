@@ -17,17 +17,17 @@ void init_kmeans(Rice::Module& m) {
       })
     .define_method(
       "d",
-      [](faiss::Clustering &self) {
+      [](faiss::Clustering& self) {
         return self.d;
       })
     .define_method(
       "k",
-      [](faiss::Clustering &self) {
+      [](faiss::Clustering& self) {
         return self.k;
       })
     .define_method(
       "centroids",
-      [](faiss::Clustering &self) {
+      [](faiss::Clustering& self) {
         auto centroids = numo::SFloat({self.k, self.d});
         std::copy(self.centroids.begin(), self.centroids.end(), centroids.write_ptr());
         return centroids;
@@ -35,7 +35,7 @@ void init_kmeans(Rice::Module& m) {
     .define_method(
       "train",
       [](Rice::Object rb_self, numo::SFloat objects) {
-        auto &self = *Rice::Data_Object<faiss::Clustering>{rb_self};
+        auto& self = *Rice::Data_Object<faiss::Clustering>{rb_self};
         auto n = check_shape(objects, self.d);
         auto index = faiss::IndexFlatL2(self.d);
         rb_self.iv_set("@index", index);
