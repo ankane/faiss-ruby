@@ -19,7 +19,7 @@ abort "Numo not found" unless find_header("numo/narray.h", numo)
 # for https://bugs.ruby-lang.org/issues/19005
 $LDFLAGS += " -Wl,-undefined,dynamic_lookup" if RbConfig::CONFIG["host_os"] =~ /darwin/i
 
-$CXXFLAGS += " -std=c++17 $(optflags) -DFINTEGER=int"
+$CXXFLAGS += " -std=c++20 $(optflags) -DFINTEGER=int"
 
 # -march=native not supported with ARM Mac
 default_optflags = RbConfig::CONFIG["host_os"] =~ /darwin/i && RbConfig::CONFIG["host_cpu"] =~ /arm|aarch64/i ? "" : " -march=native"

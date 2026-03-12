@@ -1,7 +1,8 @@
-## 0.5.4 (unreleased)
+## 0.6.0 (unreleased)
 
 - Updated Faiss to 1.14.1
 - Added `id_map` method to `IndexIDMap2`
+- Dropped support for C++17
 
 ## 0.5.3 (2026-02-12)
 
