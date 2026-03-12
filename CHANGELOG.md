@@ -2,6 +2,7 @@
 
 - Updated Faiss to 1.14.1
 - Added `id_map` method to `IndexIDMap2`
+- Dropped support for Ruby < 3.3
 - Dropped support for C++17
 
 ## 0.5.3 (2026-02-12)
