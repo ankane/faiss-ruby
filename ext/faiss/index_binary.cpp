@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <utility>
 #include <vector>
 
 #include <faiss/IndexBinary.h>
