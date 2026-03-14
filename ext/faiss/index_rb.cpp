@@ -289,7 +289,7 @@ void init_index(Rice::Module& m) {
     .define_method(
       "id_map",
       [](faiss::IndexIDMap2& self) {
-        auto n = self.id_map.size();
+        size_t n = self.id_map.size();
         numo::Int64 ids{{n}};
         std::ranges::copy(self.id_map, ids.write_ptr());
         return ids;
