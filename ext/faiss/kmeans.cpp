@@ -29,7 +29,7 @@ void init_kmeans(Rice::Module& m) {
       "centroids",
       [](faiss::Clustering& self) {
         auto centroids = numo::SFloat({self.k, self.d});
-        std::copy(self.centroids.begin(), self.centroids.end(), centroids.write_ptr());
+        std::ranges::copy(self.centroids, centroids.write_ptr());
         return centroids;
       })
     .define_method(

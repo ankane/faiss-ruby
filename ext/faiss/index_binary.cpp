@@ -80,8 +80,8 @@ void init_index_binary(Rice::Module& m) {
             self.search(n, objects_vec.data(), k, distances_vec.data(), labels_vec.data());
           });
 
-          std::copy(distances_vec.begin(), distances_vec.end(), distances.write_ptr());
-          std::copy(labels_vec.begin(), labels_vec.end(), labels.write_ptr());
+          std::ranges::copy(distances_vec, distances.write_ptr());
+          std::ranges::copy(labels_vec, labels.write_ptr());
         } else {
           self.search(n, objects.read_ptr(), k, distances.write_ptr(), labels.write_ptr());
         }
