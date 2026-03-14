@@ -30,7 +30,7 @@ void init_pca_matrix(Rice::Module& m) {
       [](faiss::PCAMatrix& self, numo::SFloat objects) {
         size_t n = check_shape(objects, self.d_in);
 
-        numo::SFloat ary{{n, static_cast<size_t>(self.d_out)}};
+        numo::SFloat ary({n, static_cast<size_t>(self.d_out)});
         self.apply_noalloc(n, objects.read_ptr(), ary.write_ptr());
         return ary;
       });

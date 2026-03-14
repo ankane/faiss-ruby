@@ -71,8 +71,8 @@ void init_index_binary(Rice::Module& m) {
           throw Rice::Exception(rb_eArgError, "expected k to be positive");
         }
 
-        numo::Int32 distances{{n, static_cast<size_t>(k)}};
-        numo::Int64 labels{{n, static_cast<size_t>(k)}};
+        numo::Int32 distances({n, static_cast<size_t>(k)});
+        numo::Int64 labels({n, static_cast<size_t>(k)});
 
         if (rb_self.is_frozen()) {
           // Don't mess with Ruby-owned memory while the GVL is released
@@ -100,7 +100,7 @@ void init_index_binary(Rice::Module& m) {
       "reconstruct",
       [](faiss::IndexBinary& self, int64_t key) {
         auto d = static_cast<size_t>(self.d / 8);
-        numo::UInt8 recons{{d}};
+        numo::UInt8 recons({d});
         self.reconstruct(key, recons.write_ptr());
         return recons;
       })
@@ -116,7 +116,7 @@ void init_index_binary(Rice::Module& m) {
         }
         auto d = static_cast<size_t>(self.d / 8);
         auto n = static_cast<size_t>(ni);
-        numo::UInt8 recons{{n, d}};
+        numo::UInt8 recons({n, d});
         self.reconstruct_n(i0, ni, recons.write_ptr());
         return recons;
       })
