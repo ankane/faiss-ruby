@@ -1,5 +1,9 @@
 #pragma once
 
+#include <cstddef>
+
+#include <rice/rice.hpp>
+
 #include "numo.hpp"
 
 size_t check_shape(const numo::NArray& objects, size_t k);

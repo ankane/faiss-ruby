@@ -1,3 +1,5 @@
+#include <cstddef>
+
 #include <rice/rice.hpp>
 
 #include "numo.hpp"

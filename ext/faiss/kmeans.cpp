@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cstddef>
 
 #include <faiss/Clustering.h>
 #include <faiss/IndexFlat.h>

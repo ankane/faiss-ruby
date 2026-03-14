@@ -1,3 +1,5 @@
+#include <cstddef>
+
 #include <faiss/impl/ProductQuantizer.h>
 #include <faiss/index_io.h>
 #include <rice/rice.hpp>

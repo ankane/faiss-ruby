@@ -1,4 +1,6 @@
 #include <algorithm>
+#include <cstddef>
+#include <cstdint>
 #include <string>
 #include <utility>
 #include <vector>
@@ -196,7 +198,7 @@ void init_index(Rice::Module& m) {
     .define_method(
       "reconstruct",
       [](faiss::Index& self, int64_t key) {
-        auto d = static_cast<std::size_t>(self.d);
+        auto d = static_cast<size_t>(self.d);
         numo::SFloat recons{{d}};
         self.reconstruct(key, recons.write_ptr());
         return recons;
@@ -207,8 +209,8 @@ void init_index(Rice::Module& m) {
         if (ids.ndim() != 1) {
           throw Rice::Exception(rb_eArgError, "expected ids to be 1d array");
         }
-        auto n = static_cast<std::size_t>(ids.shape()[0]);
-        auto d = static_cast<std::size_t>(self.d);
+        auto n = static_cast<size_t>(ids.shape()[0]);
+        auto d = static_cast<size_t>(self.d);
         numo::SFloat recons{{n, d}};
         self.reconstruct_batch(n, ids.read_ptr(), recons.write_ptr());
         return recons;
@@ -223,8 +225,8 @@ void init_index(Rice::Module& m) {
         if (i0 < 0 || i0 > self.ntotal - ni) {
           throw Rice::Exception(rb_eIndexError, "index out of range");
         }
-        auto d = static_cast<std::size_t>(self.d);
-        auto n = static_cast<std::size_t>(ni);
+        auto d = static_cast<size_t>(self.d);
+        auto n = static_cast<size_t>(ni);
         numo::SFloat recons{{n, d}};
         self.reconstruct_n(i0, ni, recons.write_ptr());
         return recons;

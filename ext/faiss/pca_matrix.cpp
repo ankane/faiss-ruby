@@ -1,3 +1,5 @@
+#include <cstddef>
+
 #include <faiss/VectorTransform.h>
 #include <rice/rice.hpp>
 
