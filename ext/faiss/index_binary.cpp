@@ -66,8 +66,8 @@ void init_index_binary(Rice::Module& m) {
         auto& self = *Rice::Data_Object<faiss::IndexBinary>{rb_self};
         size_t n = check_shape(objects, self.d / 8);
 
-        numo::Int32 distances({n, k});
-        numo::Int64 labels({n, k});
+        numo::Int32 distances{{n, k}};
+        numo::Int64 labels{{n, k}};
 
         if (rb_self.is_frozen()) {
           // Don't mess with Ruby-owned memory while the GVL is released
@@ -95,7 +95,7 @@ void init_index_binary(Rice::Module& m) {
       "reconstruct",
       [](faiss::IndexBinary& self, int64_t key) {
         auto d = static_cast<std::size_t>(self.d / 8);
-        numo::UInt8 recons({d});
+        numo::UInt8 recons{{d}};
         self.reconstruct(key, recons.write_ptr());
         return recons;
       })
@@ -111,7 +111,7 @@ void init_index_binary(Rice::Module& m) {
         }
         auto d = static_cast<std::size_t>(self.d / 8);
         auto n = static_cast<std::size_t>(ni);
-        numo::UInt8 recons({n, d});
+        numo::UInt8 recons{{n, d}};
         self.reconstruct_n(i0, ni, recons.write_ptr());
         return recons;
       })

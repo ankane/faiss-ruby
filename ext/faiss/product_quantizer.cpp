@@ -29,7 +29,7 @@ void init_product_quantizer(Rice::Module& m) {
       [](faiss::ProductQuantizer& self, numo::SFloat objects) {
         size_t n = check_shape(objects, self.d);
 
-        numo::UInt8 codes({n, self.M});
+        numo::UInt8 codes{{n, self.M}};
         self.compute_codes(objects.read_ptr(), codes.write_ptr(), n);
         return codes;
       })
@@ -38,7 +38,7 @@ void init_product_quantizer(Rice::Module& m) {
       [](faiss::ProductQuantizer& self, numo::UInt8 objects) {
         size_t n = check_shape(objects, self.M);
 
-        numo::SFloat x({n, self.d});
+        numo::SFloat x{{n, self.d}};
         self.decode(objects.read_ptr(), x.write_ptr(), n);
         return x;
       })

@@ -8,7 +8,7 @@ void init_product_quantizer(Rice::Module& m);
 
 extern "C"
 void Init_ext() {
-  auto m = Rice::define_module("Faiss");
+  Rice::Module m = Rice::define_module("Faiss");
 
   init_index(m);
   init_index_binary(m);
