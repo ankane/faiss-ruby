@@ -156,8 +156,8 @@ void init_index(Rice::Module& m) {
       [](Rice::Object rb_self, numo::SFloat objects, int64_t k) {
         auto& self = *Rice::Data_Object<faiss::Index>{rb_self};
         size_t n = check_shape(objects, self.d);
-        if (k < 0) {
-          throw Rice::Exception(rb_eArgError, "expected k to be non-negative");
+        if (k <= 0) {
+          throw Rice::Exception(rb_eArgError, "expected k to be positive");
         }
 
         numo::SFloat distances{{n, static_cast<size_t>(k)}};

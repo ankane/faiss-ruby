@@ -336,6 +336,21 @@ class IndexTest < Minitest::Test
     assert_equal 0, index.remove_ids([])
   end
 
+  def test_search_zero_k
+    objects = [
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ]
+    index = Faiss::IndexFlatL2.new(4)
+    index.add(objects)
+
+    error = assert_raises(ArgumentError) do
+      index.search(objects, 0)
+    end
+    assert_equal "expected k to be positive", error.message
+  end
+
   def test_search_negative_k
     objects = [
       [1, 1, 2, 1],
@@ -348,7 +363,7 @@ class IndexTest < Minitest::Test
     error = assert_raises(ArgumentError) do
       index.search(objects, -1)
     end
-    assert_equal "expected k to be non-negative", error.message
+    assert_equal "expected k to be positive", error.message
   end
 
   def test_add_frozen

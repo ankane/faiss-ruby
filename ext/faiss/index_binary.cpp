@@ -65,8 +65,8 @@ void init_index_binary(Rice::Module& m) {
       [](Rice::Object rb_self, numo::UInt8 objects, int64_t k) {
         auto& self = *Rice::Data_Object<faiss::IndexBinary>{rb_self};
         size_t n = check_shape(objects, self.d / 8);
-        if (k < 0) {
-          throw Rice::Exception(rb_eArgError, "expected k to be non-negative");
+        if (k <= 0) {
+          throw Rice::Exception(rb_eArgError, "expected k to be positive");
         }
 
         numo::Int32 distances{{n, static_cast<size_t>(k)}};
