@@ -71,7 +71,7 @@ void init_index_binary(Rice::Module& m) {
 
         if (rb_self.is_frozen()) {
           // Don't mess with Ruby-owned memory while the GVL is released
-          auto objects_ptr = objects.read_ptr();
+          const auto* objects_ptr = objects.read_ptr();
           std::vector<uint8_t> objects_vec(objects_ptr, objects_ptr + n * (self.d / 8));
           std::vector<int32_t> distances_vec(n * k);
           std::vector<int64_t> labels_vec(n * k);

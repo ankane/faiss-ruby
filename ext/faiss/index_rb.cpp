@@ -9,11 +9,11 @@
 #include <faiss/IndexHNSW.h>
 #include <faiss/IndexIDMap.h>
 #include <faiss/IndexIVFFlat.h>
-#include <faiss/IndexLSH.h>
-#include <faiss/IndexScalarQuantizer.h>
-#include <faiss/IndexPQ.h>
 #include <faiss/IndexIVFPQ.h>
 #include <faiss/IndexIVFPQR.h>
+#include <faiss/IndexLSH.h>
+#include <faiss/IndexPQ.h>
+#include <faiss/IndexScalarQuantizer.h>
 #include <faiss/index_io.h>
 #include <rice/rice.hpp>
 #include <rice/stl.hpp>
@@ -34,7 +34,7 @@ namespace Rice::detail {
 
     explicit From_Ruby(Arg* arg) : arg_(arg) { }
 
-    double is_convertible(VALUE value) { return Convertible::Exact; }
+    double is_convertible(VALUE /*value*/) { return Convertible::Exact; }
 
     faiss::MetricType convert(VALUE x) {
       auto s = Object(x).to_s().str();
@@ -63,7 +63,7 @@ namespace Rice::detail {
 
     explicit From_Ruby(Arg* arg) : arg_(arg) { }
 
-    double is_convertible(VALUE value) { return Convertible::Exact; }
+    double is_convertible(VALUE /*value*/) { return Convertible::Exact; }
 
     faiss::ScalarQuantizer::QuantizerType convert(VALUE x) {
       auto s = Object(x).to_s().str();
@@ -162,7 +162,7 @@ void init_index(Rice::Module& m) {
 
         if (rb_self.is_frozen()) {
           // Don't mess with Ruby-owned memory while the GVL is released
-          auto objects_ptr = objects.read_ptr();
+          const auto* objects_ptr = objects.read_ptr();
           std::vector<float> objects_vec(objects_ptr, objects_ptr + n * self.d);
           std::vector<float> distances_vec(n * k);
           std::vector<int64_t> labels_vec(n * k);
