@@ -16,6 +16,7 @@
 #include <faiss/IndexLSH.h>
 #include <faiss/IndexPQ.h>
 #include <faiss/IndexScalarQuantizer.h>
+#include <faiss/MetricType.h>
 #include <faiss/index_io.h>
 #include <rice/rice.hpp>
 #include <rice/stl.hpp>
