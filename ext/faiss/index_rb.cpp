@@ -153,19 +153,22 @@ void init_index(Rice::Module& m) {
       })
     .define_method(
       "search",
-      [](Rice::Object rb_self, numo::SFloat objects, size_t k) {
+      [](Rice::Object rb_self, numo::SFloat objects, int64_t k) {
         auto& self = *Rice::Data_Object<faiss::Index>{rb_self};
         size_t n = check_shape(objects, self.d);
+        if (k < 0) {
+          throw Rice::Exception(rb_eArgError, "expected k to be non-negative");
+        }
 
-        numo::SFloat distances{{n, k}};
-        numo::Int64 labels{{n, k}};
+        numo::SFloat distances{{n, static_cast<size_t>(k)}};
+        numo::Int64 labels{{n, static_cast<size_t>(k)}};
 
         if (rb_self.is_frozen()) {
           // Don't mess with Ruby-owned memory while the GVL is released
           const auto* objects_ptr = objects.read_ptr();
           std::vector<float> objects_vec(objects_ptr, objects_ptr + n * self.d);
-          std::vector<float> distances_vec(n * k);
-          std::vector<int64_t> labels_vec(n * k);
+          std::vector<float> distances_vec(n * static_cast<size_t>(k));
+          std::vector<int64_t> labels_vec(n * static_cast<size_t>(k));
 
           Rice::detail::no_gvl([&] {
             self.search(n, objects_vec.data(), k, distances_vec.data(), labels_vec.data());

@@ -62,19 +62,22 @@ void init_index_binary(Rice::Module& m) {
       })
     .define_method(
       "search",
-      [](Rice::Object rb_self, numo::UInt8 objects, size_t k) {
+      [](Rice::Object rb_self, numo::UInt8 objects, int64_t k) {
         auto& self = *Rice::Data_Object<faiss::IndexBinary>{rb_self};
         size_t n = check_shape(objects, self.d / 8);
+        if (k < 0) {
+          throw Rice::Exception(rb_eArgError, "expected k to be non-negative");
+        }
 
-        numo::Int32 distances{{n, k}};
-        numo::Int64 labels{{n, k}};
+        numo::Int32 distances{{n, static_cast<size_t>(k)}};
+        numo::Int64 labels{{n, static_cast<size_t>(k)}};
 
         if (rb_self.is_frozen()) {
           // Don't mess with Ruby-owned memory while the GVL is released
           const auto* objects_ptr = objects.read_ptr();
           std::vector<uint8_t> objects_vec(objects_ptr, objects_ptr + n * (self.d / 8));
-          std::vector<int32_t> distances_vec(n * k);
-          std::vector<int64_t> labels_vec(n * k);
+          std::vector<int32_t> distances_vec(n * static_cast<size_t>(k));
+          std::vector<int64_t> labels_vec(n * static_cast<size_t>(k));
 
           Rice::detail::no_gvl([&] {
             self.search(n, objects_vec.data(), k, distances_vec.data(), labels_vec.data());

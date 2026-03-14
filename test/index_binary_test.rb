@@ -56,6 +56,21 @@ class IndexBinaryTest < Minitest::Test
     assert_equal [1, 0, -1], ids[0, true].to_a
   end
 
+  def test_search_negative_k
+    objects = [
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ]
+    index = Faiss::IndexBinaryFlat.new(32)
+    index.add(objects)
+
+    error = assert_raises(ArgumentError) do
+      index.search(objects, -1)
+    end
+    assert_equal "expected k to be non-negative", error.message
+  end
+
   def test_add_frozen
     index = Faiss::IndexBinaryFlat.new(32)
     index.freeze
