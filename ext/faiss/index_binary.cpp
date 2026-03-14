@@ -35,7 +35,7 @@ void init_index_binary(Rice::Module& m) {
         check_frozen(rb_self);
 
         auto& self = *Rice::Data_Object<faiss::IndexBinary>{rb_self};
-        auto n = check_shape(objects, self.d / 8);
+        size_t n = check_shape(objects, self.d / 8);
         self.train(n, objects.read_ptr());
       })
     .define_method(
@@ -44,7 +44,7 @@ void init_index_binary(Rice::Module& m) {
         check_frozen(rb_self);
 
         auto& self = *Rice::Data_Object<faiss::IndexBinary>{rb_self};
-        auto n = check_shape(objects, self.d / 8);
+        size_t n = check_shape(objects, self.d / 8);
         self.add(n, objects.read_ptr());
       })
     .define_method(
@@ -56,7 +56,7 @@ void init_index_binary(Rice::Module& m) {
         if (ids.ndim() != 1) {
           throw Rice::Exception(rb_eArgError, "expected ids to be 1d array");
         }
-        auto n = ids.shape()[0];
+        size_t n = ids.shape()[0];
         faiss::IDSelectorBatch sel(n, ids.read_ptr());
         return self.remove_ids(sel);
       })
@@ -64,10 +64,10 @@ void init_index_binary(Rice::Module& m) {
       "search",
       [](Rice::Object rb_self, numo::UInt8 objects, size_t k) {
         auto& self = *Rice::Data_Object<faiss::IndexBinary>{rb_self};
-        auto n = check_shape(objects, self.d / 8);
+        size_t n = check_shape(objects, self.d / 8);
 
-        auto distances = numo::Int32({n, k});
-        auto labels = numo::Int64({n, k});
+        numo::Int32 distances({n, k});
+        numo::Int64 labels({n, k});
 
         if (rb_self.is_frozen()) {
           // Don't mess with Ruby-owned memory while the GVL is released
@@ -95,7 +95,7 @@ void init_index_binary(Rice::Module& m) {
       "reconstruct",
       [](faiss::IndexBinary& self, int64_t key) {
         auto d = static_cast<std::size_t>(self.d / 8);
-        auto recons = numo::UInt8({d});
+        numo::UInt8 recons({d});
         self.reconstruct(key, recons.write_ptr());
         return recons;
       })
@@ -111,7 +111,7 @@ void init_index_binary(Rice::Module& m) {
         }
         auto d = static_cast<std::size_t>(self.d / 8);
         auto n = static_cast<std::size_t>(ni);
-        auto recons = numo::UInt8({n, d});
+        numo::UInt8 recons({n, d});
         self.reconstruct_n(i0, ni, recons.write_ptr());
         return recons;
       })

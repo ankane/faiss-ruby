@@ -114,7 +114,7 @@ void init_index(Rice::Module& m) {
         check_frozen(rb_self);
 
         auto& self = *Rice::Data_Object<faiss::Index>{rb_self};
-        auto n = check_shape(objects, self.d);
+        size_t n = check_shape(objects, self.d);
         self.train(n, objects.read_ptr());
       })
     .define_method(
@@ -123,7 +123,7 @@ void init_index(Rice::Module& m) {
         check_frozen(rb_self);
 
         auto& self = *Rice::Data_Object<faiss::Index>{rb_self};
-        auto n = check_shape(objects, self.d);
+        size_t n = check_shape(objects, self.d);
         self.add(n, objects.read_ptr());
       })
     .define_method(
@@ -132,7 +132,7 @@ void init_index(Rice::Module& m) {
         check_frozen(rb_self);
 
         auto& self = *Rice::Data_Object<faiss::Index>{rb_self};
-        auto n = check_shape(objects, self.d);
+        size_t n = check_shape(objects, self.d);
         if (ids.ndim() != 1 || ids.shape()[0] != n) {
           throw Rice::Exception(rb_eArgError, "expected ids to be 1d array with size %d", n);
         }
@@ -147,7 +147,7 @@ void init_index(Rice::Module& m) {
         if (ids.ndim() != 1) {
           throw Rice::Exception(rb_eArgError, "expected ids to be 1d array");
         }
-        auto n = ids.shape()[0];
+        size_t n = ids.shape()[0];
         faiss::IDSelectorBatch sel(n, ids.read_ptr());
         return self.remove_ids(sel);
       })
@@ -155,10 +155,10 @@ void init_index(Rice::Module& m) {
       "search",
       [](Rice::Object rb_self, numo::SFloat objects, size_t k) {
         auto& self = *Rice::Data_Object<faiss::Index>{rb_self};
-        auto n = check_shape(objects, self.d);
+        size_t n = check_shape(objects, self.d);
 
-        auto distances = numo::SFloat({n, k});
-        auto labels = numo::Int64({n, k});
+        numo::SFloat distances({n, k});
+        numo::Int64 labels({n, k});
 
         if (rb_self.is_frozen()) {
           // Don't mess with Ruby-owned memory while the GVL is released
@@ -194,7 +194,7 @@ void init_index(Rice::Module& m) {
       "reconstruct",
       [](faiss::Index& self, int64_t key) {
         auto d = static_cast<std::size_t>(self.d);
-        auto recons = numo::SFloat({d});
+        numo::SFloat recons({d});
         self.reconstruct(key, recons.write_ptr());
         return recons;
       })
@@ -206,7 +206,7 @@ void init_index(Rice::Module& m) {
         }
         auto n = static_cast<std::size_t>(ids.shape()[0]);
         auto d = static_cast<std::size_t>(self.d);
-        auto recons = numo::SFloat({n, d});
+        numo::SFloat recons({n, d});
         self.reconstruct_batch(n, ids.read_ptr(), recons.write_ptr());
         return recons;
       })
@@ -222,7 +222,7 @@ void init_index(Rice::Module& m) {
         }
         auto d = static_cast<std::size_t>(self.d);
         auto n = static_cast<std::size_t>(ni);
-        auto recons = numo::SFloat({n, d});
+        numo::SFloat recons({n, d});
         self.reconstruct_n(i0, ni, recons.write_ptr());
         return recons;
       })
@@ -287,7 +287,7 @@ void init_index(Rice::Module& m) {
       "id_map",
       [](faiss::IndexIDMap2& self) {
         auto n = self.id_map.size();
-        auto ids = numo::Int64({n});
+        numo::Int64 ids({n});
         std::ranges::copy(self.id_map, ids.write_ptr());
         return ids;
       });

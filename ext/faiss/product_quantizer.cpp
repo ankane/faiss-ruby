@@ -21,24 +21,24 @@ void init_product_quantizer(Rice::Module& m) {
     .define_method(
       "train",
       [](faiss::ProductQuantizer& self, numo::SFloat objects) {
-        auto n = check_shape(objects, self.d);
+        size_t n = check_shape(objects, self.d);
         self.train(n, objects.read_ptr());
       })
     .define_method(
       "compute_codes",
       [](faiss::ProductQuantizer& self, numo::SFloat objects) {
-        auto n = check_shape(objects, self.d);
+        size_t n = check_shape(objects, self.d);
 
-        auto codes = numo::UInt8({n, self.M});
+        numo::UInt8 codes({n, self.M});
         self.compute_codes(objects.read_ptr(), codes.write_ptr(), n);
         return codes;
       })
     .define_method(
       "decode",
       [](faiss::ProductQuantizer& self, numo::UInt8 objects) {
-        auto n = check_shape(objects, self.M);
+        size_t n = check_shape(objects, self.M);
 
-        auto x = numo::SFloat({n, self.d});
+        numo::SFloat x({n, self.d});
         self.decode(objects.read_ptr(), x.write_ptr(), n);
         return x;
       })
