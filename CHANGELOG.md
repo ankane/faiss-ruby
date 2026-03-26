@@ -2,6 +2,7 @@
 
 - Updated Faiss to 1.14.1
 - Added `id_map` method to `IndexIDMap2`
+- Switched to `numo-narray-alt`
 - Dropped support for Ruby < 3.3
 - Dropped support for C++17
 

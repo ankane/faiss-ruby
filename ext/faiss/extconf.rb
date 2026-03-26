@@ -1,5 +1,5 @@
 require "mkmf-rice"
-require "numo/narray"
+require "numo/narray/alt"
 
 # libomp changed to keg-only
 # https://github.com/Homebrew/homebrew-core/issues/112107
@@ -13,7 +13,7 @@ abort "BLAS not found" unless have_library("blas")
 abort "LAPACK not found" unless have_library("lapack")
 abort "OpenMP not found" unless have_library("omp") || have_library("gomp")
 
-numo = File.join(Gem.loaded_specs["numo-narray"].require_path, "numo")
+numo = File.join(Gem.loaded_specs["numo-narray-alt"].require_path, "numo")
 abort "Numo not found" unless find_header("numo/narray.h", numo)
 
 # for https://bugs.ruby-lang.org/issues/19005
