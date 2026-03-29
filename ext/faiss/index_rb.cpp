@@ -19,7 +19,6 @@
 #include <faiss/MetricType.h>
 #include <faiss/index_io.h>
 #include <rice/rice.hpp>
-#include <rice/stl.hpp>
 
 #include "numo.hpp"
 #include "utils_rb.h"
@@ -280,8 +279,8 @@ void init_index(Rice::Module& m) {
     .define_constructor(Rice::Constructor<faiss::ParameterSpace>())
     .define_method(
       "set_index_parameter",
-      [](faiss::ParameterSpace& self, faiss::Index* index, const std::string& name, double val) {
-        self.set_index_parameter(index, name, val);
+      [](faiss::ParameterSpace& self, faiss::Index* index, Rice::String name, double val) {
+        self.set_index_parameter(index, name.str(), val);
       });
 
   Rice::define_class_under<faiss::IndexIDMap, faiss::Index>(m, "IndexIDMap")
