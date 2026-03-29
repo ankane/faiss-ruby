@@ -6,11 +6,11 @@
 #include "utils_rb.h"
 
 size_t check_shape(const numo::NArray& objects, size_t k) {
-  auto ndim = objects.ndim();
+  size_t ndim = objects.ndim();
   if (ndim != 2) {
     throw Rice::Exception(rb_eArgError, "expected 2 dimensions, not %d", ndim);
   }
-  auto shape = objects.shape();
+  size_t* shape = objects.shape();
   if (shape[1] != k) {
     throw Rice::Exception(rb_eArgError, "expected 2nd dimension to be %d, not %d", k, shape[1]);
   }
