@@ -307,6 +307,7 @@ class IndexTest < Minitest::Test
     index = Faiss::IndexFlatL2.new(4)
     index.add(objects)
     assert_equal 1, index.remove_ids([0, 99])
+    assert_equal 2, index.ntotal
     _, ids = index.search([[1, 2, 1, 2]], 3)
 
     # changes ids of existing vectors
@@ -325,6 +326,8 @@ class IndexTest < Minitest::Test
     index2 = Faiss::IndexIDMap2.new(index)
     index2.add_with_ids(objects, ids)
     assert_equal 1, index.remove_ids([0, 99])
+    assert_equal 2, index.ntotal
+    assert_equal 3, index2.ntotal
     _, ids = index2.search([[1, 2, 1, 2]], 3)
 
     # keeps ids

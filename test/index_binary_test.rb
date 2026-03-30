@@ -49,6 +49,7 @@ class IndexBinaryTest < Minitest::Test
     index = Faiss::IndexBinaryFlat.new(32)
     index.add(objects)
     assert_equal 1, index.remove_ids([0, 99])
+    assert_equal 2, index.ntotal
     _, ids = index.search([[1, 2, 1, 2]], 3)
 
     # changes ids of existing vectors
