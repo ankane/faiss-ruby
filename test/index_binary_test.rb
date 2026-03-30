@@ -67,8 +67,8 @@ class IndexBinaryTest < Minitest::Test
     index.add(objects)
 
     distances, ids = index.search([[1, 1, 2, 1]], 5)
+    assert_equal [0, 5, 6, max_int, max_int], distances[0, true].to_a
     assert_equal [0, 1, 2, -1, -1], ids[0, true].to_a
-    assert_equal [0, 5, 6, 2147483647, 2147483647], distances[0, true].to_a
   end
 
   def test_search_zero_k

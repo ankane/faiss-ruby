@@ -354,8 +354,8 @@ class IndexTest < Minitest::Test
     index.add(objects)
 
     distances, ids = index.search([[1, 1, 2, 1]], 5)
+    assert_equal [0, 3, 57, max_float, max_float], distances[0, true].to_a
     assert_equal [0, 2, 1, -1, -1], ids[0, true].to_a
-    assert_equal [0, 3, 57, 3.4028234663852886e+38, 3.4028234663852886e+38], distances[0, true].to_a
   end
 
   def test_search_zero_k
