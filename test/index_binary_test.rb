@@ -56,6 +56,20 @@ class IndexBinaryTest < Minitest::Test
     assert_equal [1, 0, -1], ids[0, true].to_a
   end
 
+  def test_search
+    objects = [
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ]
+    index = Faiss::IndexBinaryFlat.new(32)
+    index.add(objects)
+
+    distances, ids = index.search([[1, 1, 2, 1]], 5)
+    assert_equal [0, 1, 2, -1, -1], ids[0, true].to_a
+    assert_equal [0, 5, 6, 2147483647, 2147483647], distances[0, true].to_a
+  end
+
   def test_search_zero_k
     objects = [
       [1, 1, 2, 1],

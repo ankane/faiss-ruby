@@ -336,6 +336,20 @@ class IndexTest < Minitest::Test
     assert_equal 0, index.remove_ids([])
   end
 
+  def test_search
+    objects = [
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ]
+    index = Faiss::IndexFlatL2.new(4)
+    index.add(objects)
+
+    distances, ids = index.search([[1, 1, 2, 1]], 5)
+    assert_equal [0, 2, 1, -1, -1], ids[0, true].to_a
+    assert_equal [0, 3, 57, 3.4028234663852886e+38, 3.4028234663852886e+38], distances[0, true].to_a
+  end
+
   def test_search_zero_k
     objects = [
       [1, 1, 2, 1],
