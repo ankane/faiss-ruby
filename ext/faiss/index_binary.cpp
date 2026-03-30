@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <cstddef>
 #include <cstdint>
+#include <limits>
 #include <utility>
 #include <vector>
 
@@ -69,6 +70,9 @@ void init_index_binary(Rice::Module& m) {
         size_t n = check_shape(objects, self.d / 8);
         if (k <= 0) {
           throw Rice::Exception(rb_eArgError, "expected k to be positive");
+        }
+        if (std::cmp_greater_equal(k, std::numeric_limits<size_t>::max() / n)) {
+          throw Rice::Exception(rb_eArgError, "k too large");
         }
 
         numo::Int32 distances({n, static_cast<size_t>(k)});

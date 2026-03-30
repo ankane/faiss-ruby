@@ -101,6 +101,21 @@ class IndexBinaryTest < Minitest::Test
     assert_equal "expected k to be positive", error.message
   end
 
+  def test_search_large_k
+    objects = [
+      [1, 1, 2, 1],
+      [5, 4, 6, 5],
+      [1, 2, 1, 2]
+    ]
+    index = Faiss::IndexBinaryFlat.new(32)
+    index.add(objects)
+
+    error = assert_raises(ArgumentError) do
+      index.search(objects, 2**63 - 1)
+    end
+    assert_equal "k too large", error.message
+  end
+
   def test_add_frozen
     index = Faiss::IndexBinaryFlat.new(32)
     index.freeze
