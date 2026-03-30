@@ -325,13 +325,18 @@ class IndexTest < Minitest::Test
     index = Faiss::IndexFlatL2.new(4)
     index2 = Faiss::IndexIDMap2.new(index)
     index2.add_with_ids(objects, ids)
-    assert_equal 1, index.remove_ids([0, 99])
-    assert_equal 2, index.ntotal
-    assert_equal 3, index2.ntotal
-    _, ids = index2.search([[1, 2, 1, 2]], 3)
 
-    # keeps ids
-    assert_equal [101, 100, -1], ids[0, true].to_a
+    assert_equal 1, index2.remove_ids([100, 99])
+    assert_equal 2, index2.ntotal
+    assert_equal 2, index.ntotal
+    _, ids = index2.search([[1, 2, 1, 2]], 3)
+    assert_equal [102, 101, -1], ids[0, true].to_a
+
+    assert_equal 1, index.remove_ids([1, 99])
+    assert_equal 1, index.ntotal
+    assert_equal 2, index2.ntotal
+    _, ids = index2.search([[1, 2, 1, 2]], 3)
+    assert_equal [101, -1, -1], ids[0, true].to_a
   end
 
   def test_remove_ids_empty
