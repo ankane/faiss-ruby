@@ -1,4 +1,4 @@
-## 0.6.0 (unreleased)
+## 0.6.0 (2026-04-06)
 
 - Updated Faiss to 1.14.1
 - Added `id_map` method to `IndexIDMap2`
