@@ -13,10 +13,12 @@ class ProductQuantizerTest < Minitest::Test
     assert_kind_of Numo::SFloat, x2
     assert_operator ((x - x2)**2).sum / (x**2).sum, :<, 0.06
 
-    path = "#{Dir.tmpdir}/pq.bin"
-    pq.save(path)
-    pq = Faiss::ProductQuantizer.load(path)
-    x3 = pq.decode(codes)
-    assert_equal x2, x3
+    Dir.mktmpdir do |dir|
+      path = "#{dir}/pq.bin"
+      pq.save(path)
+      pq = Faiss::ProductQuantizer.load(path)
+      x3 = pq.decode(codes)
+      assert_equal x2, x3
+    end
   end
 end

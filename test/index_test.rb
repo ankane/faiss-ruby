@@ -26,10 +26,12 @@ class IndexTest < Minitest::Test
     # i[0...5, true]
     # i[-5..-1, true]
 
-    path = "#{Dir.tmpdir}/index.bin"
-    index.save(path)
-    index2 = Faiss::Index.load(path)
-    assert_equal index.ntotal, index2.ntotal
+    Dir.mktmpdir do |dir|
+      path = "#{dir}/index.bin"
+      index.save(path)
+      index2 = Faiss::Index.load(path)
+      assert_equal index.ntotal, index2.ntotal
+    end
   end
 
   def test_view
