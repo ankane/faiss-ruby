@@ -22,7 +22,7 @@
 #include <rice/rice.hpp>
 
 #include "numo.hpp"
-#include "utils_rb.h"
+#include "utils.h"
 
 namespace Rice::detail {
   template<>

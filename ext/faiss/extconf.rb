@@ -34,7 +34,8 @@ vendor = File.expand_path("../../vendor/faiss", __dir__)
 
 $srcs = Dir["{#{ext},#{vendor}/faiss,#{vendor}/faiss/{impl,invlists,utils}/**}/*.{cpp}"]
 $srcs -= ["avx2", "avx512", "aarch64", "arm_sve"].map { |v| "#{vendor}/faiss/utils/simd_impl/distances_#{v}.cpp" }
+$objs = $srcs.map { |v| v.sub(/cpp\z/, "o") }
 abort "Faiss not found" unless find_header("faiss/Index.h", vendor)
-$VPATH += $srcs.filter_map { |v| File.dirname(v) if v.start_with?(vendor) }.uniq
+$VPATH << vendor
 
 create_makefile("faiss/ext")

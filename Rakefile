@@ -25,4 +25,13 @@ task :remove_ext do
   end
 end
 
-Rake::Task["build"].enhance [:remove_ext]
+task :remove_obj do
+  Dir["ext/faiss/*.o"].each do |path|
+    File.unlink(path)
+  end
+end
+
+Rake::Task["build"].enhance [:remove_ext, :remove_obj]
+Rake::Task["compile"].enhance [:remove_obj]
+
+CLEAN.include("vendor/faiss/**/*.o")

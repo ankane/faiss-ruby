@@ -4,7 +4,7 @@
 #include <rice/rice.hpp>
 
 #include "numo.hpp"
-#include "utils_rb.h"
+#include "utils.h"
 
 void init_pca_matrix(Rice::Module& m) {
   Rice::define_class_under<faiss::PCAMatrix>(m, "PCAMatrix")
