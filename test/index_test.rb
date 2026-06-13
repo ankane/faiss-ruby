@@ -140,7 +140,7 @@ class IndexTest < Minitest::Test
     distances, ids = index.search(objects, 3)
 
     assert_equal [[26, 7, 7], [102, 29, 26], [29, 10, 7]], distances.to_a
-    assert_equal [[1, 0, 2], [1, 2, 0], [1, 2, 0]], ids.to_a
+    assert_equal [[1, 2, 0], [1, 2, 0], [1, 2, 0]], ids.to_a
   end
 
   def test_invalid_metric
