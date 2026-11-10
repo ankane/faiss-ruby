@@ -1,3 +1,7 @@
+## 0.6.5 (unreleased)
+
+- Updated Faiss to 1.16.0
+
 ## 0.6.4 (2026-09-17)
 
 - Updated Faiss to 1.15.1
